@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{602C14A3-A239-490A-8186-5457418DF564}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\nuget-bootstrap.exe = .nuget\nuget-bootstrap.exe
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\nuget.exe = .nuget\nuget.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{842F0390-D2E7-4775-B14E-5020135A5DF1}"
+	ProjectSection(SolutionItems) = preProject
+		build.proj = build.proj
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{B0177C63-EE23-44A4-83D8-F3494FDE9C30}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".shared", ".shared", "{D85CA3A0-9C27-471E-8ECB-EA5F68402F1E}"
+	ProjectSection(SolutionItems) = preProject
+		.shared\Harvester.snk = .shared\Harvester.snk
+		.shared\ProductInfo.cs = .shared\ProductInfo.cs
+		.shared\VersionInfo.cs = .shared\VersionInfo.cs
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B0177C63-EE23-44A4-83D8-F3494FDE9C30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0177C63-EE23-44A4-83D8-F3494FDE9C30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0177C63-EE23-44A4-83D8-F3494FDE9C30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0177C63-EE23-44A4-83D8-F3494FDE9C30}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

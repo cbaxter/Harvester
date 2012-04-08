@@ -1,13 +1,12 @@
 # Build Folders
 # -------------------------
-build/
 bin/
 obj/
 
 # NuGet
 # -------------------------
-.nuget/nuget.exe
-packages/
+/src/.nuget/nuget.exe
+/src/packages/
 
 # ReSharper Folders
 # -------------------------
@@ -20,4 +19,4 @@ _ReSharper.Harvester/
 
 # Generated Files
 # -------------------------
-src/Shared/VersionInfo.cs
+/src/.shared/VersionInfo.cs

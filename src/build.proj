@@ -1,0 +1,67 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Test">
+
+    <Import Project="..\lib\MSBuild\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets"/>
+
+    <PropertyGroup>
+        <Platform Condition="'$(Platform)' == ''">Any CPU</Platform>
+        <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+        <MajorVersion Condition="'$(MajorVersion)' == ''">0</MajorVersion>
+        <MinorVersion Condition="'$(MinorVersion)' == ''">0</MinorVersion>
+        <RevisionNumber Condition="'$(RevisionNumber)' == ''">0</RevisionNumber>
+        <Commit Condition="'$(Commit)' == ''">Unknown</Commit>
+    </PropertyGroup>
+
+    <Target Name="Clean">
+        <ItemGroup>
+            <CleanFiles Include="**\bin\$(Configuration)\**" />
+            <CleanFiles Include="**\bin\*.*" />
+            <CleanFiles Include="**\obj\$(Configuration)\**" />
+            <CleanFiles Include="**\obj\*.*" />
+        </ItemGroup>
+
+        <Delete Files="@(CleanFiles)" />
+    </Target>
+
+    <Target Name="StampVersionInfo">
+        <PropertyGroup>
+            <GetBuildDateScript><![CDATA[ public static string ScriptMain() { return Convert.ToInt32(DateTime.Now.Date.Subtract(new DateTime(2011, 2, 11)).TotalDays).ToString(); } ]]></GetBuildDateScript>
+            <GetBuildTimeScript><![CDATA[ public static string ScriptMain() { return Convert.ToInt32(DateTime.Now.Subtract(DateTime.Today).TotalMinutes).ToString(); } ]]></GetBuildTimeScript>
+        </PropertyGroup>
+
+        <Script Language="C#" Code="$(GetBuildDateScript)" Imports="System">
+            <Output TaskParameter="ReturnValue" PropertyName="BuildDate" />
+        </Script>
+
+        <Script Language="C#" Code="$(GetBuildTimeScript)" Imports="System">
+            <Output TaskParameter="ReturnValue" PropertyName="BuildTime" />
+        </Script>
+
+        <CreateProperty Value="$(MajorVersion).$(MinorVersion).$(RevisionNumber).0">
+            <Output TaskParameter="Value" PropertyName="AssemblyVersion" />
+        </CreateProperty>
+
+        <CreateProperty Value="$(MajorVersion).$(MinorVersion).$(BuildDate).$(BuildTime)">
+            <Output TaskParameter="Value" PropertyName="FileVersion" />
+        </CreateProperty>
+
+        <AssemblyInfo CodeLanguage="CS" 
+                      OutputFile=".shared\VersionInfo.cs" 
+                      AssemblyVersion="$(AssemblyVersion)" 
+                      AssemblyFileVersion="$(FileVersion)"
+                      AssemblyConfiguration="$(Configuration)" 
+                      AssemblyInformationalVersion="$(Commit)" />
+    </Target>
+    
+    <Target Name="Build" DependsOnTargets="Clean;StampVersionInfo">
+        <MSBuild Projects="Harvester.sln" Targets="Build" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+    </Target>
+
+    <Target Name="Test" DependsOnTargets="Build">
+        <!-- Placeholder -->
+    </Target>
+
+    <Target Name="Package" DependsOnTargets="Test">
+        <!-- Placeholder -->
+    </Target>
+
+</Project>
