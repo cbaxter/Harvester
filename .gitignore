@@ -20,3 +20,7 @@ _ReSharper.Harvester/
 # Generated Files
 # -------------------------
 /src/.shared/VersionInfo.cs
+
+# Other Files
+# -------------------------
+*.dotCover

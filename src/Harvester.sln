@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".shared", ".shared", "{D85C
 		.shared\VersionInfo.cs = .shared\VersionInfo.cs
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tests", "Core.Tests\Core.Tests.csproj", "{65EDA78B-79C5-4A97-B9F9-A39BF3BD4F94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{B0177C63-EE23-44A4-83D8-F3494FDE9C30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0177C63-EE23-44A4-83D8-F3494FDE9C30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0177C63-EE23-44A4-83D8-F3494FDE9C30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65EDA78B-79C5-4A97-B9F9-A39BF3BD4F94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65EDA78B-79C5-4A97-B9F9-A39BF3BD4F94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65EDA78B-79C5-4A97-B9F9-A39BF3BD4F94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65EDA78B-79C5-4A97-B9F9-A39BF3BD4F94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

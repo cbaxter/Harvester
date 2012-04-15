@@ -1,6 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Test">
 
     <Import Project="..\lib\MSBuild\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets"/>
+    <UsingTask TaskName="Xunit.Runner.MSBuild.xunit" AssemblyFile="..\lib\MSBuild\xUnit\xunit.runner.msbuild.dll" />
 
     <PropertyGroup>
         <Platform Condition="'$(Platform)' == ''">Any CPU</Platform>
@@ -57,7 +58,11 @@
     </Target>
 
     <Target Name="Test" DependsOnTargets="Build">
-        <!-- Placeholder -->
+        <ItemGroup>
+            <TestProjects Include="*.Tests\bin\$(Configuration)\*.Tests.dll"/>
+        </ItemGroup>
+
+        <xunit Assembly="%(TestProjects.Identity)" />
     </Target>
 
     <Target Name="Package" DependsOnTargets="Test">

@@ -1,7 +1,10 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Harvester.Core")]
 [assembly: AssemblyDescription("Harvester - Core")]
+[assembly: InternalsVisibleTo("Harvester.Core.Tests,PublicKey=00240000048000009400000006020000002400005253413100040000010001007db40b48e3a8e34272d85d7d0252b148ce2afba0e7aac15c34f5a35590cc9bc31a3ec96be376668dc400193192b801b6f006a2ac7ba86050b706873548a140c2dc5d7bd79ad6da1f938d479ac6ddd32d3f0daf3fde70bce2f8e788fbf614911be9e5206ba0f1aa45690ccb28f70a346ff8e5672fd76f3e457dd4c1f6ccaece9a")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2,PublicKey=0024000004800000940000000602000000240000525341310004000001000100c547cac37abd99c8db225ef2f6c8a3602f3b3606cc9891605d02baa56104f4cfc0734aa39b93bf7852f7d9266654753cc297e7d2edfe0bac1cdcf9f717241550e0a7b191195b7667bb4f64bcb8e2121380fd1d9d46ad2d92d2d15605093924cceaf74c4861eff62abf69b9291ed0a340e113be11e6a7d3113e92484cf7045cc7")]
