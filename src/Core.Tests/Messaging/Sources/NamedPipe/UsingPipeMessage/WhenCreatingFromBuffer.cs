@@ -21,7 +21,7 @@ using Xunit.Extensions;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugString
+namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingPipeMessage
 {
     public class WhenCreatingFromBuffer
     {

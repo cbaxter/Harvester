@@ -36,17 +36,17 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
             Verify.NotWhitespace(pipeName, "pipeName");
             Verify.NotWhitespace(identity, "identity");
 
-            this.pipeStream = new NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.None, 0, 0, GetPipeSecurity(identity));
-            this.memoryStream = new MemoryStream();
-            this.buffer = new Byte[8192];
+            pipeStream = new NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.None, 0, 0, GetPipeSecurity(identity));
+            memoryStream = new MemoryStream();
+            buffer = new Byte[8192];
 
             Timeout = TimeSpan.FromSeconds(10);
         }
 
         public void Dispose()
         {
-            this.pipeStream.Dispose();
-            this.memoryStream.Dispose();
+            pipeStream.Dispose();
+            memoryStream.Dispose();
         }
 
         private static PipeSecurity GetPipeSecurity(String identity)
@@ -60,16 +60,16 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
 
         public Byte[] Read()
         {
-            this.pipeStream.WaitForConnection();
+            pipeStream.WaitForConnection();
             try
             {
-                var bytesRead = this.pipeStream.Read(this.buffer, 0, this.buffer.Length);
+                var bytesRead = pipeStream.Read(buffer, 0, buffer.Length);
 
-                return this.pipeStream.IsMessageComplete ? ReadBuffer(bytesRead) : ReadChunkedBuffer(bytesRead);
+                return pipeStream.IsMessageComplete ? ReadBuffer(bytesRead) : ReadChunkedBuffer(bytesRead);
             }
             finally
             {
-                this.pipeStream.Disconnect();
+                pipeStream.Disconnect();
             }
         }
 
@@ -77,23 +77,23 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
         {
             var result = new Byte[bytesRead];
 
-            Buffer.BlockCopy(this.buffer, 0, result, 0, bytesRead);
+            Buffer.BlockCopy(buffer, 0, result, 0, bytesRead);
 
             return result;
         }
 
         private Byte[] ReadChunkedBuffer(Int32 bytesRead)
         {
-            this.memoryStream.SetLength(0);
-            this.memoryStream.Write(this.buffer, 0, bytesRead);
+            memoryStream.SetLength(0);
+            memoryStream.Write(buffer, 0, bytesRead);
 
-            while (!this.pipeStream.IsMessageComplete)
+            while (!pipeStream.IsMessageComplete)
             {
-                bytesRead = this.pipeStream.Read(this.buffer, 0, this.buffer.Length);
-                this.memoryStream.Write(this.buffer, 0, bytesRead);
+                bytesRead = pipeStream.Read(buffer, 0, buffer.Length);
+                memoryStream.Write(buffer, 0, bytesRead);
             }
 
-            return this.memoryStream.ToArray();
+            return memoryStream.ToArray();
         }
 
         public void Write(Byte[] message)

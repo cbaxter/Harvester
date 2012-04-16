@@ -21,7 +21,6 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
 {
     internal sealed class PipeMessageWriter : IWriteMessages
     {
-        private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(10);
         private readonly IMessageBuffer memoryBuffer;
         private readonly String mutexName;
         private readonly Byte[] preamble;
@@ -35,27 +34,27 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
             this.memoryBuffer = memoryBuffer;
 
             using (var process = Process.GetCurrentProcess())
-                this.preamble = BitConverter.GetBytes(process.Id);
+                preamble = BitConverter.GetBytes(process.Id);
         }
 
         public void Write(String message)
         {
             Boolean createdNew;
 
-            using (var mutex = new Mutex(false, this.mutexName, out createdNew))
+            using (var mutex = new Mutex(false, mutexName, out createdNew))
             {
-                if (createdNew || !mutex.WaitOne(Timeout))
+                if (createdNew || !mutex.WaitOne(memoryBuffer.Timeout))
                     return;
 
                 try
                 {
-                    var messageBytes = Encoding.UTF8.GetBytes(message);
-                    var data = new Byte[this.preamble.Length + messageBytes.Length];
+                    var messageBytes = Encoding.UTF8.GetBytes(message ?? String.Empty);
+                    var data = new Byte[preamble.Length + messageBytes.Length];
 
-                    Buffer.BlockCopy(this.preamble, 0, data, 0, this.preamble.Length);
-                    Buffer.BlockCopy(messageBytes, 0, data, this.preamble.Length, messageBytes.Length);
+                    Buffer.BlockCopy(preamble, 0, data, 0, preamble.Length);
+                    Buffer.BlockCopy(messageBytes, 0, data, preamble.Length, messageBytes.Length);
 
-                    this.memoryBuffer.Write(data);
+                    memoryBuffer.Write(data);
                 }
                 finally
                 {

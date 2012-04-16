@@ -1,5 +1,8 @@
 ﻿using System;
-using System.Text;
+using System.IO.Pipes;
+using Harvester.Core.Messaging.Sources;
+using Harvester.Core.Messaging.Sources.NamedPipe;
+using Xunit;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -15,39 +18,28 @@ using System.Text;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Messaging.Sources.NamedPipe
+namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeClientBuffer
 {
-    internal sealed class PipeMessage : IMessage
+    public class WhenWritingToClosedBuffer : IDisposable
     {
-        public const Int32 PreambleSize = sizeof(Int32);
-        private static readonly Byte[] Empty = new Byte[0];
+        private readonly IMessageBuffer buffer;
 
-        public DateTime Timestamp { get; private set; }
-        public Int32 ProcessId { get; private set; }
-        public String Message { get; private set; }
-
-        public PipeMessage(Byte[] buffer)
+        public WhenWritingToClosedBuffer()
         {
-            Timestamp = DateTime.Now;
-            Message = GetMessage(buffer ?? Empty);
-            ProcessId = GetProcessId(buffer ?? Empty);
+            var pipeName = @"\\.\pipe\" + Guid.NewGuid();
+
+            buffer = new NamedPipeClientBuffer(".", pipeName) { Timeout = 250 };
         }
 
-        public PipeMessage(Int32 processId, String message)
+        public void Dispose()
         {
-            Timestamp = DateTime.Now;
-            ProcessId = processId;
-            Message = message;
+            buffer.Dispose();
         }
 
-        private static Int32 GetProcessId(Byte[] buffer)
+        [Fact]
+        public void ThrowTimeoutExceptionIfCannotConnectToServerPipeStream()
         {
-            return buffer.Length < PreambleSize ? 0 : BitConverter.ToInt32(buffer, 0);
-        }
-
-        private static String GetMessage(Byte[] buffer)
-        {
-            return buffer.Length >= PreambleSize ? Encoding.UTF8.GetString(buffer, PreambleSize, buffer.Length - PreambleSize) : String.Empty;
+            Assert.Throws<TimeoutException>(() => buffer.Write(null));
         }
     }
 }

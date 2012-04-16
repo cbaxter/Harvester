@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Text;
-using System.Threading;
 using Harvester.Core.Messaging.Sources.DbWin;
 using Xunit;
 

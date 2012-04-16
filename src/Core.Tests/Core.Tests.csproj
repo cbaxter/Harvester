@@ -62,16 +62,30 @@
     <Compile Include="..\.shared\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeClientBuffer\WhenAdjustingTimeout.cs" />
+    <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeServerBuffer\WhenCreatingBuffer.cs" />
+    <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeServerBuffer\WhenDisposingBuffer.cs" />
+    <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeServerBuffer\WhenReadingFromBuffer.cs" />
+    <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeServerBuffer\WhenWritingToBuffer.cs" />
+    <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeClientBuffer\WhenWritingToClosedBuffer.cs" />
+    <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeClientBuffer\WhenWritingToOpenBuffer.cs" />
+    <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeClientBuffer\WhenReadingFromBuffer.cs" />
+    <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeClientBuffer\WhenDisposingBuffer.cs" />
+    <Compile Include="Messaging\Sources\NamedPipe\UsingPipeMessageWriter\WhenWritingMessageWithMutexOwned.cs" />
+    <Compile Include="PipeMessageExtensions.cs" />
     <Compile Include="Messaging\Sources\DbWin\UsingEventWaitHandleExtensions\WhenSafeSetInvokedOnValidWaitHandle.cs" />
     <Compile Include="Messaging\Sources\DbWin\UsingEventWaitHandleExtensions\WhenSafeSetInvokedOnDisposedWaitHandle.cs" />
     <Compile Include="Messaging\Sources\DbWin\UsingEventWaitHandleExtensions\WhenSafeSetInvokedOnNullWaitHandle.cs" />
     <Compile Include="Messaging\Sources\DbWin\UsingOutputDebugStringReader\WhenReadingNextMessage.cs" />
-    <Compile Include="Messaging\Sources\DbWin\UsingOutputDebugStringWriter\WhenWritingMessageWithMutexOwned.cs" />
+    <Compile Include="Messaging\Sources\DbWin\UsingOutputDebugStringWriter\WhenWritingMessage.cs" />
     <Compile Include="Messaging\Sources\DbWin\UsingOutputDebugString\WhenCreatingFromParameters.cs" />
     <Compile Include="Messaging\Sources\DbWin\UsingOutputDebugString\WhenCreatingFromBuffer.cs" />
     <Compile Include="Messaging\Sources\DbWin\UsingSharedMemoryBuffer\WhenDisposingBuffer.cs" />
     <Compile Include="Messaging\Sources\DbWin\UsingSharedMemoryBuffer\WhenReadingFromBuffer.cs" />
     <Compile Include="Messaging\Sources\DbWin\UsingSharedMemoryBuffer\WhenWritingToBuffer.cs" />
+    <Compile Include="Messaging\Sources\NamedPipe\UsingPipeMessageReader\WhenReadingNextMessage.cs" />
+    <Compile Include="Messaging\Sources\NamedPipe\UsingPipeMessage\WhenCreatingFromBuffer.cs" />
+    <Compile Include="Messaging\Sources\NamedPipe\UsingPipeMessage\WhenCreatingFromParameters.cs" />
     <Compile Include="MoqExtensions.cs" />
     <Compile Include="OutputDebugStringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

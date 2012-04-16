@@ -1,5 +1,7 @@
 ﻿using System;
-using System.Text;
+using Harvester.Core.Messaging.Sources;
+using Harvester.Core.Messaging.Sources.NamedPipe;
+using Xunit;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -15,39 +17,38 @@ using System.Text;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Messaging.Sources.NamedPipe
+namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeClientBuffer
 {
-    internal sealed class PipeMessage : IMessage
+    public class WhenAdjustingTimeout : IDisposable
     {
-        public const Int32 PreambleSize = sizeof(Int32);
-        private static readonly Byte[] Empty = new Byte[0];
+        private readonly NamedPipeClientBuffer namedPipeBuffer;
+        private readonly IMessageBuffer messageBuffer;
 
-        public DateTime Timestamp { get; private set; }
-        public Int32 ProcessId { get; private set; }
-        public String Message { get; private set; }
-
-        public PipeMessage(Byte[] buffer)
+        public WhenAdjustingTimeout()
         {
-            Timestamp = DateTime.Now;
-            Message = GetMessage(buffer ?? Empty);
-            ProcessId = GetProcessId(buffer ?? Empty);
+            namedPipeBuffer = new NamedPipeClientBuffer();
+            messageBuffer = namedPipeBuffer;
         }
 
-        public PipeMessage(Int32 processId, String message)
+        public void Dispose()
         {
-            Timestamp = DateTime.Now;
-            ProcessId = processId;
-            Message = message;
+            namedPipeBuffer.Dispose();
         }
 
-        private static Int32 GetProcessId(Byte[] buffer)
+        [Fact]
+        public void TimeSpanTimeoutConvertedToMilliseconds()
         {
-            return buffer.Length < PreambleSize ? 0 : BitConverter.ToInt32(buffer, 0);
+            messageBuffer.Timeout = TimeSpan.FromSeconds(1);
+
+            Assert.Equal(1000, namedPipeBuffer.Timeout);
         }
 
-        private static String GetMessage(Byte[] buffer)
+        [Fact]
+        public void MillisecondsTimeoutConvertedToTimeSpan()
         {
-            return buffer.Length >= PreambleSize ? Encoding.UTF8.GetString(buffer, PreambleSize, buffer.Length - PreambleSize) : String.Empty;
+            namedPipeBuffer.Timeout = 1000;
+
+            Assert.Equal(TimeSpan.FromSeconds(1), messageBuffer.Timeout);
         }
     }
 }

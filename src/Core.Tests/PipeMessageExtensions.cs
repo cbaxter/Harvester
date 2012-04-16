@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
+using Harvester.Core.Messaging.Sources.NamedPipe;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -15,39 +17,15 @@ using System.Text;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Messaging.Sources.NamedPipe
+namespace Harvester.Core.Tests
 {
-    internal sealed class PipeMessage : IMessage
+    internal static class PipeMessageExtensions
     {
-        public const Int32 PreambleSize = sizeof(Int32);
-        private static readonly Byte[] Empty = new Byte[0];
-
-        public DateTime Timestamp { get; private set; }
-        public Int32 ProcessId { get; private set; }
-        public String Message { get; private set; }
-
-        public PipeMessage(Byte[] buffer)
+        public static Byte[] ToBytes(this PipeMessage pipeMessage)
         {
-            Timestamp = DateTime.Now;
-            Message = GetMessage(buffer ?? Empty);
-            ProcessId = GetProcessId(buffer ?? Empty);
-        }
-
-        public PipeMessage(Int32 processId, String message)
-        {
-            Timestamp = DateTime.Now;
-            ProcessId = processId;
-            Message = message;
-        }
-
-        private static Int32 GetProcessId(Byte[] buffer)
-        {
-            return buffer.Length < PreambleSize ? 0 : BitConverter.ToInt32(buffer, 0);
-        }
-
-        private static String GetMessage(Byte[] buffer)
-        {
-            return buffer.Length >= PreambleSize ? Encoding.UTF8.GetString(buffer, PreambleSize, buffer.Length - PreambleSize) : String.Empty;
+            return BitConverter.GetBytes(pipeMessage.ProcessId)
+                               .Concat(Encoding.UTF8.GetBytes(pipeMessage.Message))
+                               .ToArray();
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
-using System.IO.Pipes;
+using Harvester.Core.Messaging.Sources;
+using Harvester.Core.Messaging.Sources.NamedPipe;
+using Xunit;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -15,48 +17,28 @@ using System.IO.Pipes;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Messaging.Sources.NamedPipe
+namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeServerBuffer
 {
-    internal class NamedPipeClientBuffer : IMessageBuffer
+    public class WhenCreatingBuffer : IDisposable
     {
-        private static readonly Byte[] Empty = new Byte[0];
-        private readonly String serverName;
+        private readonly IMessageBuffer buffer;
         private readonly String pipeName;
 
-        TimeSpan IMessageBuffer.Timeout { get { return TimeSpan.FromMilliseconds(Timeout); } set { Timeout = Convert.ToInt32(value.TotalMilliseconds); } }
-        public Int32 Timeout { get; set; }
-
-        public NamedPipeClientBuffer()
-            : this(@".", @"\\.\pipe\Harvester")
-        { }
-
-        public NamedPipeClientBuffer(String serverName, String pipeName)
+        public WhenCreatingBuffer()
         {
-            Verify.NotWhitespace(serverName, "serverName");
-            Verify.NotWhitespace(pipeName, "pipeName");
-
-            this.serverName = serverName;
-            this.pipeName = pipeName;
-
-            Timeout = 10000;
+            pipeName = @"\\.\pipe\" + Guid.NewGuid();
+            buffer = new NamedPipeServerBuffer(pipeName, "Everyone");
         }
 
         public void Dispose()
-        { }
-
-        public Byte[] Read()
         {
-            throw new NotSupportedException();
+            buffer.Dispose();
         }
 
-        public void Write(Byte[] message)
+        [Fact]
+        public void OnlySingleNamedInstanceAllowed()
         {
-            message = message ?? Empty;
-            using (var pipeStream = new NamedPipeClientStream(serverName, pipeName, PipeDirection.InOut, PipeOptions.None))
-            {
-                pipeStream.Connect(Timeout);
-                pipeStream.Write(message, 0, message.Length);
-            }
+            Assert.Throws<UnauthorizedAccessException>(() => new NamedPipeServerBuffer(pipeName, "Everyone"));
         }
     }
 }

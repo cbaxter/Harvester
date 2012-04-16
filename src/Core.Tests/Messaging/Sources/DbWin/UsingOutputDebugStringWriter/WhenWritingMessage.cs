@@ -25,7 +25,7 @@ using Xunit.Extensions;
 
 namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringWriter
 {
-    public class WhenWritingMessageWithMutexOwned : IDisposable
+    public class WhenWritingMessage : IDisposable
     {
         private readonly Mock<IMessageBuffer> messageBuffer = new Mock<IMessageBuffer>();
         private readonly ManualResetEvent setupComplete = new ManualResetEvent(false);
@@ -33,7 +33,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringWri
         private readonly OutputDebugStringWriter messageWriter;
         private readonly String mutexName;
 
-        public WhenWritingMessageWithMutexOwned()
+        public WhenWritingMessage()
         {
             mutexName = "Harvester: " + Guid.NewGuid();
             messageWriter = new OutputDebugStringWriter(mutexName, messageBuffer.Object);
