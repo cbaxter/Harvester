@@ -20,12 +20,12 @@ using Xunit;
 
 namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringListener
 {
-    public class WhenDisposingBuffer : IDisposable
+    public class WhenDisposingListener : IDisposable
     {
         private readonly Mock<IProcessMessages> messageProcessor = new Mock<IProcessMessages>();
         private readonly MessageListener messageListener;
 
-        public WhenDisposingBuffer()
+        public WhenDisposingListener()
         {
             var guid = Guid.NewGuid();
             var bufferName = String.Format(@"Local\HRVSTR_{0}", guid);

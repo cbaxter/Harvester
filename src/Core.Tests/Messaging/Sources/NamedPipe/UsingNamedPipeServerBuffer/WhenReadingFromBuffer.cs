@@ -54,7 +54,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeServerB
         }
 
         [Fact]
-        public void ReadAsSingleMessageIfMessageLargerrThanBuffer()
+        public void ReadAsSingleMessageIfMessageLargerThanBuffer()
         {
             var message = new Byte[32768];
             var client = Task.Factory.StartNew(() => SendMessage(message));

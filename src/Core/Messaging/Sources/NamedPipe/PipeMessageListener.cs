@@ -35,12 +35,12 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
 
         protected override void Dispose(Boolean disposing)
         {
-            if (!disposing)
-                return;
-
-            messageBuffer.Dispose();
-            mutex.Dispose();
-
+            if (disposing)
+            {
+                messageBuffer.Dispose();
+                mutex.Dispose();
+            }
+            
             base.Dispose(disposing);
         }
     }

@@ -50,14 +50,18 @@ namespace Harvester.Core.Messaging
             if (!disposing)
                 return;
 
-            listener.Abort();
             listener.Join();
         }
 
         protected virtual void ReadAllMessages()
         {
-            while (messageReader.ReadNext())
-                messageProcessor.Process(source, messageReader.Current);
+            try
+            {
+                while (messageReader.ReadNext())
+                    messageProcessor.Process(source, messageReader.Current);
+            }
+            catch (ObjectDisposedException)
+            { }
         }
     }
 }

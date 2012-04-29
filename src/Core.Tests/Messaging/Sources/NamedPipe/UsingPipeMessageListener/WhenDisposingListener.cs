@@ -21,12 +21,12 @@ using Xunit;
 
 namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingPipeMessageListener
 {
-    public class WhenDisposingBuffer : IDisposable
+    public class WhenDisposingListener : IDisposable
     {
         private readonly Mock<IProcessMessages> messageProcessor = new Mock<IProcessMessages>();
         private readonly MessageListener messageListener;
 
-        public WhenDisposingBuffer()
+        public WhenDisposingListener()
         {
             var guid = Guid.NewGuid();
             var pipeName = @"\\.\pipe\" + guid;
