@@ -16,7 +16,7 @@
 
 namespace Harvester.Core.Messaging
 {
-    internal interface IMessage
+    public interface IMessage
     {
         DateTime Timestamp { get; }
         Int32 ProcessId { get; }

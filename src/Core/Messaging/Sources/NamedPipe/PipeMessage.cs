@@ -17,7 +17,7 @@ using System.Text;
 
 namespace Harvester.Core.Messaging.Sources.NamedPipe
 {
-    internal sealed class PipeMessage : IMessage
+    public sealed class PipeMessage : IMessage
     {
         public const Int32 PreambleSize = sizeof(Int32);
         private static readonly Byte[] Empty = new Byte[0];

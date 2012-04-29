@@ -17,7 +17,7 @@ using System.Collections.Generic;
 
 namespace Harvester.Core.Messaging.Sources.DbWin
 {
-    internal class OutputDebugStringReader : IReadMessages
+    public sealed class OutputDebugStringReader : IReadMessages
     {
         private const Int32 MaxFragmentSize = OutputDebugString.MaxMessageSize * 16;
         private readonly Queue<OutputDebugString> queuedMessages = new Queue<OutputDebugString>();

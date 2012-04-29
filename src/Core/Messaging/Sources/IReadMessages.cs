@@ -16,7 +16,7 @@
 
 namespace Harvester.Core.Messaging.Sources
 {
-    internal interface IReadMessages
+    public interface IReadMessages
     {
         IMessage Current { get; }
         Boolean ReadNext();

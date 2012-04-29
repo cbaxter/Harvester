@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -14,13 +15,33 @@
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Messaging.Sources
+namespace Harvester.Core.Messaging.Sources.DbWin
 {
-    public interface IMessageBuffer : IDisposable
+    internal class OutputDebugStringListener : MessageListener
     {
-        TimeSpan Timeout { get; set; }
+        private readonly IMessageBuffer messageBuffer;
+        private readonly Mutex mutex;
 
-        Byte[] Read();
-        void Write(Byte[] message);
+        public OutputDebugStringListener(IProcessMessages messageProcessor, String bufferName, String mutexName)
+            : this(bufferName, messageProcessor, new SharedMemoryBuffer(bufferName, OutputDebugString.BufferSize), new Mutex(false, mutexName))
+        { }
+
+        private OutputDebugStringListener(String source, IProcessMessages messageProcessor, IMessageBuffer messageBuffer, Mutex mutex)
+            : base(source, messageProcessor, new OutputDebugStringReader(messageBuffer))
+        {
+            this.mutex = mutex;
+            this.messageBuffer = messageBuffer;
+        }
+
+        protected override void Dispose(Boolean disposing)
+        {
+            base.Dispose(disposing);
+
+            if (!disposing)
+                return;
+
+            messageBuffer.Dispose();
+            mutex.Dispose();
+        }
     }
 }

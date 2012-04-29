@@ -17,7 +17,7 @@ using System.IO;
 
 namespace Harvester.Core.Messaging.Sources.DbWin
 {
-    public static class UnmanagedMemoryAccessorExtensions
+    internal static class UnmanagedMemoryAccessorExtensions
     {
         public static Byte[] ReadBuffer(this UnmanagedMemoryAccessor memoryAccessor)
         {

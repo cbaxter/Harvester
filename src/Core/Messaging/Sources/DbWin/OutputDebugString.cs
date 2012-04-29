@@ -17,7 +17,7 @@ using System.Text;
 
 namespace Harvester.Core.Messaging.Sources.DbWin
 {
-    internal sealed class OutputDebugString : IMessage
+    public sealed class OutputDebugString : IMessage
     {
         public const Int32 NullByteSize = 1;
         public const Int32 BufferSize = 4096;

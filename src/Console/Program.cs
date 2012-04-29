@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Threading;
+using Harvester.Core;
+using Harvester.Core.Messaging;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -14,13 +17,22 @@
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Messaging.Sources
+namespace Harvester
 {
-    public interface IMessageBuffer : IDisposable
+    internal class Program
     {
-        TimeSpan Timeout { get; set; }
+        private class ConsoleRenderer : IRenderEvents
+        {
+            public void Render(string e)
+            {
+                Console.WriteLine(e);
+            }
+        }
 
-        Byte[] Read();
-        void Write(Byte[] message);
+        static void Main()
+        {
+            using (new SystemMonitor(new ConsoleRenderer()))
+                new ManualResetEvent(false).WaitOne();
+        }
     }
 }

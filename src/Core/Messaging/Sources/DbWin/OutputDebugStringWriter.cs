@@ -19,7 +19,7 @@ using System.Threading;
 
 namespace Harvester.Core.Messaging.Sources.DbWin
 {
-    internal sealed class OutputDebugStringWriter : IWriteMessages
+    public sealed class OutputDebugStringWriter : IWriteMessages
     {
         private readonly IMessageBuffer messageBuffer;
         private readonly String mutexName;

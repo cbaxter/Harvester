@@ -19,7 +19,7 @@ using System.Security.AccessControl;
 
 namespace Harvester.Core.Messaging.Sources.NamedPipe
 {
-    internal class NamedPipeServerBuffer : IMessageBuffer
+    internal sealed class NamedPipeServerBuffer : IMessageBuffer
     {
         private readonly NamedPipeServerStream pipeStream;
         private readonly MemoryStream memoryStream;
@@ -36,7 +36,8 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
             Verify.NotWhitespace(pipeName, "pipeName");
             Verify.NotWhitespace(identity, "identity");
 
-            pipeStream = new NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.None, 0, 0, GetPipeSecurity(identity));
+            //TODO: Review usage of `PipeOptions.Asynchronous` as significantly slower than `PipeOptions.None` but does not have Dispose issues with blocking `WaitForConnection`.
+            pipeStream = new NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.Asynchronous, 0, 0, GetPipeSecurity(identity));
             memoryStream = new MemoryStream();
             buffer = new Byte[8192];
 

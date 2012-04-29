@@ -14,13 +14,28 @@
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Messaging.Sources
+namespace Harvester.Core.Messaging
 {
-    public interface IMessageBuffer : IDisposable
+    internal class MessageProcessor : IProcessMessages
     {
-        TimeSpan Timeout { get; set; }
+        private readonly IRenderEvents eventRenderer;
 
-        Byte[] Read();
-        void Write(Byte[] message);
+        public MessageProcessor(IRenderEvents eventRenderer)
+        {
+            Verify.NotNull(eventRenderer, "eventRenderer");
+
+            this.eventRenderer = eventRenderer;
+        }
+
+        //TODO: Will eventually dump messages to process inside a blocking queue to be processed on worker thread so will beed to be disposed.
+        public void Dispose()
+        {
+            
+        }
+
+        public void Process(String source, IMessage message)
+        {
+            eventRenderer.Render(message.Timestamp.ToString("yyyy-MM-dd HH:mm:ss,ttt") + ' ' + source + ' ' + message.ProcessId + ' ' + message.Message);
+        }
     }
 }

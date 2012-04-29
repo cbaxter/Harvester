@@ -18,7 +18,7 @@ using System.Threading;
 
 namespace Harvester.Core.Messaging.Sources.DbWin
 {
-    internal sealed class SharedMemoryBuffer : IMessageBuffer
+    public sealed class SharedMemoryBuffer : IMessageBuffer
     {
         private readonly MemoryMappedViewAccessor bufferView;
         private readonly EventWaitHandle bufferReadyEvent;
@@ -27,7 +27,7 @@ namespace Harvester.Core.Messaging.Sources.DbWin
 
         public TimeSpan Timeout { get; set; }
 
-        public SharedMemoryBuffer(String baseObjectName, Int64 capacity) 
+        public SharedMemoryBuffer(String baseObjectName, Int64 capacity)
         {
             Verify.NotWhitespace(baseObjectName, "baseObjectName");
             Verify.True(capacity > 0, "capacity", Localization.ValueGreaterThanZeroExpected);

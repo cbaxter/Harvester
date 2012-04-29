@@ -14,13 +14,10 @@
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Messaging.Sources
+namespace Harvester.Core.Messaging
 {
-    public interface IMessageBuffer : IDisposable
+    public interface IProcessMessages : IDisposable
     {
-        TimeSpan Timeout { get; set; }
-
-        Byte[] Read();
-        void Write(Byte[] message);
+        void Process(String source, IMessage message);
     }
 }

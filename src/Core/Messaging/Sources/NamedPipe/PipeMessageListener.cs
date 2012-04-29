@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -14,13 +15,33 @@
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Messaging.Sources
+namespace Harvester.Core.Messaging.Sources.NamedPipe
 {
-    public interface IMessageBuffer : IDisposable
+    internal class PipeMessageListener : MessageListener
     {
-        TimeSpan Timeout { get; set; }
+        private readonly IMessageBuffer messageBuffer;
+        private readonly Mutex mutex;
 
-        Byte[] Read();
-        void Write(Byte[] message);
+        public PipeMessageListener(IProcessMessages messageProcessor, String pipeName, String mutexName)
+            : this(pipeName, messageProcessor, new NamedPipeServerBuffer(pipeName, "Everyone"), new Mutex(false, mutexName)) //TODO: Use constants
+        { }
+
+        private PipeMessageListener(String listenerName, IProcessMessages messageProcessor, IMessageBuffer messageBuffer, Mutex mutex)
+            : base(listenerName, messageProcessor, new PipeMessageReader(messageBuffer))
+        {
+            this.mutex = mutex;
+            this.messageBuffer = messageBuffer;
+        }
+
+        protected override void Dispose(Boolean disposing)
+        {
+            if (!disposing)
+                return;
+
+            messageBuffer.Dispose();
+            mutex.Dispose();
+
+            base.Dispose(disposing);
+        }
     }
 }

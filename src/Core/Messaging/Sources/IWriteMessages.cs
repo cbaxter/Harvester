@@ -16,7 +16,7 @@
 
 namespace Harvester.Core.Messaging.Sources
 {
-    internal interface IWriteMessages
+    public interface IWriteMessages
     {
         void Write(String message);
     }

@@ -17,7 +17,7 @@ using System.IO.Pipes;
 
 namespace Harvester.Core.Messaging.Sources.NamedPipe
 {
-    internal class NamedPipeClientBuffer : IMessageBuffer
+    public sealed class NamedPipeClientBuffer : IMessageBuffer
     {
         private static readonly Byte[] Empty = new Byte[0];
         private readonly String serverName;

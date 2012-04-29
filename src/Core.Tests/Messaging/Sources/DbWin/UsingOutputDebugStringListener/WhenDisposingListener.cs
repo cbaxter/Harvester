@@ -1,4 +1,8 @@
 ﻿using System;
+using Harvester.Core.Messaging;
+using Harvester.Core.Messaging.Sources.DbWin;
+using Moq;
+using Xunit;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -14,13 +18,32 @@
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Messaging.Sources
+namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringListener
 {
-    public interface IMessageBuffer : IDisposable
+    public class WhenDisposingBuffer : IDisposable
     {
-        TimeSpan Timeout { get; set; }
+        private readonly Mock<IProcessMessages> messageProcessor = new Mock<IProcessMessages>();
+        private readonly MessageListener messageListener;
 
-        Byte[] Read();
-        void Write(Byte[] message);
+        public WhenDisposingBuffer()
+        {
+            var guid = Guid.NewGuid();
+            var bufferName = String.Format(@"Local\HRVSTR_{0}", guid);
+            var mutexName = "Harvester: " + guid;
+
+            messageListener = new OutputDebugStringListener(messageProcessor.Object, bufferName, mutexName);
+        }
+
+        public void Dispose()
+        {
+            messageListener.Dispose();
+        }
+
+        [Fact]
+        public void CanSafelyCallDisposeMultipleTimes()
+        {
+            messageListener.Dispose();
+            messageListener.Dispose();
+        }
     }
 }

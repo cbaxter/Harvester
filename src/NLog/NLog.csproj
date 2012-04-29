@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B0177C63-EE23-44A4-83D8-F3494FDE9C30}</ProjectGuid>
+    <ProjectGuid>{0ACD7FBA-77ED-4F12-B88E-CA87AE89C74D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Harvester.Core</RootNamespace>
-    <AssemblyName>Harvester.Core</AssemblyName>
+    <RootNamespace>Harvester.Integration.NLog</RootNamespace>
+    <AssemblyName>Harvester.Integration.NLog</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\src\</SolutionDir>
@@ -23,7 +23,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,17 +32,14 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\.shared\Harvester.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\.shared\ProductInfo.cs">
@@ -52,48 +48,21 @@
     <Compile Include="..\.shared\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Messaging\IProcessMessages.cs" />
-    <Compile Include="Messaging\IRenderEvents.cs" />
-    <Compile Include="Messaging\MessageListener.cs" />
-    <Compile Include="Messaging\MessageProcessor.cs" />
-    <Compile Include="Messaging\Sources\DbWin\EventWaitHandleExtensions.cs" />
-    <Compile Include="Messaging\Sources\DbWin\OutputDebugStringListener.cs" />
-    <Compile Include="Messaging\Sources\DbWin\UnmanagedMemoryAccessorExtensions.cs" />
-    <Compile Include="Localization.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Localization.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Messaging\Sources\IWriteMessages.cs" />
-    <Compile Include="Messaging\Sources\DbWin\OutputDebugString.cs" />
-    <Compile Include="Messaging\Sources\DbWin\OutputDebugStringReader.cs" />
-    <Compile Include="Messaging\Sources\DbWin\OutputDebugStringWriter.cs" />
-    <Compile Include="Messaging\Sources\DbWin\SharedMemoryBuffer.cs" />
-    <Compile Include="Messaging\IMessage.cs" />
-    <Compile Include="Messaging\Sources\IMessageBuffer.cs" />
-    <Compile Include="Messaging\Sources\IReadMessages.cs" />
-    <Compile Include="Messaging\Sources\NamedPipe\NamedPipeClientBuffer.cs" />
-    <Compile Include="Messaging\Sources\NamedPipe\PipeMessageListener.cs" />
-    <Compile Include="Messaging\Sources\NamedPipe\NamedPipeServerBuffer.cs" />
-    <Compile Include="Messaging\Sources\NamedPipe\PipeMessage.cs" />
-    <Compile Include="Messaging\Sources\NamedPipe\PipeMessageReader.cs" />
-    <Compile Include="Messaging\Sources\NamedPipe\PipeMessageWriter.cs" />
+    <Compile Include="HarvesterTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SystemMonitor.cs" />
-    <Compile Include="Verify.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.shared\Harvester.snk">
       <Link>Harvester.snk</Link>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Localization.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Localization.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{B0177C63-EE23-44A4-83D8-F3494FDE9C30}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

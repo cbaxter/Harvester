@@ -1,4 +1,7 @@
 ﻿using System;
+using Harvester.Core.Messaging;
+using Harvester.Core.Messaging.Sources.DbWin;
+using Harvester.Core.Messaging.Sources.NamedPipe;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -14,26 +17,30 @@
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Messaging.Sources.NamedPipe
+namespace Harvester.Core
 {
-    public sealed class PipeMessageReader : IReadMessages
+    public class SystemMonitor : IDisposable
     {
-        private readonly IMessageBuffer memoryBuffer;
-        
-        public IMessage Current { get; private set; }
+        private readonly MessageListener[] messageListeners;
+        private readonly IProcessMessages messageProcessor;
 
-        public PipeMessageReader(IMessageBuffer memoryBuffer)
+        public SystemMonitor(IRenderEvents eventRenderer)
         {
-            Verify.NotNull(memoryBuffer, "memoryBuffer");
-            
-            this.memoryBuffer = memoryBuffer;
+            messageProcessor = new MessageProcessor(eventRenderer);
+            messageListeners = new MessageListener[]
+                                   {
+                                       new PipeMessageListener(messageProcessor, @"\\.\pipe\Harvester", @"HarvesterDBWinMutex"),
+                                       new OutputDebugStringListener(messageProcessor, @"Global\DBWIN", @"DBWinMutex"), //TODO: Based on security level...
+                                       new OutputDebugStringListener(messageProcessor, @"Local\DBWIN", @"DBWinMutex")
+                                   };
         }
 
-        public Boolean ReadNext()
+        public void Dispose()
         {
-            Current = new PipeMessage(memoryBuffer.Read()); 
+            messageProcessor.Dispose();
 
-            return true;
+            foreach(var messageListener in messageListeners)
+                messageListener.Dispose();
         }
     }
 }

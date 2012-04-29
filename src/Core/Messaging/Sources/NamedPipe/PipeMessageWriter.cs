@@ -19,7 +19,7 @@ using System.Threading;
 
 namespace Harvester.Core.Messaging.Sources.NamedPipe
 {
-    internal sealed class PipeMessageWriter : IWriteMessages
+    public sealed class PipeMessageWriter : IWriteMessages
     {
         private readonly IMessageBuffer memoryBuffer;
         private readonly String mutexName;
