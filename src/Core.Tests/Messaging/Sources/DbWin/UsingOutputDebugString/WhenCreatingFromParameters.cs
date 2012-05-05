@@ -41,5 +41,17 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugString
         {
             Assert.Equal("My Message", message.Message);
         }
+
+        [Fact]
+        public void SourceTrimmedOfWhitespace()
+        {
+            Assert.Equal("Source", new OutputDebugString(" Source ", new Byte[] { 123, 0, 0, 0, 65 }).Source);
+        }
+
+        [Fact]
+        public void MessageTrimmedOfWhitespace()
+        {
+            Assert.Equal("A", new OutputDebugString(" Source ", new Byte[] { 123, 0, 0, 0, 32, 65, 32 }).Message);
+        }
     }
 }

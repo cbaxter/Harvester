@@ -31,19 +31,15 @@ namespace Harvester.Core.Messaging.Sources.DbWin
         public String Source { get; private set; }
 
         public OutputDebugString(String source, Byte[] buffer)
-        {
-            Timestamp = DateTime.Now;
-            Source = source ?? String.Empty;
-            Message = GetMessage(buffer ?? Empty);
-            ProcessId = GetProcessId(buffer ?? Empty);
-        }
+            : this(source, GetProcessId(buffer ?? Empty), GetMessage(buffer ?? Empty))
+        { }
 
         public OutputDebugString(String source, Int32 processId, String message)
         {
-            Timestamp = DateTime.Now;
-            Source = source ?? String.Empty;
-            Message = message ?? String.Empty;
             ProcessId = processId;
+            Timestamp = DateTime.Now;
+            Source = (source ?? String.Empty).Trim();
+            Message = (message ?? String.Empty).Trim();
         }
 
         private static Int32 GetProcessId(Byte[] buffer)
@@ -58,7 +54,7 @@ namespace Harvester.Core.Messaging.Sources.DbWin
             while (index < buffer.Length && buffer[index] != 0)
                 index++;
 
-            return index > PreambleSize ? Encoding.UTF8.GetString(buffer, PreambleSize, index - PreambleSize) : String.Empty;
+            return index > PreambleSize ? Encoding.UTF8.GetString(buffer, PreambleSize, index - PreambleSize).Trim() : String.Empty;
         }
     }
 }

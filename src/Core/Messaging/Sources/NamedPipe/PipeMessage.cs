@@ -28,20 +28,15 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
         public String Source { get; private set; }
 
         public PipeMessage(String source, Byte[] buffer)
-        {
-            Timestamp = DateTime.Now;
-            Source = source ?? String.Empty;
-            Source = source ?? String.Empty;
-            Message = GetMessage(buffer ?? Empty);
-            ProcessId = GetProcessId(buffer ?? Empty);
-        }
+            : this(source, GetProcessId(buffer ?? Empty), GetMessage(buffer ?? Empty))
+        { }
 
         public PipeMessage(String source, Int32 processId, String message)
         {
-            Timestamp = DateTime.Now;
-            Source = source ?? String.Empty;
-            Message = message ?? String.Empty;
             ProcessId = processId;
+            Timestamp = DateTime.Now;
+            Source = (source ?? String.Empty).Trim();
+            Message = (message ?? String.Empty).Trim();
         }
 
         private static Int32 GetProcessId(Byte[] buffer)
@@ -51,7 +46,7 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
 
         private static String GetMessage(Byte[] buffer)
         {
-            return buffer.Length >= PreambleSize ? Encoding.UTF8.GetString(buffer, PreambleSize, buffer.Length - PreambleSize) : String.Empty;
+            return buffer.Length >= PreambleSize ? Encoding.UTF8.GetString(buffer, PreambleSize, buffer.Length - PreambleSize).Trim() : String.Empty;
         }
     }
 }

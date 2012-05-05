@@ -1,6 +1,5 @@
 ﻿using System;
 using Harvester.Core.Messaging;
-using Harvester.Core.Messaging.Sources.DbWin;
 using Harvester.Core.Messaging.Sources.NamedPipe;
 using Xunit;
 
@@ -41,6 +40,18 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingPipeMessage
         public void MessageIsSet()
         {
             Assert.Equal("My Message", message.Message);
+        }
+
+        [Fact]
+        public void SourceTrimmedOfWhitespace()
+        {
+            Assert.Equal("Source", new PipeMessage(" Source ", new Byte[] { 123, 0, 0, 0, 65 }).Source);
+        }
+
+        [Fact]
+        public void MessageTrimmedOfWhitespace()
+        {
+            Assert.Equal("A", new PipeMessage(" Source ", new Byte[] { 123, 0, 0, 0, 32, 65, 32 }).Message);
         }
     }
 }

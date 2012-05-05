@@ -3,7 +3,6 @@ using System.Linq;
 using System.Text;
 using Harvester.Core.Messaging;
 using Harvester.Core.Messaging.Sources.DbWin;
-using Harvester.Core.Messaging.Sources.NamedPipe;
 using Xunit;
 using Xunit.Extensions;
 
@@ -49,28 +48,40 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugString
         [Fact]
         public void TolerateMissingNullTerminatingByte()
         {
-            Assert.Equal("A", new PipeMessage("Source", new Byte[] { 123, 0, 0, 0, 65 }).Message);
+            Assert.Equal("A", new OutputDebugString("Source", new Byte[] { 123, 0, 0, 0, 65 }).Message);
+        }
+
+        [Fact]
+        public void SourceTrimmedOfWhitespace()
+        {
+            Assert.Equal("Source", new OutputDebugString(" Source ", new Byte[] { 123, 0, 0, 0, 65 }).Source);
+        }
+
+        [Fact]
+        public void MessageTrimmedOfWhitespace()
+        {
+            Assert.Equal("A", new OutputDebugString(" Source ", new Byte[] { 123, 0, 0, 0, 32, 65, 32 }).Message);
         }
 
         [Theory, InlineData(null), InlineData(new Byte[0]), InlineData(new Byte[] { 123 }), InlineData(new Byte[] { 123, 0 }), InlineData(new Byte[] { 123, 0, 0 })]
         public void ProcessIdIsZeroIfLessThanFourBytesInBuffer(Byte[] buffer)
         {
-            Assert.Equal(0, new PipeMessage("Source", buffer).ProcessId);
+            Assert.Equal(0, new OutputDebugString("Source", buffer).ProcessId);
         }
 
         [Theory, InlineData(null), InlineData(new Byte[0]), InlineData(new Byte[] { 123, 0, 0, 0 }), InlineData(new Byte[] { 123, 0, 0, 0 })]
         public void MessageIsEmptyIfOnlyPreambleInBuffer(Byte[] buffer)
         {
-            Assert.Equal(String.Empty, new PipeMessage("Source", buffer).Message);
+            Assert.Equal(String.Empty, new OutputDebugString("Source", buffer).Message);
         }
 
         [Theory,
-        InlineData("M\0", new Byte[] { 123, 0, 0, 0, 77, 0 }),
-        InlineData("My\0", new Byte[] { 123, 0, 0, 0, 77, 121, 0 }),
-        InlineData("My\0 Message\0", new Byte[] { 123, 0, 0, 0, 77, 121, 0, 32, 77, 101, 115, 115, 97, 103, 101, 0 })]
+        InlineData("M", new Byte[] { 123, 0, 0, 0, 77, 0 }),
+        InlineData("My", new Byte[] { 123, 0, 0, 0, 77, 121, 0 }),
+        InlineData("My", new Byte[] { 123, 0, 0, 0, 77, 121, 0, 32, 77, 101, 115, 115, 97, 103, 101, 0 })]
         public void MessageAllowsForNullByteIfBufferHasMoreThanFourBytes(String expected, Byte[] buffer)
         {
-            Assert.Equal(expected, new PipeMessage("Source", buffer).Message);
+            Assert.Equal(expected, new OutputDebugString("Source", buffer).Message);
         }
     }
 }
