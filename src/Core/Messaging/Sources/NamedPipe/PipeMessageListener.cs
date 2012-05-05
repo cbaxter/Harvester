@@ -23,7 +23,7 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
         private readonly Mutex mutex;
 
         public PipeMessageListener(IProcessMessages messageProcessor, String pipeName, String mutexName)
-            : this(pipeName, messageProcessor, new NamedPipeServerBuffer(pipeName, "Everyone"), new Mutex(false, mutexName)) //TODO: Use constants
+            : this(pipeName, messageProcessor, new NamedPipeServerBuffer(pipeName, "Everyone"), new Mutex(false, mutexName))
         { }
 
         private PipeMessageListener(String listenerName, IProcessMessages messageProcessor, IMessageBuffer messageBuffer, Mutex mutex)

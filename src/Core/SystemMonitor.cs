@@ -46,7 +46,7 @@ namespace Harvester.Core
                 messageListeners.Add(new OutputDebugStringListener(messageProcessor, @"Global\DBWIN", @"DBWinMutex"));
 
             messageListeners.Add(new OutputDebugStringListener(messageProcessor, @"Local\DBWIN", @"DBWinMutex"));
-            messageListeners.Add(new PipeMessageListener(messageProcessor, @"\\.\pipe\Harvester", @"HarvesterDBWinMutex"));
+            messageListeners.Add(new PipeMessageListener(messageProcessor, @"\\.\pipe\Harvester", @"HarvestDBWinMutex"));
         }
 
         public void Dispose()
