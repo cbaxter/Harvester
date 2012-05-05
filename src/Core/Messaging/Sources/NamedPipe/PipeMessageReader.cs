@@ -31,7 +31,7 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
 
         public Boolean ReadNext()
         {
-            Current = new PipeMessage(memoryBuffer.Read()); 
+            Current = new PipeMessage(memoryBuffer.Name, memoryBuffer.Read()); 
 
             return true;
         }

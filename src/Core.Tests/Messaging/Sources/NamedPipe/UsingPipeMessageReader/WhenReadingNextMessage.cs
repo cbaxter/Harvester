@@ -33,7 +33,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingPipeMessageReade
         [Fact]
         public void ReadSingleMessagePerBufferRead()
         {
-            messageBuffer.Setup(mock => mock.Read()).Returns(new PipeMessage(1, "Single Fragment").ToBytes());
+            messageBuffer.Setup(mock => mock.Read()).Returns(new PipeMessage("Source", 1, "Single Fragment").ToBytes());
 
             Assert.True(ReadNextMessage(1, "Single Fragment"));
 
@@ -45,8 +45,8 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingPipeMessageReade
         {
             messageBuffer.Setup(mock => mock.Read()).Returns(new[]
                                                                  {
-                                                                     new PipeMessage(1, "First Fragment").ToBytes(),
-                                                                     new PipeMessage(1, "Second Fragment").ToBytes()
+                                                                     new PipeMessage("Source", 1, "First Fragment").ToBytes(),
+                                                                     new PipeMessage("Source", 1, "Second Fragment").ToBytes()
                                                                  });
 
 
@@ -61,8 +61,8 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingPipeMessageReade
         {
             messageBuffer.Setup(mock => mock.Read()).Returns(new[]
                                                                  {
-                                                                     new PipeMessage(1, "First Fragment").ToBytes(),
-                                                                     new PipeMessage(2, "Second Fragment").ToBytes()
+                                                                     new PipeMessage("Source", 1, "First Fragment").ToBytes(),
+                                                                     new PipeMessage("Source", 2, "Second Fragment").ToBytes()
                                                                  });
 
             Assert.True(ReadNextMessage(1, "First Fragment"));

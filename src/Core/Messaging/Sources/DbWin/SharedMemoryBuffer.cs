@@ -24,7 +24,9 @@ namespace Harvester.Core.Messaging.Sources.DbWin
         private readonly EventWaitHandle bufferReadyEvent;
         private readonly EventWaitHandle dataReadyEvent;
         private readonly MemoryMappedFile bufferFile;
+        private readonly String name;
 
+        public String Name { get { return name; } }
         public TimeSpan Timeout { get; set; }
 
         public SharedMemoryBuffer(String baseObjectName, Int64 capacity)
@@ -32,6 +34,7 @@ namespace Harvester.Core.Messaging.Sources.DbWin
             Verify.NotWhitespace(baseObjectName, "baseObjectName");
             Verify.True(capacity > 0, "capacity", Localization.ValueGreaterThanZeroExpected);
 
+            name = baseObjectName;
             dataReadyEvent = new EventWaitHandle(false, EventResetMode.AutoReset, baseObjectName + "_DATA_READY");
             bufferReadyEvent = new EventWaitHandle(true, EventResetMode.AutoReset, baseObjectName + "_BUFFER_READY");
             bufferFile = MemoryMappedFile.CreateOrOpen(baseObjectName + "_BUFFER", capacity, MemoryMappedFileAccess.ReadWrite);

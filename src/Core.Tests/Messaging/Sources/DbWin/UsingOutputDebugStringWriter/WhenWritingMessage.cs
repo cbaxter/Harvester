@@ -101,7 +101,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringWri
             {
                 var chunks = new Queue<String>();
 
-                messageBuffer.Setup(mock => mock.Write(It.IsAny<Byte[]>())).Callback((Byte[] buffer) => chunks.Enqueue(new OutputDebugString(buffer).Message));
+                messageBuffer.Setup(mock => mock.Write(It.IsAny<Byte[]>())).Callback((Byte[] buffer) => chunks.Enqueue(new OutputDebugString("Source", buffer).Message));
 
                 messageWriter.Write(messageChunk1 + messageChunk2);
 
@@ -140,7 +140,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringWri
             {
                 var chunks = new Queue<String>();
 
-                messageBuffer.Setup(mock => mock.Write(It.IsAny<Byte[]>())).Callback((Byte[] buffer) => chunks.Enqueue(new OutputDebugString(buffer).Message));
+                messageBuffer.Setup(mock => mock.Write(It.IsAny<Byte[]>())).Callback((Byte[] buffer) => chunks.Enqueue(new OutputDebugString("Source", buffer).Message));
 
                 messageWriter.Write(message);
 

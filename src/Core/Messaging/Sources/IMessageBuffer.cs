@@ -18,6 +18,7 @@ namespace Harvester.Core.Messaging.Sources
 {
     public interface IMessageBuffer : IDisposable
     {
+        String Name { get; }
         TimeSpan Timeout { get; set; }
 
         Byte[] Read();

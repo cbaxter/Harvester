@@ -26,7 +26,7 @@ namespace Harvester.Core.Tests.Messaging.UsingMessageProcessor
         public void DoNotThrowOnDisposedProcessor()
         {
             processor.Dispose();
-            processor.Process("Dispose", null);
+            processor.Process(null);
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace Harvester.Core.Tests.Messaging.UsingMessageProcessor
             using(var blockingMessage = new BlockingMessage())
             {
                 var stopwatch = Stopwatch.StartNew();
-                processor.Process("Dispose", blockingMessage);    
+                processor.Process(blockingMessage);    
                 stopwatch.Stop();
 
                 Assert.InRange(stopwatch.ElapsedMilliseconds, 0, 10);
@@ -49,6 +49,7 @@ namespace Harvester.Core.Tests.Messaging.UsingMessageProcessor
             public DateTime Timestamp { get { resetEvent.WaitOne(); return DateTime.Now; } }
             public Int32 ProcessId { get { resetEvent.WaitOne(); return DateTime.Now.Millisecond; } }
             public String Message { get { resetEvent.WaitOne(); return DateTime.Now.ToLongTimeString(); } }
+            public String Source { get { resetEvent.WaitOne(); return DateTime.Now.ToLongTimeString(); } }
 
             public void Dispose()
             {

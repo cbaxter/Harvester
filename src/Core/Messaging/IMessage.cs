@@ -21,5 +21,6 @@ namespace Harvester.Core.Messaging
         DateTime Timestamp { get; }
         Int32 ProcessId { get; }
         String Message { get; }
+        String Source { get; }
     }
 }

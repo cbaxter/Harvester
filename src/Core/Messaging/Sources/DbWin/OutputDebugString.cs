@@ -28,17 +28,20 @@ namespace Harvester.Core.Messaging.Sources.DbWin
         public DateTime Timestamp { get; private set; }
         public Int32 ProcessId { get; private set; }
         public String Message { get; private set; }
+        public String Source { get; private set; }
 
-        public OutputDebugString(Byte[] buffer)
+        public OutputDebugString(String source, Byte[] buffer)
         {
             Timestamp = DateTime.Now;
+            Source = source ?? String.Empty;
             Message = GetMessage(buffer ?? Empty);
             ProcessId = GetProcessId(buffer ?? Empty);
         }
 
-        public OutputDebugString(Int32 processId, String message)
+        public OutputDebugString(String source, Int32 processId, String message)
         {
             Timestamp = DateTime.Now;
+            Source = source ?? String.Empty;
             Message = message ?? String.Empty;
             ProcessId = processId;
         }

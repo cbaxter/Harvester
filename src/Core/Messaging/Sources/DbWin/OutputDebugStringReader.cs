@@ -47,7 +47,7 @@ namespace Harvester.Core.Messaging.Sources.DbWin
             while (queuedMessages.Count == 0)
             {
                 var data = messageBuffer.Read();
-                var fragment = new OutputDebugString(data);
+                var fragment = new OutputDebugString(messageBuffer.Name, data);
 
                 if (NewMessageFragment(fragment))
                     FlushPartialMessage();
@@ -75,7 +75,7 @@ namespace Harvester.Core.Messaging.Sources.DbWin
 
         private void AppendToPartialMessage(OutputDebugString fragment)
         {
-            partial = partial == null ? fragment : new OutputDebugString(partial.ProcessId, partial.Message + fragment.Message);
+            partial = partial == null ? fragment : new OutputDebugString(messageBuffer.Name, partial.ProcessId, partial.Message + fragment.Message);
         }
 
         private Boolean ExceedsMaxMessageLength(OutputDebugString fragment)

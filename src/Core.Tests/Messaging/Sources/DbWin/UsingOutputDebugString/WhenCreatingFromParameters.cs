@@ -21,7 +21,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugString
 {
     public class WhenCreatingFromParameters
     {
-        private readonly IMessage message = new OutputDebugString(123, "My Message");
+        private readonly IMessage message = new OutputDebugString("Source", 123, "My Message");
         private readonly DateTime now = DateTime.Now;
 
         [Fact]

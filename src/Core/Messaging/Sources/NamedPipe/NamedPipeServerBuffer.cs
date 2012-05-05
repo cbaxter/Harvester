@@ -24,7 +24,9 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
         private readonly NamedPipeServerStream pipeStream;
         private readonly MemoryStream memoryStream;
         private readonly Byte[] buffer;
+        private readonly String name;
 
+        public String Name { get { return name; } }
         public TimeSpan Timeout { get; set; }
 
         public NamedPipeServerBuffer()
@@ -40,6 +42,7 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
             pipeStream = new NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.Asynchronous, 0, 0, GetPipeSecurity(identity));
             memoryStream = new MemoryStream();
             buffer = new Byte[8192];
+            name = pipeName;
 
             Timeout = TimeSpan.FromSeconds(10);
         }

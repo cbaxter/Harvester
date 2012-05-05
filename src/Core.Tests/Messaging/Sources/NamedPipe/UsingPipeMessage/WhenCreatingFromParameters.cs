@@ -22,7 +22,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingPipeMessage
 {
     public class WhenCreatingFromParameters
     {
-        private readonly IMessage message = new PipeMessage(123, "My Message");
+        private readonly IMessage message = new PipeMessage("Source", 123, "My Message");
         private readonly DateTime now = DateTime.Now;
 
         [Fact]

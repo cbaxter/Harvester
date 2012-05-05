@@ -58,7 +58,7 @@ namespace Harvester.Core.Messaging
             try
             {
                 while (messageReader.ReadNext())
-                    messageProcessor.Process(source, messageReader.Current);
+                    messageProcessor.Process(messageReader.Current);
             }
             catch (ObjectDisposedException)
             { }

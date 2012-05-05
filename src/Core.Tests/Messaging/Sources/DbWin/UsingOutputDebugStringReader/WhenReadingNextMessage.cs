@@ -33,7 +33,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringRea
         [Fact]
         public void ReadSingleMessageIfOnlyFragment()
         {
-            messageBuffer.Setup(mock => mock.Read()).Returns(new OutputDebugString(1, "Single Fragment").ToBytes());
+            messageBuffer.Setup(mock => mock.Read()).Returns(new OutputDebugString("Source", 1, "Single Fragment").ToBytes());
 
             Assert.True(ReadNextMessage(1, "Single Fragment"));
 
@@ -45,8 +45,8 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringRea
         {
             messageBuffer.Setup(mock => mock.Read()).Returns(new[]
                                                                  {
-                                                                     new OutputDebugString(1, '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize - 2) + '$').ToBytes(),
-                                                                     new OutputDebugString(1, '^' + String.Empty.PadLeft(126) + '$').ToBytes()
+                                                                     new OutputDebugString("Source", 1, '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize - 2) + '$').ToBytes(),
+                                                                     new OutputDebugString("Source", 1, '^' + String.Empty.PadLeft(126) + '$').ToBytes()
                                                                  });
 
             Assert.True(ReadNextMessage(1, '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize - 2) + '$' + '^' + String.Empty.PadLeft(126) + '$'));
@@ -59,8 +59,8 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringRea
         {
             messageBuffer.Setup(mock => mock.Read()).Returns(new[]
                                                                  {
-                                                                     new OutputDebugString(1, '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize - 2) + '$').ToBytes(),
-                                                                     new OutputDebugString(1, String.Empty).ToBytes(),
+                                                                     new OutputDebugString("Source", 1, '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize - 2) + '$').ToBytes(),
+                                                                     new OutputDebugString("Source", 1, String.Empty).ToBytes(),
                                                                  });
 
             Assert.True(ReadNextMessage(1, '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize - 2) + '$'));
@@ -73,8 +73,8 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringRea
         {
             messageBuffer.Setup(mock => mock.Read()).Returns(new[]
                                                                  {
-                                                                     new OutputDebugString(1, "First Fragment").ToBytes(),
-                                                                     new OutputDebugString(2, "Second Fragment").ToBytes()
+                                                                     new OutputDebugString("Source", 1, "First Fragment").ToBytes(),
+                                                                     new OutputDebugString("Source", 2, "Second Fragment").ToBytes()
                                                                  });
 
             Assert.True(ReadNextMessage(1, "First Fragment"));
@@ -88,9 +88,9 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringRea
         {
             messageBuffer.Setup(mock => mock.Read()).Returns(new[]
                                                                  {
-                                                                     new OutputDebugString(1, '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize * 15 - 2) + '$').ToBytes(),
-                                                                     new OutputDebugString(1, '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize - 2) + '$').ToBytes(),
-                                                                     new OutputDebugString(1, '^' + String.Empty.PadLeft(126) + '$').ToBytes(),
+                                                                     new OutputDebugString("Source", 1, '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize * 15 - 2) + '$').ToBytes(),
+                                                                     new OutputDebugString("Source", 1, '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize - 2) + '$').ToBytes(),
+                                                                     new OutputDebugString("Source", 1, '^' + String.Empty.PadLeft(126) + '$').ToBytes(),
                                                                  });
 
             Assert.True(ReadNextMessage(1, '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize * 15 - 2) + '$' + '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize - 2) + '$'));

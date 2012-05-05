@@ -25,7 +25,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugString
 {
     public class WhenCreatingFromBuffer
     {
-        private readonly IMessage message = new OutputDebugString(BitConverter.GetBytes(123).Concat(Encoding.UTF8.GetBytes("My Message")).ToArray());
+        private readonly IMessage message = new OutputDebugString("Source", BitConverter.GetBytes(123).Concat(Encoding.UTF8.GetBytes("My Message")).ToArray());
         private readonly DateTime now = DateTime.Now;
 
         [Fact]
@@ -49,19 +49,19 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugString
         [Fact]
         public void TolerateMissingNullTerminatingByte()
         {
-            Assert.Equal("A", new PipeMessage(new Byte[] { 123, 0, 0, 0, 65 }).Message);
+            Assert.Equal("A", new PipeMessage("Source", new Byte[] { 123, 0, 0, 0, 65 }).Message);
         }
 
         [Theory, InlineData(null), InlineData(new Byte[0]), InlineData(new Byte[] { 123 }), InlineData(new Byte[] { 123, 0 }), InlineData(new Byte[] { 123, 0, 0 })]
         public void ProcessIdIsZeroIfLessThanFourBytesInBuffer(Byte[] buffer)
         {
-            Assert.Equal(0, new PipeMessage(buffer).ProcessId);
+            Assert.Equal(0, new PipeMessage("Source", buffer).ProcessId);
         }
 
         [Theory, InlineData(null), InlineData(new Byte[0]), InlineData(new Byte[] { 123, 0, 0, 0 }), InlineData(new Byte[] { 123, 0, 0, 0 })]
         public void MessageIsEmptyIfOnlyPreambleInBuffer(Byte[] buffer)
         {
-            Assert.Equal(String.Empty, new PipeMessage(buffer).Message);
+            Assert.Equal(String.Empty, new PipeMessage("Source", buffer).Message);
         }
 
         [Theory,
@@ -70,7 +70,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugString
         InlineData("My\0 Message\0", new Byte[] { 123, 0, 0, 0, 77, 121, 0, 32, 77, 101, 115, 115, 97, 103, 101, 0 })]
         public void MessageAllowsForNullByteIfBufferHasMoreThanFourBytes(String expected, Byte[] buffer)
         {
-            Assert.Equal(expected, new PipeMessage(buffer).Message);
+            Assert.Equal(expected, new PipeMessage("Source", buffer).Message);
         }
     }
 }

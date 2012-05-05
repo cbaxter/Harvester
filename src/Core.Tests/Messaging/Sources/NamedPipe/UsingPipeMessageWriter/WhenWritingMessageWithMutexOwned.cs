@@ -98,7 +98,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingPipeMessageWrite
             {
                 var chunks = new Queue<String>();
 
-                messageBuffer.Setup(mock => mock.Write(It.IsAny<Byte[]>())).Callback((Byte[] buffer) => chunks.Enqueue(new PipeMessage(buffer).Message));
+                messageBuffer.Setup(mock => mock.Write(It.IsAny<Byte[]>())).Callback((Byte[] buffer) => chunks.Enqueue(new PipeMessage("Source", buffer).Message));
 
                 messageWriter.Write(message);
 

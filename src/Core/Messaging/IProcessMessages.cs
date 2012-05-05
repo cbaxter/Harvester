@@ -18,6 +18,6 @@ namespace Harvester.Core.Messaging
 {
     public interface IProcessMessages : IDisposable
     {
-        void Process(String source, IMessage message);
+        void Process(IMessage message);
     }
 }

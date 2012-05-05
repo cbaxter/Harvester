@@ -21,29 +21,17 @@ namespace Harvester.Core.Messaging
     internal class MessageProcessor : IProcessMessages
     {
         private readonly CancellationTokenSource cancellationTokenSource;
-        private readonly BlockingCollection<RawMessage> messageQueue;
+        private readonly BlockingCollection<IMessage> messageQueue;
         private readonly Object syncLock = new Object();
         private readonly IRenderEvents renderer;
         private readonly Thread processor;
-
-        private struct RawMessage
-        {
-            public readonly String Source;
-            public readonly IMessage Message;
-
-            public RawMessage(String source, IMessage message)
-            {
-                Source = source;
-                Message = message;
-            }
-        }
 
         public MessageProcessor(IRenderEvents eventRenderer)
         {
             Verify.NotNull(eventRenderer, "eventRenderer");
 
             renderer = eventRenderer;
-            messageQueue = new BlockingCollection<RawMessage>();
+            messageQueue = new BlockingCollection<IMessage>();
             cancellationTokenSource = new CancellationTokenSource();
             processor = new Thread(ProcessAllMessages) { IsBackground = true, Priority = ThreadPriority.AboveNormal, Name = "Processor", };
             processor.Start();
@@ -68,26 +56,23 @@ namespace Harvester.Core.Messaging
         {
             try
             {
-                foreach (var rawMessage in messageQueue.GetConsumingEnumerable(cancellationTokenSource.Token))
+                foreach (var message in messageQueue.GetConsumingEnumerable(cancellationTokenSource.Token))
                 {
-                    var source = rawMessage.Source;
-                    var message = rawMessage.Message;
-
-                    renderer.Render(message.Timestamp.ToString("yyyy-MM-dd HH:mm:ss,fff") + ' ' + source + ' ' + message.ProcessId + ' ' + message.Message);
+                    renderer.Render(message.Timestamp.ToString("yyyy-MM-dd HH:mm:ss,fff") + ' ' + message.Source + ' ' + message.ProcessId + ' ' + message.Message);
                 }
             }
             catch (OperationCanceledException)
             { }
         }
         
-        public void Process(String source, IMessage message)
+        public void Process(IMessage message)
         {
             lock (syncLock)
             {
                 if (cancellationTokenSource.IsCancellationRequested)
                     return;
 
-                messageQueue.Add(new RawMessage(source, message));
+                messageQueue.Add(message);
             }
         }
     }

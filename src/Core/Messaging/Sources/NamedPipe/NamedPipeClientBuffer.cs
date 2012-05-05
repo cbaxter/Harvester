@@ -23,9 +23,10 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
         private readonly String serverName;
         private readonly String pipeName;
 
-        TimeSpan IMessageBuffer.Timeout { get { return TimeSpan.FromMilliseconds(Timeout); } set { Timeout = Convert.ToInt32(value.TotalMilliseconds); } }
+        public String Name { get { return pipeName; } }
         public Int32 Timeout { get; set; }
-
+        TimeSpan IMessageBuffer.Timeout { get { return TimeSpan.FromMilliseconds(Timeout); } set { Timeout = Convert.ToInt32(value.TotalMilliseconds); } }
+        
         public NamedPipeClientBuffer()
             : this(@".", @"\\.\pipe\Harvester")
         { }
