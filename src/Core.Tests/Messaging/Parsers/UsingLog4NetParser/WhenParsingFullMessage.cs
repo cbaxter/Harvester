@@ -21,22 +21,35 @@ using Xunit.Extensions;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4JXmlParser
+namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4NetParser
 {
-    public class WhenParsingEmptyMessage
+    public class WhenParsingFullMessage
     {
         private readonly Mock<IRetrieveProcesses> processRetriever = new Mock<IRetrieveProcesses>();
         private readonly IParseMessages messageParser;
 
-        public WhenParsingEmptyMessage()
+        public WhenParsingFullMessage()
         {
-            messageParser = new Log4JXmlParser(processRetriever.Object);
+            messageParser = new Log4NetParser(processRetriever.Object);
         }
 
-        [Fact]
-        public void AlwaysTraceLevel()
+        [
+        Theory,
+        InlineData("Fatal", SystemEventLevel.Fatal),
+        InlineData("Error", SystemEventLevel.Error),
+        InlineData("Warn", SystemEventLevel.Warning),
+        InlineData("Info", SystemEventLevel.Information),
+        InlineData("Debug", SystemEventLevel.Debug),
+        InlineData("Unknown", SystemEventLevel.Trace)
+        ]
+        public void TraceLevelFromMessage(String level, SystemEventLevel systemEventlevel)
         {
-            Assert.Equal(SystemEventLevel.Trace, messageParser.Parse(CreateMessage()).Level);
+            processRetriever.Setup(mock => mock.GetProcessById(123)).Returns(new UnknownProcess(123));
+
+            var message = new OutputDebugString("xUnit Source", 123, String.Format("<log4net:event level=\"{0}\"></log4net:event>", level));
+            var e = messageParser.Parse(message);
+
+            Assert.Equal(systemEventlevel, e.Level);
         }
 
         [Fact]
@@ -56,35 +69,36 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4JXmlParser
         }
 
         [Fact]
-        public void SourceIsEmpty()
+        public void SourceFromLoggerAttribute()
         {
-            Assert.Equal(String.Empty, messageParser.Parse(CreateMessage()).Source);
+            Assert.Equal("Test Logger", messageParser.Parse(CreateMessage()).Source);
         }
 
         [Fact]
-        public void MessageIsEmpty()
+        public void MessageFromMessageNode()
         {
-            Assert.Equal(String.Empty, messageParser.Parse(CreateMessage()).Message);
+            Assert.Equal("Test Message", messageParser.Parse(CreateMessage()).Message);
         }
 
         [Fact]
         public void RawMessageIsFormattedXml()
         {
-            var message = CreateMessage();
-
-            Assert.Equal("<log4j:event xmlns:log4j=\"http://logging.apache.org/log4j/\">\r\n</log4j:event>", messageParser.Parse(message).RawMessage.Value);
+            Assert.Equal(
+                "<log4net:event level=\"error\" logger=\"Test Logger\" thread=\"Test Thread\" username=\"Test User\" xmlns:log4net=\"http://logging.apache.org/log4j/\">\r\n  <log4net:message>Test Message</log4net:message>\r\n</log4net:event>",
+                messageParser.Parse(CreateMessage()).RawMessage.Value
+            );
         }
 
         [Fact]
-        public void ThreadIsEmpty()
+        public void ThreadFromThreadAttribute()
         {
-            Assert.Equal(String.Empty, messageParser.Parse(CreateMessage()).Thread);
+            Assert.Equal("Test Thread", messageParser.Parse(CreateMessage()).Thread);
         }
 
         [Fact]
-        public void UsernameIsEmpty()
+        public void UsernameFromUsernameAttribute()
         {
-            Assert.Equal(String.Empty, messageParser.Parse(CreateMessage()).Username);
+            Assert.Equal("Test User", messageParser.Parse(CreateMessage()).Username);
         }
 
         [Fact]
@@ -98,7 +112,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4JXmlParser
         {
             Assert.NotEqual((UInt32)0, messageParser.Parse(CreateMessage()).MessageId);
         }
-        
+
         private IMessage CreateMessage()
         {
             var process = new Mock<IProcess>();
@@ -107,7 +121,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4JXmlParser
             process.Setup(mock => mock.Name).Returns("xUnit Process");
             processRetriever.Setup(mock => mock.GetProcessById(123)).Returns(process.Object);
 
-            return new OutputDebugString("xUnit Source", 123, "<log4j:event ></log4j:event>");
+            return new OutputDebugString("xUnit Source", 123, "<log4net:event level=\"error\" logger=\"Test Logger\" thread=\"Test Thread\" username=\"Test User\"><log4net:message>Test Message</log4net:message></log4net:event>");
         }
     }
 }

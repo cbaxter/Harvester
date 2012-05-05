@@ -33,7 +33,7 @@ namespace Harvester.Core
             var processRetriever = new ProcessRetriever();
             var messageParsers = new IParseMessages[]
                                      {
-                                         new Log4JXmlParser(processRetriever),
+                                         new Log4JParser(processRetriever),
                                          new DefaultMessageParser(processRetriever)
                                      };
 

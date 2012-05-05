@@ -62,11 +62,14 @@
     <Compile Include="..\.shared\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Messaging\Parsers\UsingLog4NetParser\WhenCheckingCanParseMessage.cs" />
+    <Compile Include="Messaging\Parsers\UsingLog4NetParser\WhenParsingEmptyMessage.cs" />
+    <Compile Include="Messaging\Parsers\UsingLog4NetParser\WhenParsingFullMessage.cs" />
     <Compile Include="Messaging\Parsers\UsingDefaultParser\WhenCheckingCanParseMessage.cs" />
     <Compile Include="Messaging\Parsers\UsingDefaultParser\WhenParsingMessage.cs" />
-    <Compile Include="Messaging\Parsers\UsingLog4JXmlParser\WhenParsingFullMessage.cs" />
-    <Compile Include="Messaging\Parsers\UsingLog4JXmlParser\WhenParsingEmptyMessage.cs" />
-    <Compile Include="Messaging\Parsers\UsingLog4JXmlParser\WhenCheckingCanParseMessage.cs" />
+    <Compile Include="Messaging\Parsers\UsingLog4JParser\WhenParsingFullMessage.cs" />
+    <Compile Include="Messaging\Parsers\UsingLog4JParser\WhenParsingEmptyMessage.cs" />
+    <Compile Include="Messaging\Parsers\UsingLog4JParser\WhenCheckingCanParseMessage.cs" />
     <Compile Include="Messaging\Sources\DbWin\UsingOutputDebugStringListener\WhenDisposingListener.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeClientBuffer\WhenAdjustingTimeout.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeServerBuffer\WhenCreatingBuffer.cs" />

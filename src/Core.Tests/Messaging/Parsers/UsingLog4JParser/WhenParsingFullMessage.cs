@@ -21,7 +21,7 @@ using Xunit.Extensions;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4JXmlParser
+namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4JParser
 {
     public class WhenParsingFullMessage
     {
@@ -30,7 +30,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4JXmlParser
 
         public WhenParsingFullMessage()
         {
-            messageParser = new Log4JXmlParser(processRetriever.Object);
+            messageParser = new Log4JParser(processRetriever.Object);
         }
 
         [

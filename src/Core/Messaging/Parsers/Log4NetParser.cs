@@ -18,20 +18,20 @@ using Harvester.Core.Processes;
 
 namespace Harvester.Core.Messaging.Parsers
 {
-    internal class Log4JXmlParser : XmlMessageParser
+    internal class Log4NetParser : XmlMessageParser
     {
-        public Log4JXmlParser(IRetrieveProcesses processRetriever)
-            : base(processRetriever, "log4j", "http://logging.apache.org/log4j/")
+        public Log4NetParser(IRetrieveProcesses processRetriever)
+            : base(processRetriever, "log4net", "http://logging.apache.org/log4j/")
         { }
 
         public override Boolean CanParseMessage(String message)
         {
-            return message != null && message.StartsWith("<log4j:event ") && message.EndsWith("</log4j:event>");
+            return message != null && message.StartsWith("<log4net:event ") && message.EndsWith("</log4net:event>");
         }
 
         protected override SystemEventLevel GetLevel(XmlDocument document)
         {
-            var level = QuerySingleValue(document, "./log4j:event/@level");
+            var level = QuerySingleValue(document, "./log4net:event/@level");
             switch (level.ToLowerInvariant())
             {
                 case "fatal": return SystemEventLevel.Fatal;
@@ -45,22 +45,22 @@ namespace Harvester.Core.Messaging.Parsers
 
         protected override String GetSource(XmlDocument document)
         {
-            return QuerySingleValue(document, "./log4j:event/@logger");
+            return QuerySingleValue(document, "./log4net:event/@logger");
         }
 
         protected override String GetThread(XmlDocument document)
         {
-            return QuerySingleValue(document, "./log4j:event/@thread");
+            return QuerySingleValue(document, "./log4net:event/@thread");
         }
 
         protected override String GetUsername(XmlDocument document)
         {
-            return QuerySingleValue(document, "./log4j:event/@username");
+            return QuerySingleValue(document, "./log4net:event/@username");
         }
 
         protected override String GetMessage(XmlDocument document)
         {
-            return QuerySingleValue(document, "./log4j:event/log4j:message/text()");
+            return QuerySingleValue(document, "./log4net:event/log4net:message/text()");
         }
     }
 }
