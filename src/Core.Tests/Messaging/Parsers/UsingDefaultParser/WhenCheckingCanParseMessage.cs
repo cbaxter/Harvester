@@ -1,7 +1,9 @@
 ﻿using System;
-using Harvester.Core.Messaging.Sources;
-using Harvester.Core.Messaging.Sources.NamedPipe;
+using Harvester.Core.Messaging.Parsers;
+using Harvester.Core.Processes;
+using Moq;
 using Xunit;
+using Xunit.Extensions;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -17,32 +19,22 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeClientBuffer
+namespace Harvester.Core.Tests.Messaging.Parsers.UsingDefaultParser
 {
-    public class WhenReadingFromBuffer : IDisposable
+    public class WhenCheckingCanParseMessage
     {
-        private readonly IMessageBuffer buffer;
+        private readonly Mock<IRetrieveProcesses> processRetriever = new Mock<IRetrieveProcesses>();
+        private readonly IParseMessages messageParser;
 
-        public WhenReadingFromBuffer()
+        public WhenCheckingCanParseMessage()
         {
-            buffer = new NamedPipeClientBuffer();
+            messageParser = new DefaultMessageParser(processRetriever.Object);
         }
 
-        public void Dispose()
+        [Theory, InlineData(null), InlineData(""), InlineData("Message")]
+        public void AlwaysReturnTrue(String message)
         {
-            buffer.Dispose();
-        }
-
-        [Fact]
-        public void ThrowNotSupportedException()
-        {
-            Assert.Throws<NotSupportedException>(() => buffer.Read());
-        }
-
-        [Fact]
-        public void NameIsBufferName()
-        {
-            Assert.Equal(@"\\.\pipe\Harvester", buffer.Name);
+            Assert.True(messageParser.CanParseMessage(message));
         }
     }
 }

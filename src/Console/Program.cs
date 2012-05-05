@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using Harvester.Core;
-using Harvester.Core.Messaging;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -21,14 +19,6 @@ namespace Harvester
 {
     internal class Program
     {
-        private class ConsoleRenderer : IRenderEvents
-        {
-            public void Render(string e)
-            {
-                Console.WriteLine(e);
-            }
-        }
-
         static void Main()
         {
             using (new SystemMonitor(new ConsoleRenderer()))

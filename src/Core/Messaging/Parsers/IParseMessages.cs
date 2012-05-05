@@ -1,7 +1,4 @@
 ﻿using System;
-using Harvester.Core.Messaging.Sources;
-using Harvester.Core.Messaging.Sources.NamedPipe;
-using Xunit;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -17,32 +14,11 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeClientBuffer
+namespace Harvester.Core.Messaging.Parsers
 {
-    public class WhenReadingFromBuffer : IDisposable
+    internal interface IParseMessages
     {
-        private readonly IMessageBuffer buffer;
-
-        public WhenReadingFromBuffer()
-        {
-            buffer = new NamedPipeClientBuffer();
-        }
-
-        public void Dispose()
-        {
-            buffer.Dispose();
-        }
-
-        [Fact]
-        public void ThrowNotSupportedException()
-        {
-            Assert.Throws<NotSupportedException>(() => buffer.Read());
-        }
-
-        [Fact]
-        public void NameIsBufferName()
-        {
-            Assert.Equal(@"\\.\pipe\Harvester", buffer.Name);
-        }
+        Boolean CanParseMessage(String message);
+        SystemEvent Parse(IMessage message);
     }
 }

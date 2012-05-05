@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using Harvester.Core.Messaging.Parsers;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -22,18 +25,21 @@ namespace Harvester.Core.Messaging
     {
         private readonly CancellationTokenSource cancellationTokenSource;
         private readonly BlockingCollection<IMessage> messageQueue;
+        private readonly IEnumerable<IParseMessages> parsers;
         private readonly Object syncLock = new Object();
         private readonly IRenderEvents renderer;
         private readonly Thread processor;
 
-        public MessageProcessor(IRenderEvents eventRenderer)
+        public MessageProcessor(IRenderEvents eventRenderer, IList<IParseMessages> messageParsers)
         {
             Verify.NotNull(eventRenderer, "eventRenderer");
+            Verify.NotNull(messageParsers, "messageParsers");
 
             renderer = eventRenderer;
+            parsers = messageParsers;
             messageQueue = new BlockingCollection<IMessage>();
             cancellationTokenSource = new CancellationTokenSource();
-            processor = new Thread(ProcessAllMessages) { IsBackground = true, Priority = ThreadPriority.AboveNormal, Name = "Processor", };
+            processor = new Thread(ProcessAllMessages) { IsBackground = true, Name = "Processor", };
             processor.Start();
         }
 
@@ -58,18 +64,20 @@ namespace Harvester.Core.Messaging
             {
                 foreach (var message in messageQueue.GetConsumingEnumerable(cancellationTokenSource.Token))
                 {
-                    renderer.Render(message.Timestamp.ToString("yyyy-MM-dd HH:mm:ss,fff") + ' ' + message.Source + ' ' + message.ProcessId + ' ' + message.Message);
+                    var parser = parsers.FirstOrDefault(p => p.CanParseMessage(message.Message));
+
+                    renderer.Render(parser != null ? parser.Parse(message) : SystemEvent.Create(message));
                 }
             }
             catch (OperationCanceledException)
             { }
         }
-        
+
         public void Process(IMessage message)
         {
             lock (syncLock)
             {
-                if (cancellationTokenSource.IsCancellationRequested)
+                if (message == null || cancellationTokenSource.IsCancellationRequested)
                     return;
 
                 messageQueue.Add(message);

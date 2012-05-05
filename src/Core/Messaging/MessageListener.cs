@@ -23,7 +23,6 @@ namespace Harvester.Core.Messaging
         private readonly IProcessMessages messageProcessor;
         private readonly IReadMessages messageReader;
         private readonly Thread listener;
-        private readonly String source;
 
         protected MessageListener(String source, IProcessMessages messageProcessor, IReadMessages messageReader)
         {
@@ -33,7 +32,6 @@ namespace Harvester.Core.Messaging
 
             this.messageProcessor = messageProcessor;
             this.messageReader = messageReader;
-            this.source = source;
 
             listener = new Thread(ReadAllMessages) { IsBackground = true, Priority = ThreadPriority.AboveNormal, Name = source, };
             listener.Start();

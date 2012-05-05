@@ -1,7 +1,6 @@
 ﻿using System;
-using Harvester.Core.Messaging.Sources;
-using Harvester.Core.Messaging.Sources.NamedPipe;
-using Xunit;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -17,32 +16,32 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeClientBuffer
+namespace Harvester.Core.Processes
 {
-    public class WhenReadingFromBuffer : IDisposable
+    internal class ProcessRetriever : IRetrieveProcesses
     {
-        private readonly IMessageBuffer buffer;
-
-        public WhenReadingFromBuffer()
+        private readonly IDictionary<Int32, IProcess> processCache = new Dictionary<Int32, IProcess>();
+        
+        public IProcess GetProcessById(Int32 processId)
         {
-            buffer = new NamedPipeClientBuffer();
-        }
+            lock (processCache)
+            {
+                IProcess process = null;
 
-        public void Dispose()
-        {
-            buffer.Dispose();
-        }
+                try
+                {
+                    if (processCache.TryGetValue(processId, out process) && !process.HasExited)
+                        return process;
 
-        [Fact]
-        public void ThrowNotSupportedException()
-        {
-            Assert.Throws<NotSupportedException>(() => buffer.Read());
-        }
+                    processCache[processId] = process = new ProcessWrapper(Process.GetProcessById(processId));
+                }
+                catch (Exception)
+                {
+                    processCache.Remove(processId);
+                }
 
-        [Fact]
-        public void NameIsBufferName()
-        {
-            Assert.Equal(@"\\.\pipe\Harvester", buffer.Name);
+                return process ?? new UnknownProcess(processId);
+            }
         }
     }
 }

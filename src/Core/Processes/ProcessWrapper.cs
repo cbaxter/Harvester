@@ -1,7 +1,5 @@
 ﻿using System;
-using Harvester.Core.Messaging.Sources;
-using Harvester.Core.Messaging.Sources.NamedPipe;
-using Xunit;
+using System.Diagnostics;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -17,32 +15,38 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeClientBuffer
+namespace Harvester.Core.Processes
 {
-    public class WhenReadingFromBuffer : IDisposable
+    internal class ProcessWrapper : IProcess
     {
-        private readonly IMessageBuffer buffer;
+        private readonly String processName;
+        private readonly Int32 processId;
+        private DateTime? exitTime;
+        private Process process;
 
-        public WhenReadingFromBuffer()
+        public Int32 Id { get { return processId; } }
+        public String Name { get { return processName; } }
+        public DateTime? ExitTime { get { return exitTime; } }
+        public Boolean HasExited { get { return process == null || process.HasExited; } }
+
+        public ProcessWrapper(Process process)
         {
-            buffer = new NamedPipeClientBuffer();
+            Verify.NotNull(process, "process");
+
+            this.process = process;
+            this.process.Exited += OnProcessExited;
+
+            processId = process.Id;
+            processName = process.ProcessName;
         }
 
-        public void Dispose()
+        private void OnProcessExited(Object sender, EventArgs e)
         {
-            buffer.Dispose();
-        }
+            exitTime = DateTime.Now;
 
-        [Fact]
-        public void ThrowNotSupportedException()
-        {
-            Assert.Throws<NotSupportedException>(() => buffer.Read());
-        }
-
-        [Fact]
-        public void NameIsBufferName()
-        {
-            Assert.Equal(@"\\.\pipe\Harvester", buffer.Name);
+            process.Exited -= OnProcessExited;
+            process.Dispose();
+            process = null;
         }
     }
 }

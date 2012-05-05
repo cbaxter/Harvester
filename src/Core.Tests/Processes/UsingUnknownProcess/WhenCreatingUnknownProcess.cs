@@ -1,6 +1,5 @@
 ﻿using System;
-using Harvester.Core.Messaging.Sources;
-using Harvester.Core.Messaging.Sources.NamedPipe;
+using Harvester.Core.Processes;
 using Xunit;
 
 /* Copyright (c) 2012 CBaxter
@@ -17,32 +16,40 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeClientBuffer
+namespace Harvester.Core.Tests.Processes.UsingUnknownProcess
 {
-    public class WhenReadingFromBuffer : IDisposable
+    public class WhenCreatingNewUnknownProcess
     {
-        private readonly IMessageBuffer buffer;
-
-        public WhenReadingFromBuffer()
+        [Fact]
+        public void AlwaysSetHasExitedTrue()
         {
-            buffer = new NamedPipeClientBuffer();
-        }
+            var unknownProcess = new UnknownProcess(1);
 
-        public void Dispose()
-        {
-            buffer.Dispose();
+            Assert.True(unknownProcess.HasExited);
         }
 
         [Fact]
-        public void ThrowNotSupportedException()
+        public void AlwaysSetExitedTime()
         {
-            Assert.Throws<NotSupportedException>(() => buffer.Read());
+            var unknownProcess = new UnknownProcess(1);
+
+            Assert.NotNull(unknownProcess.ExitTime);
         }
 
         [Fact]
-        public void NameIsBufferName()
+        public void NeverSetProcessName()
         {
-            Assert.Equal(@"\\.\pipe\Harvester", buffer.Name);
+            var unknownProcess = new UnknownProcess(1);
+
+            Assert.Equal(String.Empty, unknownProcess.Name);
+        }
+
+        [Fact]
+        public void AlwaysSetProcessId()
+        {
+            var unknownProcess = new UnknownProcess(1);
+
+            Assert.Equal(1, unknownProcess.Id);
         }
     }
 }

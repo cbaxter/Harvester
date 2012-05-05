@@ -62,6 +62,11 @@
     <Compile Include="..\.shared\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Messaging\Parsers\UsingDefaultParser\WhenCheckingCanParseMessage.cs" />
+    <Compile Include="Messaging\Parsers\UsingDefaultParser\WhenParsingMessage.cs" />
+    <Compile Include="Messaging\Parsers\UsingLog4JXmlParser\WhenParsingFullMessage.cs" />
+    <Compile Include="Messaging\Parsers\UsingLog4JXmlParser\WhenParsingEmptyMessage.cs" />
+    <Compile Include="Messaging\Parsers\UsingLog4JXmlParser\WhenCheckingCanParseMessage.cs" />
     <Compile Include="Messaging\Sources\DbWin\UsingOutputDebugStringListener\WhenDisposingListener.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeClientBuffer\WhenAdjustingTimeout.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeServerBuffer\WhenCreatingBuffer.cs" />
@@ -92,6 +97,11 @@
     <Compile Include="Messaging\Sources\NamedPipe\UsingPipeMessage\WhenCreatingFromParameters.cs" />
     <Compile Include="MoqExtensions.cs" />
     <Compile Include="OutputDebugStringExtensions.cs" />
+    <Compile Include="Processes\ProcessExtensions.cs" />
+    <Compile Include="Processes\UsingProcessRetriever\WhenGettingProcess.cs" />
+    <Compile Include="Processes\UsingProcessWrapper\WhenProcessHasExited.cs" />
+    <Compile Include="Processes\UsingProcessWrapper\WhenProcessIsRunning.cs" />
+    <Compile Include="Processes\UsingUnknownProcess\WhenCreatingUnknownProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

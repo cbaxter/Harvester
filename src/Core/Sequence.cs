@@ -1,7 +1,4 @@
 ﻿using System;
-using Harvester.Core.Messaging.Sources;
-using Harvester.Core.Messaging.Sources.NamedPipe;
-using Xunit;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -17,32 +14,31 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeClientBuffer
+namespace Harvester.Core
 {
-    public class WhenReadingFromBuffer : IDisposable
+    internal class Sequence
     {
-        private readonly IMessageBuffer buffer;
+        private readonly Object syncLock = new Object();
+        private UInt32 nextId;
 
-        public WhenReadingFromBuffer()
+        public Sequence()
+            : this(1)
+        { }
+
+        public Sequence(UInt32 nextId)
         {
-            buffer = new NamedPipeClientBuffer();
+            this.nextId = nextId;
         }
 
-        public void Dispose()
+        public UInt32 Next()
         {
-            buffer.Dispose();
-        }
-
-        [Fact]
-        public void ThrowNotSupportedException()
-        {
-            Assert.Throws<NotSupportedException>(() => buffer.Read());
-        }
-
-        [Fact]
-        public void NameIsBufferName()
-        {
-            Assert.Equal(@"\\.\pipe\Harvester", buffer.Name);
+            lock (syncLock)
+            {
+                unchecked
+                {
+                    return nextId++;
+                }
+            }
         }
     }
 }

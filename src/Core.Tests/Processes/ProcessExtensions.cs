@@ -1,7 +1,5 @@
 ﻿using System;
-using Harvester.Core.Messaging.Sources;
-using Harvester.Core.Messaging.Sources.NamedPipe;
-using Xunit;
+using System.Diagnostics;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -17,32 +15,22 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeClientBuffer
+namespace Harvester.Core.Tests.Processes
 {
-    public class WhenReadingFromBuffer : IDisposable
+    internal static class ProcessExtensions
     {
-        private readonly IMessageBuffer buffer;
-
-        public WhenReadingFromBuffer()
+        internal static void KillAndWaitForExit(this Process process)
         {
-            buffer = new NamedPipeClientBuffer();
-        }
+            var processId = process.Id;
+            var exitVerified = false;
 
-        public void Dispose()
-        {
-            buffer.Dispose();
-        }
+            process.Kill();
+            process.WaitForExit();
 
-        [Fact]
-        public void ThrowNotSupportedException()
-        {
-            Assert.Throws<NotSupportedException>(() => buffer.Read());
-        }
-
-        [Fact]
-        public void NameIsBufferName()
-        {
-            Assert.Equal(@"\\.\pipe\Harvester", buffer.Name);
+            // Wait For Exit occassionally lies.
+            while (!exitVerified)
+                try { Process.GetProcessById(processId); }
+                catch (ArgumentException) { exitVerified = true; }
         }
     }
 }

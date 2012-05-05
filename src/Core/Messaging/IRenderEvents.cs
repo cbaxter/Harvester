@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 /* Copyright (c) 2012 CBaxter
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
@@ -18,6 +17,6 @@ namespace Harvester.Core.Messaging
 {
     public interface IRenderEvents
     {
-        void Render(String e); //TODO: String is temporary implementation... 
+        void Render(SystemEvent e);
     }
 }

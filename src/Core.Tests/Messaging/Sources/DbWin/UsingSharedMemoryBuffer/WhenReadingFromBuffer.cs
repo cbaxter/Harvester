@@ -129,5 +129,11 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingSharedMemoryBuffer
 
             syncEvent2.WaitOne();
         }
+
+        [Fact]
+        public void NameIsBufferName()
+        {
+            Assert.Contains(@"Local\HRVSTR_", buffer.Name);
+        }
     }
 }

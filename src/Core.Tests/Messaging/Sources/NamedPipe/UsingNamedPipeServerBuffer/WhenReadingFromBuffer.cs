@@ -109,5 +109,11 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeServerB
                 }
             }
         }
+
+        [Fact]
+        public void NameIsBufferName()
+        {
+            Assert.Contains(@"\\.\pipe\", buffer.Name);
+        }
     }
 }

@@ -1,6 +1,5 @@
-﻿using System;
-using Harvester.Core.Messaging.Sources;
-using Harvester.Core.Messaging.Sources.NamedPipe;
+﻿using System.Diagnostics;
+using Harvester.Core.Processes;
 using Xunit;
 
 /* Copyright (c) 2012 CBaxter
@@ -17,32 +16,22 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeClientBuffer
+namespace Harvester.Core.Tests.Processes.UsingProcessWrapper
 {
-    public class WhenReadingFromBuffer : IDisposable
+    public class WhenProcessIsRunning
     {
-        private readonly IMessageBuffer buffer;
-
-        public WhenReadingFromBuffer()
-        {
-            buffer = new NamedPipeClientBuffer();
-        }
-
-        public void Dispose()
-        {
-            buffer.Dispose();
-        }
-
         [Fact]
-        public void ThrowNotSupportedException()
+        public void WrapDiagnositcProcessProperties()
         {
-            Assert.Throws<NotSupportedException>(() => buffer.Read());
-        }
+            using (var process = Process.GetCurrentProcess())
+            {
+                var processWrapper = new ProcessWrapper(process);
 
-        [Fact]
-        public void NameIsBufferName()
-        {
-            Assert.Equal(@"\\.\pipe\Harvester", buffer.Name);
+                Assert.Equal(process.Id, processWrapper.Id);
+                Assert.Equal(process.ProcessName, processWrapper.Name);
+                Assert.False(processWrapper.HasExited);
+                Assert.Null(processWrapper.ExitTime);
+            }
         }
     }
 }

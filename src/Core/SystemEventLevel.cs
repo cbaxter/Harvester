@@ -1,8 +1,4 @@
-﻿using System;
-using Harvester.Core.Messaging.Sources;
-using Harvester.Core.Messaging.Sources.NamedPipe;
-using Xunit;
-
+﻿
 /* Copyright (c) 2012 CBaxter
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
@@ -17,32 +13,15 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeClientBuffer
+namespace Harvester.Core
 {
-    public class WhenReadingFromBuffer : IDisposable
+    public enum SystemEventLevel
     {
-        private readonly IMessageBuffer buffer;
-
-        public WhenReadingFromBuffer()
-        {
-            buffer = new NamedPipeClientBuffer();
-        }
-
-        public void Dispose()
-        {
-            buffer.Dispose();
-        }
-
-        [Fact]
-        public void ThrowNotSupportedException()
-        {
-            Assert.Throws<NotSupportedException>(() => buffer.Read());
-        }
-
-        [Fact]
-        public void NameIsBufferName()
-        {
-            Assert.Equal(@"\\.\pipe\Harvester", buffer.Name);
-        }
+        Trace = 0,
+        Debug = 1,
+        Information = 2,
+        Warning = 3,
+        Error = 4,
+        Fatal = 5
     }
 }

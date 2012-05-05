@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Security.Principal;
 using Harvester.Core.Messaging;
+using Harvester.Core.Messaging.Parsers;
 using Harvester.Core.Messaging.Sources.DbWin;
 using Harvester.Core.Messaging.Sources.NamedPipe;
+using Harvester.Core.Processes;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -28,7 +30,14 @@ namespace Harvester.Core
 
         public SystemMonitor(IRenderEvents eventRenderer)
         {
-            messageProcessor = new MessageProcessor(eventRenderer);
+            var processRetriever = new ProcessRetriever();
+            var messageParsers = new IParseMessages[]
+                                     {
+                                         new Log4JXmlParser(processRetriever),
+                                         new DefaultMessageParser(processRetriever)
+                                     };
+
+            messageProcessor = new MessageProcessor(eventRenderer, messageParsers);
             messageListeners = new List<MessageListener>();
 
             var principal = new WindowsPrincipal(WindowsIdentity.GetCurrent() ?? WindowsIdentity.GetAnonymous());
