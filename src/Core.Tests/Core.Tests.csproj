@@ -74,6 +74,8 @@
     <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeClientBuffer\WhenDisposingBuffer.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\UsingPipeMessageListener\WhenDisposingListener.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\UsingPipeMessageWriter\WhenWritingMessageWithMutexOwned.cs" />
+    <Compile Include="Messaging\UsingMessageProcessor\WhenProcessingMessage.cs" />
+    <Compile Include="Messaging\UsingMessageProcessor\WhenDisposingProcessor.cs" />
     <Compile Include="PipeMessageExtensions.cs" />
     <Compile Include="Messaging\Sources\DbWin\UsingEventWaitHandleExtensions\WhenSafeSetInvokedOnValidWaitHandle.cs" />
     <Compile Include="Messaging\Sources\DbWin\UsingEventWaitHandleExtensions\WhenSafeSetInvokedOnDisposedWaitHandle.cs" />

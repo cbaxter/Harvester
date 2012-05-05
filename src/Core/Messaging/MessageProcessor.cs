@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Threading;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -18,24 +20,75 @@ namespace Harvester.Core.Messaging
 {
     internal class MessageProcessor : IProcessMessages
     {
-        private readonly IRenderEvents eventRenderer;
+        private readonly CancellationTokenSource cancellationTokenSource;
+        private readonly BlockingCollection<RawMessage> messageQueue;
+        private readonly Object syncLock = new Object();
+        private readonly IRenderEvents renderer;
+        private readonly Thread processor;
+
+        private struct RawMessage
+        {
+            public readonly String Source;
+            public readonly IMessage Message;
+
+            public RawMessage(String source, IMessage message)
+            {
+                Source = source;
+                Message = message;
+            }
+        }
 
         public MessageProcessor(IRenderEvents eventRenderer)
         {
             Verify.NotNull(eventRenderer, "eventRenderer");
 
-            this.eventRenderer = eventRenderer;
+            renderer = eventRenderer;
+            messageQueue = new BlockingCollection<RawMessage>();
+            cancellationTokenSource = new CancellationTokenSource();
+            processor = new Thread(ProcessAllMessages) { IsBackground = true, Priority = ThreadPriority.AboveNormal, Name = "Processor", };
+            processor.Start();
         }
 
-        //TODO: Will eventually dump messages to process inside a blocking queue to be processed on worker thread so will beed to be disposed.
         public void Dispose()
         {
-            
+            lock (syncLock)
+            {
+                if (cancellationTokenSource.IsCancellationRequested)
+                    return;
+
+                cancellationTokenSource.Cancel();
+                processor.Join();
+
+                cancellationTokenSource.Dispose();
+                messageQueue.Dispose();
+            }
         }
 
+        private void ProcessAllMessages()
+        {
+            try
+            {
+                foreach (var rawMessage in messageQueue.GetConsumingEnumerable(cancellationTokenSource.Token))
+                {
+                    var source = rawMessage.Source;
+                    var message = rawMessage.Message;
+
+                    renderer.Render(message.Timestamp.ToString("yyyy-MM-dd HH:mm:ss,fff") + ' ' + source + ' ' + message.ProcessId + ' ' + message.Message);
+                }
+            }
+            catch (OperationCanceledException)
+            { }
+        }
+        
         public void Process(String source, IMessage message)
         {
-            eventRenderer.Render(message.Timestamp.ToString("yyyy-MM-dd HH:mm:ss,ttt") + ' ' + source + ' ' + message.ProcessId + ' ' + message.Message);
+            lock (syncLock)
+            {
+                if (cancellationTokenSource.IsCancellationRequested)
+                    return;
+
+                messageQueue.Add(new RawMessage(source, message));
+            }
         }
     }
 }

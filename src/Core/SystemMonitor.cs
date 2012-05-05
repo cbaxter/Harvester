@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Security.Principal;
 using Harvester.Core.Messaging;
 using Harvester.Core.Messaging.Sources.DbWin;
 using Harvester.Core.Messaging.Sources.NamedPipe;
@@ -21,25 +23,27 @@ namespace Harvester.Core
 {
     public class SystemMonitor : IDisposable
     {
-        private readonly MessageListener[] messageListeners;
+        private readonly IList<MessageListener> messageListeners;
         private readonly IProcessMessages messageProcessor;
 
         public SystemMonitor(IRenderEvents eventRenderer)
         {
             messageProcessor = new MessageProcessor(eventRenderer);
-            messageListeners = new MessageListener[]
-                                   {
-                                       new PipeMessageListener(messageProcessor, @"\\.\pipe\Harvester", @"HarvesterDBWinMutex"),
-                                       new OutputDebugStringListener(messageProcessor, @"Global\DBWIN", @"DBWinMutex"), //TODO: Based on security level...
-                                       new OutputDebugStringListener(messageProcessor, @"Local\DBWIN", @"DBWinMutex")
-                                   };
+            messageListeners = new List<MessageListener>();
+
+            var principal = new WindowsPrincipal(WindowsIdentity.GetCurrent() ?? WindowsIdentity.GetAnonymous());
+            if (principal.IsInRole(WindowsBuiltInRole.Administrator))
+                messageListeners.Add(new OutputDebugStringListener(messageProcessor, @"Global\DBWIN", @"DBWinMutex"));
+
+            messageListeners.Add(new OutputDebugStringListener(messageProcessor, @"Local\DBWIN", @"DBWinMutex"));
+            messageListeners.Add(new PipeMessageListener(messageProcessor, @"\\.\pipe\Harvester", @"HarvesterDBWinMutex"));
         }
 
         public void Dispose()
         {
             messageProcessor.Dispose();
 
-            foreach(var messageListener in messageListeners)
+            foreach (var messageListener in messageListeners)
                 messageListener.Dispose();
         }
     }
