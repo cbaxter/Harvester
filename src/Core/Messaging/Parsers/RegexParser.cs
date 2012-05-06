@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Harvester.Core.Processes;
 
@@ -24,15 +23,19 @@ namespace Harvester.Core.Messaging.Parsers
         private readonly IRetrieveProcesses processes;
         private readonly Regex pattern;
 
-        public RegexParser(IRetrieveProcesses processRetriever, IDictionary<String, String> extendedProperties)
+        public RegexParser(IRetrieveProcesses processRetriever, IHaveExtendedProperties extendedProperties)
         {
             Verify.NotNull(processRetriever, "processRetriever");
             Verify.NotNull(extendedProperties, "extendedProperties");
-            Verify.True(extendedProperties.ContainsKey("pattern"), "extendedProperties", "Missing parser attribute 'pattern'.");
-            Verify.True(extendedProperties.ContainsKey("options"), "extendedProperties", "Missing parser attribute 'regexOptions'.");
+            Verify.True(extendedProperties.HasExtendedProperty("pattern"), "extendedProperties", "Parser configuration missing attribute 'pattern'.");
+            Verify.True(extendedProperties.HasExtendedProperty("options"), "extendedProperties", "Parser configuration missing attribute 'options'.");
 
             processes = processRetriever;
-            pattern = new Regex(extendedProperties["pattern"], (RegexOptions)Enum.Parse(typeof(RegexOptions), extendedProperties["options"], ignoreCase: true));
+            pattern = new Regex(
+                          extendedProperties.GetExtendedProperty("pattern"), 
+                          (RegexOptions)Enum.Parse(typeof(RegexOptions), extendedProperties.GetExtendedProperty("options"), 
+                          ignoreCase: true)
+                      );
         }
 
         public Boolean CanParseMessage(String message)

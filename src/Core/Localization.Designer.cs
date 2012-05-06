@@ -61,6 +61,16 @@ namespace Harvester.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extended property not defined.
+        ///Property: {0}.
+        /// </summary>
+        internal static string ExtendedPropertyNotDefined {
+            get {
+                return ResourceManager.GetString("ExtendedPropertyNotDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot combine OutputDebugString messages originating from different processes..
         /// </summary>
         internal static string OutputDebugStringProcessMismatch {

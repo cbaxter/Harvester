@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using Harvester.Core.Messaging;
 using Harvester.Core.Messaging.Parsers;
 using Harvester.Core.Messaging.Sources.DbWin;
 using Harvester.Core.Processes;
 using Moq;
 using Xunit;
-using Xunit.Extensions;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -31,7 +29,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingDefaultParser
 
         public WhenParsingMessage()
         {
-            messageParser = new DefaultParser(processRetriever.Object, new Dictionary<String, String>());
+            messageParser = new DefaultParser(processRetriever.Object, new FakeExtendedProperties());
         }
 
         [Fact]

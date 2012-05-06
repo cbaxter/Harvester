@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Harvester.Core.Messaging;
 using Harvester.Core.Messaging.Parsers;
 using Harvester.Core.Messaging.Sources.DbWin;
@@ -31,7 +30,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4NetParser
 
         public WhenParsingFullMessage()
         {
-            messageParser = new Log4NetParser(processRetriever.Object, new Dictionary<String, String>());
+            messageParser = new Log4NetParser(processRetriever.Object, new FakeExtendedProperties());
         }
 
         [

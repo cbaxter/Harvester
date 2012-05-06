@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Harvester.Core.Messaging.Parsers;
+﻿using Harvester.Core.Messaging.Parsers;
 using Harvester.Core.Processes;
 using Moq;
 using Xunit;
@@ -28,7 +26,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingRegexParser
 
         public WhenCheckingCanParseMessage()
         {
-            var extendedProperties = new Dictionary<String, String>
+            var extendedProperties = new FakeExtendedProperties
                                          {
                                              { "pattern", "ExactMatch" },
                                              { "options", "None" }

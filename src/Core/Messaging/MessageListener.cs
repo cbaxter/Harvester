@@ -18,7 +18,7 @@ using Harvester.Core.Messaging.Sources;
 
 namespace Harvester.Core.Messaging
 {
-    internal abstract class MessageListener : IDisposable
+    public abstract class MessageListener : IDisposable
     {
         private readonly IProcessMessages messageProcessor;
         private readonly IReadMessages messageReader;
@@ -34,6 +34,10 @@ namespace Harvester.Core.Messaging
             this.messageReader = messageReader;
 
             listener = new Thread(ReadAllMessages) { IsBackground = true, Priority = ThreadPriority.AboveNormal, Name = source, };
+        }
+
+        public void Start()
+        {
             listener.Start();
         }
 

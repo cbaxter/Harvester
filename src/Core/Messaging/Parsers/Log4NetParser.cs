@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Xml;
 using Harvester.Core.Processes;
 
@@ -21,7 +20,7 @@ namespace Harvester.Core.Messaging.Parsers
 {
     internal class Log4NetParser : XmlMessageParser
     {
-        public Log4NetParser(IRetrieveProcesses processRetriever, IDictionary<String, String> extendedProperties)
+        public Log4NetParser(IRetrieveProcesses processRetriever, IHaveExtendedProperties extendedProperties)
             : base(processRetriever, "log4net", "http://logging.apache.org/log4j/")
         {
             Verify.NotNull(extendedProperties, "extendedProperties");

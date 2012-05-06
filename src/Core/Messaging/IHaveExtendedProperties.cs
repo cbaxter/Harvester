@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Harvester.Core.Configuration;
-using Harvester.Core.Messaging;
-using Harvester.Core.Processes;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -18,28 +14,11 @@ using Harvester.Core.Processes;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core
+namespace Harvester.Core.Messaging
 {
-    public class SystemMonitor : IDisposable
+    public interface IHaveExtendedProperties
     {
-        private readonly IList<MessageListener> messageListeners;
-        private readonly IProcessMessages messageProcessor;
-
-        public SystemMonitor(IRenderEvents eventRenderer)
-        {
-            messageProcessor = new MessageProcessor(eventRenderer, Settings.GetParsers(new ProcessRetriever()));
-            messageListeners = Settings.GetListeners(messageProcessor);
-
-            foreach(var messageListener in messageListeners)
-                messageListener.Start();
-        }
-
-        public void Dispose()
-        {
-            messageProcessor.Dispose();
-
-            foreach (var messageListener in messageListeners)
-                messageListener.Dispose();
-        }
+        String GetExtendedProperty(String property);
+        Boolean HasExtendedProperty(String property);
     }
 }

@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Harvester.Core.Messaging;
-using Harvester.Core.Messaging.Sources.NamedPipe;
-using Moq;
-using Xunit;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -18,38 +17,40 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingPipeMessageListener
+namespace Harvester.Core.Tests.Messaging
 {
-    public class WhenDisposingListener : IDisposable
+    public class FakeExtendedProperties : IHaveExtendedProperties, IEnumerable<KeyValuePair<String, String>>
     {
-        private readonly Mock<IProcessMessages> messageProcessor = new Mock<IProcessMessages>();
-        private readonly MessageListener messageListener;
+        private readonly IDictionary<String, String> extendedProperties;
 
-        public WhenDisposingListener()
+        public FakeExtendedProperties()
         {
-            var guid = Guid.NewGuid();
-            var configuration = new FakeListenerConfiguration
-                                    {
-                                        Name = @"\\.\pipe\" + guid,
-                                        Mutex = "Harvester: " + guid
-                                    };
-
-            configuration["identity"] = "Everyone";
-
-            messageListener = new PipeMessageListener(messageProcessor.Object, configuration);
-            messageListener.Start();
+            extendedProperties = new Dictionary<String, String>();
         }
 
-        public void Dispose()
+        public void Add(String key, String value)
         {
-            messageListener.Dispose();
+            extendedProperties.Add(key, value);
         }
 
-        [Fact]
-        public void CanSafelyCallDisposeMultipleTimes()
+        public string GetExtendedProperty(String property)
         {
-            messageListener.Dispose();
-            messageListener.Dispose();
+            return extendedProperties[property];
+        }
+
+        public bool HasExtendedProperty(String property)
+        {
+            return extendedProperties.ContainsKey(property);
+        }
+
+        public IEnumerator<KeyValuePair<String, String>> GetEnumerator()
+        {
+            return extendedProperties.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

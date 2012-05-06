@@ -1,8 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using Harvester.Core.Messaging;
-using Harvester.Core.Messaging.Sources.NamedPipe;
-using Moq;
-using Xunit;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -18,38 +16,24 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingPipeMessageListener
+namespace Harvester.Core.Tests.Messaging.Sources
 {
-    public class WhenDisposingListener : IDisposable
+    internal class FakeListenerConfiguration : IConfigureListeners
     {
-        private readonly Mock<IProcessMessages> messageProcessor = new Mock<IProcessMessages>();
-        private readonly MessageListener messageListener;
+        private readonly IDictionary<String, String> extendedProperties = new Dictionary<String, String>();
 
-        public WhenDisposingListener()
+        public string Name { get; set; }
+        public string Mutex { get; set; }
+        public String this[String property] { get { return extendedProperties[property]; } set { extendedProperties[property] = value; } }
+
+        public String GetExtendedProperty(String property)
         {
-            var guid = Guid.NewGuid();
-            var configuration = new FakeListenerConfiguration
-                                    {
-                                        Name = @"\\.\pipe\" + guid,
-                                        Mutex = "Harvester: " + guid
-                                    };
-
-            configuration["identity"] = "Everyone";
-
-            messageListener = new PipeMessageListener(messageProcessor.Object, configuration);
-            messageListener.Start();
+            return extendedProperties[property];
         }
 
-        public void Dispose()
+        public Boolean HasExtendedProperty(String property)
         {
-            messageListener.Dispose();
-        }
-
-        [Fact]
-        public void CanSafelyCallDisposeMultipleTimes()
-        {
-            messageListener.Dispose();
-            messageListener.Dispose();
+            return extendedProperties.ContainsKey(property);
         }
     }
 }

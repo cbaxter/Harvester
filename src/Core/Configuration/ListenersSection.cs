@@ -19,33 +19,42 @@ using Harvester.Core.Messaging;
 
 namespace Harvester.Core.Configuration
 {
-    public class ParsersSection : ConfigurationSection
+    public class ListenersSection : ConfigurationSection
     {
         [ConfigurationProperty(null, Options = ConfigurationPropertyOptions.IsDefaultCollection)]
-        public ParserElementCollection Parsers { get { return (ParserElementCollection)base[""] ?? new ParserElementCollection(); } }
+        public ListenerElementCollection Listeners { get { return (ListenerElementCollection)base[""] ?? new ListenerElementCollection(); } }
     }
 
-    [ConfigurationCollection(typeof(ParserElement), AddItemName = "parser", CollectionType = ConfigurationElementCollectionType.BasicMap)]
-    public class ParserElementCollection : ConfigurationElementCollection
+    [ConfigurationCollection(typeof(ListenerElement), AddItemName = "listener", CollectionType = ConfigurationElementCollectionType.BasicMap)]
+    public class ListenerElementCollection : ConfigurationElementCollection
     {
         protected override ConfigurationElement CreateNewElement()
         {
-            return new ParserElement();
+            return new ListenerElement();
         }
 
         protected override Object GetElementKey(ConfigurationElement element)
         {
-            return ((ParserElement)element).TypeName;
+            return ((ListenerElement)element).Name;
         }
     }
 
-    public class ParserElement : ConfigurationElement, IHaveExtendedProperties
+    public class ListenerElement : ConfigurationElement, IConfigureListeners
     {
         private readonly IDictionary<String, String> extendedProperties = new Dictionary<String, String>(StringComparer.OrdinalIgnoreCase);
 
         [ConfigurationProperty("type", IsRequired = true)]
-        public String TypeName { get { return (String)base["type"]; } }
-        
+        public String TypeName { get { return (String)base["type"]; }  }
+
+        [ConfigurationProperty("name", IsRequired = true)]
+        public String Name { get { return (String)base["name"]; }  }
+
+        [ConfigurationProperty("mutex", IsRequired = true)]
+        public String Mutex { get { return (String)base["mutex"]; } }
+
+        [ConfigurationProperty("elevatedOnly", IsRequired = false, DefaultValue = false)]
+        public Boolean ElevatedOnly { get { return (Boolean)base["elevatedOnly"]; } }
+
         public String GetExtendedProperty(String property)
         {
             if (!extendedProperties.ContainsKey(property))

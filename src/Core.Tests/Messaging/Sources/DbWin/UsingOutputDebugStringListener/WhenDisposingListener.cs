@@ -28,10 +28,14 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringLis
         public WhenDisposingListener()
         {
             var guid = Guid.NewGuid();
-            var bufferName = String.Format(@"Local\HRVSTR_{0}", guid);
-            var mutexName = "Harvester: " + guid;
+            var configuration = new FakeListenerConfiguration
+                                    {
+                                        Name = String.Format(@"Local\HRVSTR_{0}", guid),
+                                        Mutex = "Harvester: " + guid
+                                    };
 
-            messageListener = new OutputDebugStringListener(messageProcessor.Object, bufferName, mutexName);
+            messageListener = new OutputDebugStringListener(messageProcessor.Object, configuration);
+            messageListener.Start();
         }
 
         public void Dispose()

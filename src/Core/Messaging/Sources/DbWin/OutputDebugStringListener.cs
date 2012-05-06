@@ -22,8 +22,8 @@ namespace Harvester.Core.Messaging.Sources.DbWin
         private readonly IMessageBuffer messageBuffer;
         private readonly Mutex mutex;
 
-        public OutputDebugStringListener(IProcessMessages messageProcessor, String bufferName, String mutexName)
-            : this(bufferName, messageProcessor, new SharedMemoryBuffer(bufferName, OutputDebugString.BufferSize), new Mutex(false, mutexName))
+        public OutputDebugStringListener(IProcessMessages messageProcessor, IConfigureListeners configuration)
+            : this(GetSource(configuration), messageProcessor, new SharedMemoryBuffer(GetSource(configuration), OutputDebugString.BufferSize), GetMutex(configuration))
         { }
 
         private OutputDebugStringListener(String source, IProcessMessages messageProcessor, IMessageBuffer messageBuffer, Mutex mutex)
@@ -31,6 +31,20 @@ namespace Harvester.Core.Messaging.Sources.DbWin
         {
             this.mutex = mutex;
             this.messageBuffer = messageBuffer;
+        }
+
+        private static String GetSource( IConfigureListeners configuration)
+        {
+            Verify.NotNull(configuration, "configuration");
+
+            return configuration.Name;
+        }
+
+        private static Mutex GetMutex(IConfigureListeners configuration)
+        {
+            Verify.NotNull(configuration, "configuration");
+
+            return new Mutex(false, configuration.Mutex);
         }
 
         protected override void Dispose(Boolean disposing)

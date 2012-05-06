@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Harvester.Core.Messaging;
 using Harvester.Core.Messaging.Parsers;
 using Harvester.Core.Messaging.Sources.DbWin;
@@ -30,7 +29,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingRegexParser
 
         public WhenParsingGroupedMessage()
         {
-            var extendedProperties = new Dictionary<String, String>
+            var extendedProperties = new FakeExtendedProperties
                                          {
                                              { "pattern", @"(?<logger>[^:]+): (?<level>[A-Z]{5}) \[(?<thread>[\d])\] - (?<username>[\w]+) - (?<message>.*)" },
                                              { "options", "IgnoreCase" }

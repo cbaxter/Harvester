@@ -44,10 +44,8 @@
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="xunit">
       <HintPath>..\packages\xunit.1.9.0.1566\lib\xunit.dll</HintPath>
     </Reference>
@@ -62,6 +60,7 @@
     <Compile Include="..\.shared\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Messaging\FakeExtendedProperties.cs" />
     <Compile Include="Messaging\Parsers\UsingLog4NetParser\WhenCheckingCanParseMessage.cs" />
     <Compile Include="Messaging\Parsers\UsingLog4NetParser\WhenParsingEmptyMessage.cs" />
     <Compile Include="Messaging\Parsers\UsingLog4NetParser\WhenParsingFullMessage.cs" />
@@ -74,6 +73,7 @@
     <Compile Include="Messaging\Parsers\UsingRegexParser\WhenParsingNonGroupedMessage.cs" />
     <Compile Include="Messaging\Parsers\UsingRegexParser\WhenParsingGroupedMessage.cs" />
     <Compile Include="Messaging\Sources\DbWin\UsingOutputDebugStringListener\WhenDisposingListener.cs" />
+    <Compile Include="Messaging\Sources\FakeListenerConfiguration.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeClientBuffer\WhenAdjustingTimeout.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeServerBuffer\WhenCreatingBuffer.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeServerBuffer\WhenDisposingBuffer.cs" />

@@ -43,7 +43,6 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -53,9 +52,11 @@
     <Compile Include="..\.shared\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Configuration\ListenersSection.cs" />
     <Compile Include="Configuration\LevelsSection.cs" />
     <Compile Include="Configuration\ParsersSection.cs" />
     <Compile Include="Configuration\Settings.cs" />
+    <Compile Include="Messaging\IHaveExtendedProperties.cs" />
     <Compile Include="Messaging\IProcessMessages.cs" />
     <Compile Include="Messaging\IRenderEvents.cs" />
     <Compile Include="Messaging\MessageListener.cs" />
@@ -68,6 +69,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Messaging\Parsers\XmlMessageParser.cs" />
+    <Compile Include="Messaging\IConfigureListeners.cs" />
     <Compile Include="Messaging\Sources\DbWin\EventWaitHandleExtensions.cs" />
     <Compile Include="Messaging\Sources\DbWin\OutputDebugStringListener.cs" />
     <Compile Include="Messaging\Sources\DbWin\UnmanagedMemoryAccessorExtensions.cs" />

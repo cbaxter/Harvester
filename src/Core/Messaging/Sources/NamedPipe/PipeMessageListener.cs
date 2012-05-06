@@ -22,8 +22,8 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
         private readonly IMessageBuffer messageBuffer;
         private readonly Mutex mutex;
 
-        public PipeMessageListener(IProcessMessages messageProcessor, String pipeName, String mutexName)
-            : this(pipeName, messageProcessor, new NamedPipeServerBuffer(pipeName, "Everyone"), new Mutex(false, mutexName))
+        public PipeMessageListener(IProcessMessages messageProcessor, IConfigureListeners configuration)
+            : this(GetSource(configuration), messageProcessor, new NamedPipeServerBuffer(GetSource(configuration), GetIdentity(configuration)), GetMutex(configuration))
         { }
 
         private PipeMessageListener(String listenerName, IProcessMessages messageProcessor, IMessageBuffer messageBuffer, Mutex mutex)
@@ -33,6 +33,28 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
             this.messageBuffer = messageBuffer;
         }
 
+        private static String GetSource(IConfigureListeners configuration)
+        {
+            Verify.NotNull(configuration, "configuration");
+
+            return configuration.Name;
+        }
+
+        private static String GetIdentity(IConfigureListeners configuration)
+        {
+            Verify.NotNull(configuration, "configuration");
+            Verify.True(configuration.HasExtendedProperty("identity"), "configuration", "Listener mising configuration attribute 'identity'.\r\nName: " + configuration.Name);
+
+            return configuration.GetExtendedProperty("identity");
+        }
+
+        private static Mutex GetMutex(IConfigureListeners configuration)
+        {
+            Verify.NotNull(configuration, "configuration");
+
+            return new Mutex(false, configuration.Mutex);
+        }
+
         protected override void Dispose(Boolean disposing)
         {
             if (disposing)
@@ -40,7 +62,7 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
                 messageBuffer.Dispose();
                 mutex.Dispose();
             }
-            
+
             base.Dispose(disposing);
         }
     }
