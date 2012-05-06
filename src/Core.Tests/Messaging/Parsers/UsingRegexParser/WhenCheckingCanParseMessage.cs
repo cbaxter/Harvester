@@ -19,7 +19,7 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4JParser
+namespace Harvester.Core.Tests.Messaging.Parsers.UsingRegexParser
 {
     public class WhenCheckingCanParseMessage
     {
@@ -28,43 +28,31 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4JParser
 
         public WhenCheckingCanParseMessage()
         {
-            messageParser = new Log4JParser(processRetriever.Object, new Dictionary<String, String>());
+            var extendedProperties = new Dictionary<String, String>
+                                         {
+                                             { "pattern", "ExactMatch" },
+                                             { "options", "None" }
+                                         };
+
+            messageParser = new RegexParser(processRetriever.Object, extendedProperties);
         }
 
         [Fact]
-        public void MustStartWithLog4JNode()
-        {
-            Assert.False(messageParser.CanParseMessage(@"<log4net:event level=""ERROR""></log4j:event>"));
-        }
-
-        [Fact]
-        public void MustEndWithLog4JNode()
-        {
-            Assert.False(messageParser.CanParseMessage(@"<log4j:event level=""ERROR""></log4net:event>"));
-        }
-
-        [Fact]
-        public void MustNotHaveLeadingWhitespace()
-        {
-            Assert.False(messageParser.CanParseMessage(@" <log4j:event level=""ERROR""></log4j:event>"));
-        }
-
-        [Fact]
-        public void MustNotHaveTrailingWhitespace()
-        {
-            Assert.False(messageParser.CanParseMessage(@"<log4j:event level=""ERROR""></log4j:event> "));
-        }
-
-        [Fact]
-        public void MustNotBeNullMessage()
+        public void ReturnsFalseIfNull()
         {
             Assert.False(messageParser.CanParseMessage(null));
         }
 
         [Fact]
-        public void CanHaveNoAdditionalContent()
+        public void ReturnsFalseIfDoesNotMatchPattern()
         {
-            Assert.True(messageParser.CanParseMessage(@"<log4j:event ></log4j:event>"));
+            Assert.False(messageParser.CanParseMessage("NotMatch"));
+        }
+
+        [Fact]
+        public void ReturnsTrueIfMatchesPattern()
+        {
+            Assert.True(messageParser.CanParseMessage("ExactMatch"));
         }
     }
 }

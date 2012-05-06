@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Harvester.Core.Messaging;
 using Harvester.Core.Messaging.Parsers;
 using Harvester.Core.Messaging.Sources.DbWin;
@@ -30,7 +31,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingDefaultParser
 
         public WhenParsingMessage()
         {
-            messageParser = new DefaultParser(processRetriever.Object);
+            messageParser = new DefaultParser(processRetriever.Object, new Dictionary<String, String>());
         }
 
         [Fact]

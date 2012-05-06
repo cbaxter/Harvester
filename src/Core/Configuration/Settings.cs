@@ -23,7 +23,7 @@ namespace Harvester.Core.Configuration
 {
     public static class Settings
     {
-        private static readonly IList<Type> Parsers;
+        private static readonly IList<Func<IRetrieveProcesses, IParseMessages>> ParserActivators;
         private static readonly IDictionary<SystemEventLevel, ConsoleColor> ForeColors;
         private static readonly IDictionary<SystemEventLevel, ConsoleColor> BackColors;
 
@@ -52,15 +52,22 @@ namespace Harvester.Core.Configuration
                                  { SystemEventLevel.Trace, levelsSection.Trace.BackColor }
                              };
 
-            Parsers = parsersSection.Parsers
-                                    .Cast<ParserElement>()
-                                    .Select(parser => Type.GetType(parser.TypeName, true))
-                                    .ToList();
+            ParserActivators = parsersSection.Parsers
+                                             .Cast<ParserElement>()
+                                             .Select(CreateParserActivator)
+                                             .ToList();
+        }
+
+        private static Func<IRetrieveProcesses, IParseMessages> CreateParserActivator(ParserElement parser)
+        {
+            var extendedProperties = parser.GetExtendedProperties();
+
+            return processRetriever => (IParseMessages)Activator.CreateInstance(Type.GetType(parser.TypeName, true), processRetriever, extendedProperties);
         }
 
         public static IList<IParseMessages> GetParsers(IRetrieveProcesses processRetriever)
         {
-            return Parsers.Select(type => (IParseMessages)Activator.CreateInstance(type, processRetriever)).ToList();
+            return ParserActivators.Select(activator => activator.Invoke(processRetriever)).ToList();
         }
 
         public static ConsoleColor GetForeColor(SystemEventLevel level)

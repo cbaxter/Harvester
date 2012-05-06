@@ -21,16 +21,22 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4JParser
+namespace Harvester.Core.Tests.Messaging.Parsers.UsingRegexParser
 {
-    public class WhenParsingEmptyMessage
+    public class WhenParsingNonGroupedMessage
     {
         private readonly Mock<IRetrieveProcesses> processRetriever = new Mock<IRetrieveProcesses>();
         private readonly IParseMessages messageParser;
 
-        public WhenParsingEmptyMessage()
+        public WhenParsingNonGroupedMessage()
         {
-            messageParser = new Log4JParser(processRetriever.Object, new Dictionary<String, String>());
+            var extendedProperties = new Dictionary<String, String>
+                                         {
+                                             { "pattern", @"[^:]+: [A-Z]{5} \[[\d]\] - [\w]+ - .*" },
+                                             { "options", "IgnoreCase" }
+                                         };
+
+            messageParser = new RegexParser(processRetriever.Object, extendedProperties);
         }
 
         [Fact]
@@ -72,7 +78,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4JParser
         {
             var message = CreateMessage();
 
-            Assert.Equal("<log4j:event xmlns:log4j=\"http://logging.apache.org/log4j/\">\r\n</log4j:event>", messageParser.Parse(message).RawMessage.Value);
+            Assert.Equal(message.Message, messageParser.Parse(message).RawMessage.Value);
         }
 
         [Fact]
@@ -107,7 +113,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4JParser
             process.Setup(mock => mock.Name).Returns("xUnit Process");
             processRetriever.Setup(mock => mock.GetProcessById(123)).Returns(process.Object);
 
-            return new OutputDebugString("xUnit Source", 123, "<log4j:event ></log4j:event>");
+            return new OutputDebugString("xUnit Source", 123, "Test Logger: DEBUG [1] - CBaxter - Test Message");
         }
     }
 }

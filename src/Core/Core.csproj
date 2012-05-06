@@ -64,6 +64,9 @@
     <Compile Include="Messaging\Parsers\DefaultParser.cs" />
     <Compile Include="Messaging\Parsers\IParseMessages.cs" />
     <Compile Include="Messaging\Parsers\Log4JParser.cs" />
+    <Compile Include="Messaging\Parsers\RegexParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Messaging\Parsers\XmlMessageParser.cs" />
     <Compile Include="Messaging\Sources\DbWin\EventWaitHandleExtensions.cs" />
     <Compile Include="Messaging\Sources\DbWin\OutputDebugStringListener.cs" />

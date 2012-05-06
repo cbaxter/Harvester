@@ -21,22 +21,28 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4JParser
+namespace Harvester.Core.Tests.Messaging.Parsers.UsingRegexParser
 {
-    public class WhenParsingEmptyMessage
+    public class WhenParsingGroupedMessage
     {
         private readonly Mock<IRetrieveProcesses> processRetriever = new Mock<IRetrieveProcesses>();
         private readonly IParseMessages messageParser;
 
-        public WhenParsingEmptyMessage()
+        public WhenParsingGroupedMessage()
         {
-            messageParser = new Log4JParser(processRetriever.Object, new Dictionary<String, String>());
+            var extendedProperties = new Dictionary<String, String>
+                                         {
+                                             { "pattern", @"(?<logger>[^:]+): (?<level>[A-Z]{5}) \[(?<thread>[\d])\] - (?<username>[\w]+) - (?<message>.*)" },
+                                             { "options", "IgnoreCase" }
+                                         };
+
+            messageParser = new RegexParser(processRetriever.Object, extendedProperties);
         }
 
         [Fact]
-        public void AlwaysTraceLevel()
+        public void LevelFromMessage()
         {
-            Assert.Equal(SystemEventLevel.Trace, messageParser.Parse(CreateMessage()).Level);
+            Assert.Equal(SystemEventLevel.Debug, messageParser.Parse(CreateMessage()).Level);
         }
 
         [Fact]
@@ -56,35 +62,39 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4JParser
         }
 
         [Fact]
-        public void SourceIsEmpty()
-        {
-            Assert.Equal(String.Empty, messageParser.Parse(CreateMessage()).Source);
-        }
-
-        [Fact]
-        public void MessageIsEmpty()
-        {
-            Assert.Equal(String.Empty, messageParser.Parse(CreateMessage()).Message);
-        }
-
-        [Fact]
-        public void RawMessageIsFormattedXml()
+        public void SourceFromMessage()
         {
             var message = CreateMessage();
 
-            Assert.Equal("<log4j:event xmlns:log4j=\"http://logging.apache.org/log4j/\">\r\n</log4j:event>", messageParser.Parse(message).RawMessage.Value);
+            Assert.Equal("Test Logger", messageParser.Parse(message).Source);
         }
 
         [Fact]
-        public void ThreadIsEmpty()
+        public void MessageTextFromMessage()
         {
-            Assert.Equal(String.Empty, messageParser.Parse(CreateMessage()).Thread);
+            var message = CreateMessage();
+
+            Assert.Equal("Test Message", messageParser.Parse(message).Message);
+        }
+
+        [Fact]
+        public void RawMessageFromMessage()
+        {
+            var message = CreateMessage();
+
+            Assert.Equal(message.Message, messageParser.Parse(message).RawMessage.Value);
+        }
+
+        [Fact]
+        public void ThreadFromMessage()
+        {
+            Assert.Equal("1", messageParser.Parse(CreateMessage()).Thread);
         }
 
         [Fact]
         public void UsernameIsEmpty()
         {
-            Assert.Equal(String.Empty, messageParser.Parse(CreateMessage()).Username);
+            Assert.Equal("CBaxter", messageParser.Parse(CreateMessage()).Username);
         }
 
         [Fact]
@@ -98,7 +108,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4JParser
         {
             Assert.NotEqual((UInt32)0, messageParser.Parse(CreateMessage()).MessageId);
         }
-        
+
         private IMessage CreateMessage()
         {
             var process = new Mock<IProcess>();
@@ -107,7 +117,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4JParser
             process.Setup(mock => mock.Name).Returns("xUnit Process");
             processRetriever.Setup(mock => mock.GetProcessById(123)).Returns(process.Object);
 
-            return new OutputDebugString("xUnit Source", 123, "<log4j:event ></log4j:event>");
+            return new OutputDebugString("xUnit Source", 123, "Test Logger: DEBUG [1] - CBaxter - Test Message");
         }
     }
 }

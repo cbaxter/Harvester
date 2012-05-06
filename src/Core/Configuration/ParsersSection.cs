@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 
 /* Copyright (c) 2012 CBaxter
@@ -39,7 +40,21 @@ namespace Harvester.Core.Configuration
 
     public class ParserElement : ConfigurationElement
     {
+        private readonly IDictionary<String, String> extendedProperties = new Dictionary<String, String>();
+
         [ConfigurationProperty("type", IsRequired = true)]
         public String TypeName { get { return (String)base["type"]; } set { base["type"] = value; } }
+
+        public IDictionary<String, String> GetExtendedProperties()
+        {
+            return new Dictionary<String, String>(extendedProperties); 
+        }
+
+        protected override Boolean OnDeserializeUnrecognizedAttribute(String name, String value)
+        {
+            extendedProperties.Add(name, value);
+            
+            return true;
+        }
     }
 }

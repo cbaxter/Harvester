@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Harvester.Core.Processes;
 
 /* Copyright (c) 2012 CBaxter
@@ -21,9 +22,10 @@ namespace Harvester.Core.Messaging.Parsers
     {
         private readonly IRetrieveProcesses processes;
 
-        public DefaultParser(IRetrieveProcesses processRetriever)
+        public DefaultParser(IRetrieveProcesses processRetriever, IDictionary<String, String> extendedProperties)
         {
             Verify.NotNull(processRetriever, "processRetriever");
+            Verify.NotNull(extendedProperties, "extendedProperties");
 
             processes = processRetriever;
         }

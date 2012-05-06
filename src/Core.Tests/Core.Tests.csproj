@@ -70,6 +70,9 @@
     <Compile Include="Messaging\Parsers\UsingLog4JParser\WhenParsingFullMessage.cs" />
     <Compile Include="Messaging\Parsers\UsingLog4JParser\WhenParsingEmptyMessage.cs" />
     <Compile Include="Messaging\Parsers\UsingLog4JParser\WhenCheckingCanParseMessage.cs" />
+    <Compile Include="Messaging\Parsers\UsingRegexParser\WhenCheckingCanParseMessage.cs" />
+    <Compile Include="Messaging\Parsers\UsingRegexParser\WhenParsingNonGroupedMessage.cs" />
+    <Compile Include="Messaging\Parsers\UsingRegexParser\WhenParsingGroupedMessage.cs" />
     <Compile Include="Messaging\Sources\DbWin\UsingOutputDebugStringListener\WhenDisposingListener.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeClientBuffer\WhenAdjustingTimeout.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeServerBuffer\WhenCreatingBuffer.cs" />

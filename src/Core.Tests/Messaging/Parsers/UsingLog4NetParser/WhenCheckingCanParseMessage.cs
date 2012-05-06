@@ -1,4 +1,6 @@
-﻿using Harvester.Core.Messaging.Parsers;
+﻿using System;
+using System.Collections.Generic;
+using Harvester.Core.Messaging.Parsers;
 using Harvester.Core.Processes;
 using Moq;
 using Xunit;
@@ -26,7 +28,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingLog4NetParser
 
         public WhenCheckingCanParseMessage()
         {
-            messageParser = new Log4NetParser(processRetriever.Object);
+            messageParser = new Log4NetParser(processRetriever.Object, new Dictionary<String, String>());
         }
 
         [Fact]

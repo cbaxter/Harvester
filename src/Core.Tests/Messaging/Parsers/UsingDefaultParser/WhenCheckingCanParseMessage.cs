@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Harvester.Core.Messaging.Parsers;
 using Harvester.Core.Processes;
 using Moq;
@@ -28,7 +29,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingDefaultParser
 
         public WhenCheckingCanParseMessage()
         {
-            messageParser = new DefaultParser(processRetriever.Object);
+            messageParser = new DefaultParser(processRetriever.Object, new Dictionary<String, String>());
         }
 
         [Theory, InlineData(null), InlineData(""), InlineData("Message")]
