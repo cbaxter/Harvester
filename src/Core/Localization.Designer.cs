@@ -61,6 +61,15 @@ namespace Harvester.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unknown buffer type specified &apos;{0}&apos;; supported buffer types are &apos;SharedMemoryBuffer&apos; and &apos;NamedPipeBuffer&apos;.
+        /// </summary>
+        public static string BufferTypeNotSupported {
+            get {
+                return ResourceManager.GetString("BufferTypeNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extended property not defined.
         ///Property: {0}.
         /// </summary>
@@ -71,42 +80,22 @@ namespace Harvester.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attribute must be a valid pipe name.
-        ///Example: \\.\pipe\Harvester.
+        ///   Looks up a localized string similar to Invalid NamedPipe name.
+        ///Example: \\.\pipe\CustomPipeName.
         /// </summary>
-        public static string InvalidNamedPipeBinding {
+        public static string InvalidNamedPiperName {
             get {
-                return ResourceManager.GetString("InvalidNamedPipeBinding", resourceCulture);
+                return ResourceManager.GetString("InvalidNamedPiperName", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attribute must be a unique mutex name.
-        ///Example: HarvesterMutex.
+        ///   Looks up a localized string similar to Invalid SharedMemoryBuffer name.
+        ///Example: Local\CustomBufferName.
         /// </summary>
-        public static string InvalidNamedPipeMutex {
+        public static string InvalidSharedMemoryBufferName {
             get {
-                return ResourceManager.GetString("InvalidNamedPipeMutex", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Attribute must be a valid memory mapped file name.
-        ///Example: Local\HRVSTWIN.
-        /// </summary>
-        public static string InvalidSharedMemoryBinding {
-            get {
-                return ResourceManager.GetString("InvalidSharedMemoryBinding", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Attribute must be a unique mutex name.
-        ///Example: HrvstWinMutex.
-        /// </summary>
-        public static string InvalidSharedMemoryMutex {
-            get {
-                return ResourceManager.GetString("InvalidSharedMemoryMutex", resourceCulture);
+                return ResourceManager.GetString("InvalidSharedMemoryBufferName", resourceCulture);
             }
         }
         

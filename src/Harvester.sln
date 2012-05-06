@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Log4Net", "Log4Net\Log4Net.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog", "NLog\NLog.csproj", "{0ACD7FBA-77ED-4F12-B88E-CA87AE89C74D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraceListener", "TraceListener\TraceListener.csproj", "{74B18130-510E-41AE-AB2D-B1AF44D41E20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,16 @@ Global
 		{0ACD7FBA-77ED-4F12-B88E-CA87AE89C74D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0ACD7FBA-77ED-4F12-B88E-CA87AE89C74D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0ACD7FBA-77ED-4F12-B88E-CA87AE89C74D}.Release|x86.ActiveCfg = Release|Any CPU
+		{74B18130-510E-41AE-AB2D-B1AF44D41E20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74B18130-510E-41AE-AB2D-B1AF44D41E20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74B18130-510E-41AE-AB2D-B1AF44D41E20}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{74B18130-510E-41AE-AB2D-B1AF44D41E20}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{74B18130-510E-41AE-AB2D-B1AF44D41E20}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{74B18130-510E-41AE-AB2D-B1AF44D41E20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74B18130-510E-41AE-AB2D-B1AF44D41E20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74B18130-510E-41AE-AB2D-B1AF44D41E20}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{74B18130-510E-41AE-AB2D-B1AF44D41E20}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{74B18130-510E-41AE-AB2D-B1AF44D41E20}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

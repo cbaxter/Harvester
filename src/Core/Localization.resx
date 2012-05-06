@@ -117,25 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BufferTypeNotSupported" xml:space="preserve">
+    <value>Unknown buffer type specified '{0}'; supported buffer types are 'SharedMemoryBuffer' and 'NamedPipeBuffer'</value>
+  </data>
   <data name="ExtendedPropertyNotDefined" xml:space="preserve">
     <value>Extended property not defined.
 Property: {0}</value>
   </data>
-  <data name="InvalidNamedPipeBinding" xml:space="preserve">
-    <value>Attribute must be a valid pipe name.
-Example: \\.\pipe\Harvester</value>
+  <data name="InvalidNamedPiperName" xml:space="preserve">
+    <value>Invalid NamedPipe name.
+Example: \\.\pipe\CustomPipeName</value>
   </data>
-  <data name="InvalidNamedPipeMutex" xml:space="preserve">
-    <value>Attribute must be a unique mutex name.
-Example: HarvesterMutex</value>
-  </data>
-  <data name="InvalidSharedMemoryBinding" xml:space="preserve">
-    <value>Attribute must be a valid memory mapped file name.
-Example: Local\HRVSTWIN</value>
-  </data>
-  <data name="InvalidSharedMemoryMutex" xml:space="preserve">
-    <value>Attribute must be a unique mutex name.
-Example: HrvstWinMutex</value>
+  <data name="InvalidSharedMemoryBufferName" xml:space="preserve">
+    <value>Invalid SharedMemoryBuffer name.
+Example: Local\CustomBufferName</value>
   </data>
   <data name="OutputDebugStringProcessMismatch" xml:space="preserve">
     <value>Cannot combine OutputDebugString messages originating from different processes.</value>

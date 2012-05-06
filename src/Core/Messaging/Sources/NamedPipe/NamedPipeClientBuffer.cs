@@ -33,8 +33,9 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
 
         public NamedPipeClientBuffer(String serverName, String pipeName)
         {
-            Verify.NotWhitespace(serverName, "serverName");
             Verify.NotWhitespace(pipeName, "pipeName");
+            Verify.NotWhitespace(serverName, "serverName");
+            Verify.True(pipeName.StartsWith(@"\\.\pipe\"), "pipeName", Localization.InvalidNamedPiperName);
 
             this.serverName = serverName;
             this.pipeName = pipeName;

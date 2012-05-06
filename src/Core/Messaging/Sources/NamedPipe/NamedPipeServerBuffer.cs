@@ -35,8 +35,9 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
 
         public NamedPipeServerBuffer(String pipeName, String identity)
         {
-            Verify.NotWhitespace(pipeName, "pipeName");
             Verify.NotWhitespace(identity, "identity");
+            Verify.NotWhitespace(pipeName, "pipeName");
+            Verify.True(pipeName.StartsWith(@"\\.\pipe\"), "pipeName", Localization.InvalidNamedPiperName);
 
             //TODO: Review usage of `PipeOptions.Asynchronous` as significantly slower than `PipeOptions.None` but does not have Dispose issues with blocking `WaitForConnection`.
             pipeStream = new NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.Asynchronous, 0, 0, GetPipeSecurity(identity));

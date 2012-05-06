@@ -28,57 +28,35 @@ namespace Harvester.Integration.Log4Net
         private IWriteMessages MessageWriter { get; set; }
         private IMessageBuffer MessageBuffer { get; set; }
 
+        public String BufferType { get; set; }
+        public String MutexName { get; set; }
         public String Binding { get; set; }
-        public String Buffer { get; set; }
-        public String Mutex { get; set; }
 
         public HarvesterAppender()
         {
             Layout = new XmlLayoutSchemaLog4j();
             Binding = @"\\.\pipe\Harvester";
-            Buffer = @"NamedPipeBuffer";
-            Mutex = @"HarvesterMutex";
+            BufferType = @"NamedPipeBuffer";
+            MutexName = @"HarvesterMutex";
         }
 
         public override void ActivateOptions()
         {
             base.ActivateOptions();
 
-            switch (Buffer)
+            switch (BufferType)
             {
                 case "SharedMemoryBuffer":
-                    SetupSharedMemoryBuffer(Binding, Mutex);
+                    MessageBuffer = new SharedMemoryBuffer(Binding, OutputDebugString.BufferSize);
+                    MessageWriter = new OutputDebugStringWriter(MutexName, MessageBuffer);
                     break;
                 case "NamedPipeBuffer":
-                    SetupNamedPipeBuffer(Binding, Mutex);
+                    MessageBuffer = new NamedPipeClientBuffer(".", Binding);
+                    MessageWriter = new PipeMessageWriter(MutexName, MessageBuffer);
                     break;
                 default:
-                    throw new NotSupportedException(String.Format("Unknown buffer type specified '{0}'; supported buffers are 'SharedMemoryBuffer' and 'NamedPipeBuffer'.", Buffer));
+                    throw new NotSupportedException(String.Format(Localization.BufferTypeNotSupported, BufferType));
             }
-        }
-
-        private void SetupSharedMemoryBuffer(String buffer, String mutex)
-        {
-            if (String.IsNullOrWhiteSpace(Binding) || !(Binding.StartsWith(@"Local\") || Binding.StartsWith(@"Global\")))
-                throw new ArgumentException(Localization.InvalidSharedMemoryBinding, "buffer");
-
-            if (String.IsNullOrWhiteSpace(Mutex))
-                throw new ArgumentException(Localization.InvalidSharedMemoryMutex, "mutex");
-
-            MessageBuffer = new SharedMemoryBuffer(buffer, OutputDebugString.BufferSize);
-            MessageWriter = new OutputDebugStringWriter(mutex, MessageBuffer);
-        }
-
-        private void SetupNamedPipeBuffer(String buffer, String mutex)
-        {
-            if (String.IsNullOrWhiteSpace(Binding) || !Binding.StartsWith(@"\\.\pipe\"))
-                throw new ArgumentException(Localization.InvalidNamedPipeBinding, "buffer");
-
-            if (String.IsNullOrWhiteSpace(Mutex))
-                throw new ArgumentException(Localization.InvalidNamedPipeMutex, "mutex");
-
-            MessageBuffer = new NamedPipeClientBuffer(".", buffer);
-            MessageWriter = new PipeMessageWriter(mutex, MessageBuffer);
         }
 
         protected override void OnClose()

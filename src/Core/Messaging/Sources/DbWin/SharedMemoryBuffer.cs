@@ -33,6 +33,7 @@ namespace Harvester.Core.Messaging.Sources.DbWin
         {
             Verify.NotWhitespace(baseObjectName, "baseObjectName");
             Verify.True(capacity > 0, "capacity", Localization.ValueGreaterThanZeroExpected);
+            Verify.True(baseObjectName.StartsWith(@"Local\") || baseObjectName.StartsWith(@"Global\"), "baseObjectName", Localization.InvalidSharedMemoryBufferName);
 
             name = baseObjectName;
             dataReadyEvent = new EventWaitHandle(false, EventResetMode.AutoReset, baseObjectName + "_DATA_READY");
