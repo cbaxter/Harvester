@@ -18,7 +18,7 @@ namespace Harvester.Core.Messaging
 {
     public interface IConfigureListeners : IHaveExtendedProperties
     {
-        String Name { get; }
+        String Binding { get; }
         String Mutex { get; }
     }
 }

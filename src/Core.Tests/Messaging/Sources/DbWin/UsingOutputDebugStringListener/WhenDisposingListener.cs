@@ -30,7 +30,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringLis
             var guid = Guid.NewGuid();
             var configuration = new FakeListenerConfiguration
                                     {
-                                        Name = String.Format(@"Local\HRVSTR_{0}", guid),
+                                        Binding = String.Format(@"Local\HRVSTR_{0}", guid),
                                         Mutex = "Harvester: " + guid
                                     };
 

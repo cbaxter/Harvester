@@ -37,13 +37,13 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
         {
             Verify.NotNull(configuration, "configuration");
 
-            return configuration.Name;
+            return configuration.Binding;
         }
 
         private static String GetIdentity(IConfigureListeners configuration)
         {
             Verify.NotNull(configuration, "configuration");
-            Verify.True(configuration.HasExtendedProperty("identity"), "configuration", "Listener mising configuration attribute 'identity'.\r\nName: " + configuration.Name);
+            Verify.True(configuration.HasExtendedProperty("identity"), "configuration", "Listener mising configuration attribute 'identity'.\r\nName: " + configuration.Binding);
 
             return configuration.GetExtendedProperty("identity");
         }

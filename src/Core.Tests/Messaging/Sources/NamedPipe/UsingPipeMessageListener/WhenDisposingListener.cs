@@ -30,7 +30,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingPipeMessageListe
             var guid = Guid.NewGuid();
             var configuration = new FakeListenerConfiguration
                                     {
-                                        Name = @"\\.\pipe\" + guid,
+                                        Binding = @"\\.\pipe\" + guid,
                                         Mutex = "Harvester: " + guid
                                     };
 

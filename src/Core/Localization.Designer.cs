@@ -22,7 +22,7 @@ namespace Harvester.Core {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Localization {
+    public class Localization {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Harvester.Core {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Harvester.Core.Localization", typeof(Localization).Assembly);
@@ -51,7 +51,7 @@ namespace Harvester.Core {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -64,16 +64,56 @@ namespace Harvester.Core {
         ///   Looks up a localized string similar to Extended property not defined.
         ///Property: {0}.
         /// </summary>
-        internal static string ExtendedPropertyNotDefined {
+        public static string ExtendedPropertyNotDefined {
             get {
                 return ResourceManager.GetString("ExtendedPropertyNotDefined", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attribute must be a valid pipe name.
+        ///Example: \\.\pipe\Harvester.
+        /// </summary>
+        public static string InvalidNamedPipeBinding {
+            get {
+                return ResourceManager.GetString("InvalidNamedPipeBinding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute must be a unique mutex name.
+        ///Example: HarvesterMutex.
+        /// </summary>
+        public static string InvalidNamedPipeMutex {
+            get {
+                return ResourceManager.GetString("InvalidNamedPipeMutex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute must be a valid memory mapped file name.
+        ///Example: Local\HRVSTWIN.
+        /// </summary>
+        public static string InvalidSharedMemoryBinding {
+            get {
+                return ResourceManager.GetString("InvalidSharedMemoryBinding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute must be a unique mutex name.
+        ///Example: HrvstWinMutex.
+        /// </summary>
+        public static string InvalidSharedMemoryMutex {
+            get {
+                return ResourceManager.GetString("InvalidSharedMemoryMutex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot combine OutputDebugString messages originating from different processes..
         /// </summary>
-        internal static string OutputDebugStringProcessMismatch {
+        public static string OutputDebugStringProcessMismatch {
             get {
                 return ResourceManager.GetString("OutputDebugStringProcessMismatch", resourceCulture);
             }
@@ -82,7 +122,7 @@ namespace Harvester.Core {
         /// <summary>
         ///   Looks up a localized string similar to Value must be greater than zero..
         /// </summary>
-        internal static string ValueGreaterThanZeroExpected {
+        public static string ValueGreaterThanZeroExpected {
             get {
                 return ResourceManager.GetString("ValueGreaterThanZeroExpected", resourceCulture);
             }

@@ -35,7 +35,7 @@ namespace Harvester.Core.Configuration
 
         protected override Object GetElementKey(ConfigurationElement element)
         {
-            return ((ListenerElement)element).Name;
+            return ((ListenerElement)element).Binding;
         }
     }
 
@@ -43,14 +43,14 @@ namespace Harvester.Core.Configuration
     {
         private readonly IDictionary<String, String> extendedProperties = new Dictionary<String, String>(StringComparer.OrdinalIgnoreCase);
 
-        [ConfigurationProperty("type", IsRequired = true)]
-        public String TypeName { get { return (String)base["type"]; }  }
-
-        [ConfigurationProperty("name", IsRequired = true)]
-        public String Name { get { return (String)base["name"]; }  }
+        [ConfigurationProperty("binding", IsRequired = true)]
+        public String Binding { get { return (String)base["binding"]; } }
 
         [ConfigurationProperty("mutex", IsRequired = true)]
         public String Mutex { get { return (String)base["mutex"]; } }
+
+        [ConfigurationProperty("type", IsRequired = true)]
+        public String TypeName { get { return (String)base["type"]; }  }
 
         [ConfigurationProperty("elevatedOnly", IsRequired = false, DefaultValue = false)]
         public Boolean ElevatedOnly { get { return (Boolean)base["elevatedOnly"]; } }

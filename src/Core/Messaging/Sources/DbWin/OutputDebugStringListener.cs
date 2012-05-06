@@ -37,7 +37,7 @@ namespace Harvester.Core.Messaging.Sources.DbWin
         {
             Verify.NotNull(configuration, "configuration");
 
-            return configuration.Name;
+            return configuration.Binding;
         }
 
         private static Mutex GetMutex(IConfigureListeners configuration)

@@ -22,7 +22,7 @@ namespace Harvester.Core.Tests.Messaging.Sources
     {
         private readonly IDictionary<String, String> extendedProperties = new Dictionary<String, String>();
 
-        public string Name { get; set; }
+        public string Binding { get; set; }
         public string Mutex { get; set; }
         public String this[String property] { get { return extendedProperties[property]; } set { extendedProperties[property] = value; } }
 
