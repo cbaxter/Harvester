@@ -17,11 +17,11 @@ using Harvester.Core.Processes;
 
 namespace Harvester.Core.Messaging.Parsers
 {
-    public class DefaultMessageParser : IParseMessages
+    internal class DefaultParser : IParseMessages
     {
         private readonly IRetrieveProcesses processes;
 
-        public DefaultMessageParser(IRetrieveProcesses processRetriever)
+        public DefaultParser(IRetrieveProcesses processRetriever)
         {
             Verify.NotNull(processRetriever, "processRetriever");
 

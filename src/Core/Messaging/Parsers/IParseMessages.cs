@@ -16,7 +16,7 @@
 
 namespace Harvester.Core.Messaging.Parsers
 {
-    internal interface IParseMessages
+    public interface IParseMessages
     {
         Boolean CanParseMessage(String message);
         SystemEvent Parse(IMessage message);

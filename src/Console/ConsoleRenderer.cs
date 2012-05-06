@@ -2,8 +2,8 @@
 using System.Globalization;
 using System.Text;
 using Harvester.Core;
+using Harvester.Core.Configuration;
 using Harvester.Core.Messaging;
-using Harvester.Properties;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -30,16 +30,13 @@ namespace Harvester
         private Int32 MaxProcessIdLength { get; set; }
         private Int32 MaxThreadLength { get; set; }
 
-        //TODO: Batch writes to Console every 100ms?
-        //TODO: Move MessageColor.settings into common?
         public void Render(SystemEvent e)
         {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write(String.Format("{0:yyyy-MM-dd HH:mm:ss,fff}   ", e.Timestamp));
-
-            SetConsoleBackgroundColor(e);
-            SetConsoleForegroundColor(e);
+            Console.BackgroundColor = Settings.GetBackeColor(e.Level);
+            Console.ForegroundColor = Settings.GetForeColor(e.Level);
 
             stringBuilder.Clear();
             stringBuilder.AppendFormat("[{0}]   ", GetProcessId(e));
@@ -52,45 +49,45 @@ namespace Harvester
             Console.WriteLine(stringBuilder.ToString());
         }
 
-        private String GetProcessId(SystemEvent logMessage)
+        private String GetProcessId(SystemEvent e)
         {
-            var value = logMessage.ProcessId.ToString(CultureInfo.InvariantCulture);
+            var value = e.ProcessId.ToString(CultureInfo.InvariantCulture);
 
             MaxProcessIdLength = Math.Max(MaxProcessIdLength, value.Length);
 
             return value.PadLeft(MaxProcessIdLength, ' ');
         }
 
-        private String GetProcessName(SystemEvent logMessage)
+        private String GetProcessName(SystemEvent e)
         {
-            var value = logMessage.ProcessName ?? String.Empty;
+            var value = e.ProcessName ?? String.Empty;
 
             MaxProcessNameLength = Math.Max(MaxProcessNameLength, value.Length);
 
             return value.PadRight(MaxProcessNameLength, ' ');
         }
 
-        private String GetThread(SystemEvent logMessage)
+        private String GetThread(SystemEvent e)
         {
-            var value = logMessage.Thread ?? String.Empty;
+            var value = e.Thread ?? String.Empty;
 
             MaxThreadLength = Math.Max(MaxThreadLength, value.Length);
 
             return value.PadRight(MaxThreadLength, ' ');
         }
 
-        private String GetSource(SystemEvent logMessage)
+        private String GetSource(SystemEvent e)
         {
-            var value = logMessage.Source ?? String.Empty;
+            var value = e.Source ?? String.Empty;
 
             MaxSourceLength = Math.Max(MaxSourceLength, value.Length);
 
             return value.PadRight(MaxSourceLength, ' ');
         }
 
-        private static Char GetLevel(SystemEvent logMessage)
+        private static Char GetLevel(SystemEvent e)
         {
-            switch (logMessage.Level)
+            switch (e.Level)
             {
                 case SystemEventLevel.Fatal: return 'F';
                 case SystemEventLevel.Error: return 'E';
@@ -98,32 +95,6 @@ namespace Harvester
                 case SystemEventLevel.Information: return 'I';
                 case SystemEventLevel.Debug: return 'D';
                 default: return 'T';
-            }
-        }
-
-        private static void SetConsoleBackgroundColor(SystemEvent logMessage)
-        {
-            switch (logMessage.Level)
-            {
-                case SystemEventLevel.Fatal: Console.BackgroundColor = MessageColor.Default.FatalBackColor; break;
-                case SystemEventLevel.Error: Console.BackgroundColor = MessageColor.Default.ErrorBackColor; break;
-                case SystemEventLevel.Warning: Console.BackgroundColor = MessageColor.Default.WarningBackColor; break;
-                case SystemEventLevel.Information: Console.BackgroundColor = MessageColor.Default.InformationBackColor; break;
-                case SystemEventLevel.Debug: Console.BackgroundColor = MessageColor.Default.DebugBackColor; break;
-                default: Console.BackgroundColor = MessageColor.Default.TraceBackColor; break;
-            }
-        }
-
-        private static void SetConsoleForegroundColor(SystemEvent logMessage)
-        {
-            switch (logMessage.Level)
-            {
-                case SystemEventLevel.Fatal: Console.ForegroundColor = MessageColor.Default.FatalForeColor; break;
-                case SystemEventLevel.Error: Console.ForegroundColor = MessageColor.Default.ErrorForeColor; break;
-                case SystemEventLevel.Warning: Console.ForegroundColor = MessageColor.Default.WarningForeColor; break;
-                case SystemEventLevel.Information: Console.ForegroundColor = MessageColor.Default.InformationForeColor; break;
-                case SystemEventLevel.Debug: Console.ForegroundColor = MessageColor.Default.DebugForeColor; break;
-                default: Console.ForegroundColor = MessageColor.Default.TraceForeColor; break;
             }
         }
     }

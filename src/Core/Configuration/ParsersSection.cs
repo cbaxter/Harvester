@@ -1,9 +1,5 @@
 ﻿using System;
-using Harvester.Core.Messaging.Parsers;
-using Harvester.Core.Processes;
-using Moq;
-using Xunit;
-using Xunit.Extensions;
+using System.Configuration;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -19,22 +15,31 @@ using Xunit.Extensions;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging.Parsers.UsingDefaultParser
+namespace Harvester.Core.Configuration
 {
-    public class WhenCheckingCanParseMessage
+    public class ParsersSection : ConfigurationSection
     {
-        private readonly Mock<IRetrieveProcesses> processRetriever = new Mock<IRetrieveProcesses>();
-        private readonly IParseMessages messageParser;
+        [ConfigurationProperty(null, Options = ConfigurationPropertyOptions.IsDefaultCollection)]
+        public ParserElementCollection Parsers { get { return (ParserElementCollection)base[""] ?? new ParserElementCollection(); } }
+    }
 
-        public WhenCheckingCanParseMessage()
+    [ConfigurationCollection(typeof(ParserElement), AddItemName = "parser", CollectionType = ConfigurationElementCollectionType.BasicMap)]
+    public class ParserElementCollection : ConfigurationElementCollection
+    {
+        protected override ConfigurationElement CreateNewElement()
         {
-            messageParser = new DefaultParser(processRetriever.Object);
+            return new ParserElement();
         }
 
-        [Theory, InlineData(null), InlineData(""), InlineData("Message")]
-        public void AlwaysReturnTrue(String message)
+        protected override Object GetElementKey(ConfigurationElement element)
         {
-            Assert.True(messageParser.CanParseMessage(message));
+            return ((ParserElement)element).TypeName;
         }
+    }
+
+    public class ParserElement : ConfigurationElement
+    {
+        [ConfigurationProperty("type", IsRequired = true)]
+        public String TypeName { get { return (String)base["type"]; } set { base["type"] = value; } }
     }
 }

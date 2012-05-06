@@ -30,7 +30,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingDefaultParser
 
         public WhenParsingMessage()
         {
-            messageParser = new DefaultMessageParser(processRetriever.Object);
+            messageParser = new DefaultParser(processRetriever.Object);
         }
 
         [Fact]

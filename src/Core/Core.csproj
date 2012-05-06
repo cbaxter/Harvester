@@ -41,6 +41,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xml" />
@@ -52,12 +53,15 @@
     <Compile Include="..\.shared\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Configuration\LevelsSection.cs" />
+    <Compile Include="Configuration\ParsersSection.cs" />
+    <Compile Include="Configuration\Settings.cs" />
     <Compile Include="Messaging\IProcessMessages.cs" />
     <Compile Include="Messaging\IRenderEvents.cs" />
     <Compile Include="Messaging\MessageListener.cs" />
     <Compile Include="Messaging\MessageProcessor.cs" />
     <Compile Include="Messaging\Parsers\Log4NetParser.cs" />
-    <Compile Include="Messaging\Parsers\DefaultMessageParser.cs" />
+    <Compile Include="Messaging\Parsers\DefaultParser.cs" />
     <Compile Include="Messaging\Parsers\IParseMessages.cs" />
     <Compile Include="Messaging\Parsers\Log4JParser.cs" />
     <Compile Include="Messaging\Parsers\XmlMessageParser.cs" />

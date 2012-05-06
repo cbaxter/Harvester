@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Principal;
+using Harvester.Core.Configuration;
 using Harvester.Core.Messaging;
 using Harvester.Core.Messaging.Parsers;
 using Harvester.Core.Messaging.Sources.DbWin;
@@ -30,15 +31,7 @@ namespace Harvester.Core
 
         public SystemMonitor(IRenderEvents eventRenderer)
         {
-            var processRetriever = new ProcessRetriever();
-            var messageParsers = new IParseMessages[]
-                                     {
-                                         new Log4JParser(processRetriever),
-                                         new Log4NetParser(processRetriever),
-                                         new DefaultMessageParser(processRetriever)
-                                     };
-
-            messageProcessor = new MessageProcessor(eventRenderer, messageParsers);
+            messageProcessor = new MessageProcessor(eventRenderer, Settings.GetParsers(new ProcessRetriever()));
             messageListeners = new List<MessageListener>();
 
             var principal = new WindowsPrincipal(WindowsIdentity.GetCurrent() ?? WindowsIdentity.GetAnonymous());
