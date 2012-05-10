@@ -159,6 +159,11 @@ namespace Harvester.Integration.Diagnostics
                 WriteEvent(DateTime.Now, TraceEventType.Verbose, category ?? NoCategory, message, NoData);
         }
 
+        protected override void WriteIndent()
+        {
+            /* Do Nothing */
+        }
+
         public override void WriteLine(Object value)
         {
             if (value != null && (Filter == null || Filter.ShouldTrace(null, String.Empty, TraceEventType.Verbose, 0, null, null, value, null)))

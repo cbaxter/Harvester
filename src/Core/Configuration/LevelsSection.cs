@@ -24,6 +24,9 @@ namespace Harvester.Core.Configuration
 
         [ConfigurationProperty("foreColor", IsRequired = true, DefaultValue = ConsoleColor.DarkGray)]
         public ConsoleColor ForeColor { get { return (ConsoleColor)base["foreColor"]; } }
+
+        [ConfigurationProperty("aliases", IsRequired = true, DefaultValue = "")]
+        public String Aliases { get { return (String)base["aliases"]; } }
     }
 
     public class LevelsSection : ConfigurationSection

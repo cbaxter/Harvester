@@ -1,4 +1,6 @@
-﻿
+﻿using System.Collections.Generic;
+using System.Linq;
+
 /* Copyright (c) 2012 CBaxter
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
@@ -15,13 +17,16 @@
 
 namespace Harvester.Core
 {
-    public enum SystemEventLevel
+    internal static class EnumerableExtensions
     {
-        Debug = 0,
-        Trace = 1,
-        Information = 2,
-        Warning = 3,
-        Error = 4,
-        Fatal = 5
+        public static IEnumerable<T> Concat<T>(this IEnumerable<T> source, T item)
+        {
+            return source.Concat(new[] { item });
+        }
+
+        public static IDictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> source, IEqualityComparer<TKey> comparer)
+        {
+            return source.ToDictionary(kvp => kvp.Key, kvp => kvp.Value, comparer);
+        }
     }
 }

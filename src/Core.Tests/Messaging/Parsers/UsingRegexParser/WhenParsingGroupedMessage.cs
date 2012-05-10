@@ -5,6 +5,7 @@ using Harvester.Core.Messaging.Sources.DbWin;
 using Harvester.Core.Processes;
 using Moq;
 using Xunit;
+using Xunit.Extensions;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -31,7 +32,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingRegexParser
         {
             var extendedProperties = new FakeExtendedProperties
                                          {
-                                             { "pattern", @"(?<logger>[^:]+): (?<level>[A-Z]{5}) \[(?<thread>[\d])\] - (?<username>[\w]+) - (?<message>.*)" },
+                                             { "pattern", @"(?<logger>[^:]+): (?<level>[A-Z]+) \[(?<thread>[\d])\] - (?<username>[\w]+) - (?<message>.*)" },
                                              { "options", "IgnoreCase" }
                                          };
 
@@ -42,6 +43,12 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingRegexParser
         public void LevelFromMessage()
         {
             Assert.Equal(SystemEventLevel.Debug, messageParser.Parse(CreateMessage()).Level);
+        }
+
+        [Theory, InlineData("INFO"), InlineData("Info"), InlineData("Information")]
+        public void LevelParsedFromKnownAliases(String level)
+        {
+            Assert.Equal(SystemEventLevel.Information, messageParser.Parse(CreateMessage(level)).Level);
         }
 
         [Fact]
@@ -108,7 +115,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingRegexParser
             Assert.NotEqual((UInt32)0, messageParser.Parse(CreateMessage()).MessageId);
         }
 
-        private IMessage CreateMessage()
+        private IMessage CreateMessage(String level = "DEBUG")
         {
             var process = new Mock<IProcess>();
 
@@ -116,7 +123,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingRegexParser
             process.Setup(mock => mock.Name).Returns("xUnit Process");
             processRetriever.Setup(mock => mock.GetProcessById(123)).Returns(process.Object);
 
-            return new OutputDebugString("xUnit Source", 123, "Test Logger: DEBUG [1] - CBaxter - Test Message");
+            return new OutputDebugString("xUnit Source", 123, String.Format("Test Logger: {0} [1] - CBaxter - Test Message", level));
         }
     }
 }

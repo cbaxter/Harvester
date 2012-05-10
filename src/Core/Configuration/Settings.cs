@@ -29,44 +29,85 @@ namespace Harvester.Core.Configuration
         private static readonly IList<Func<IRetrieveProcesses, IParseMessages>> ParserActivators;
         private static readonly IDictionary<SystemEventLevel, ConsoleColor> ForeColors;
         private static readonly IDictionary<SystemEventLevel, ConsoleColor> BackColors;
+        private static readonly IDictionary<String, SystemEventLevel> LevelMappings;
 
         static Settings()
         {
-            var levelsSection = (LevelsSection)ConfigurationManager.GetSection("levels") ?? new LevelsSection();
-            
+            LevelMappings = GetLevels();
+            BackColors = GetBackColors();
+            ForeColors = GetForeColors();
             ParserActivators = GetParserActivators();
-
             ListenerActivators = GetListenerActivators();
-
-            ForeColors = new Dictionary<SystemEventLevel, ConsoleColor>
-                             {
-                                 { SystemEventLevel.Fatal, levelsSection.Fatal.ForeColor },
-                                 { SystemEventLevel.Error, levelsSection.Error.ForeColor },
-                                 { SystemEventLevel.Warning, levelsSection.Warning.ForeColor },
-                                 { SystemEventLevel.Information, levelsSection.Information.ForeColor },
-                                 { SystemEventLevel.Debug, levelsSection.Debug.ForeColor },
-                                 { SystemEventLevel.Trace, levelsSection.Trace.ForeColor }
-                             };
-
-            BackColors = new Dictionary<SystemEventLevel, ConsoleColor>
-                             {
-                                 { SystemEventLevel.Fatal, levelsSection.Fatal.BackColor },
-                                 { SystemEventLevel.Error, levelsSection.Error.BackColor },
-                                 { SystemEventLevel.Warning, levelsSection.Warning.BackColor },
-                                 { SystemEventLevel.Information, levelsSection.Information.BackColor },
-                                 { SystemEventLevel.Debug, levelsSection.Debug.BackColor },
-                                 { SystemEventLevel.Trace, levelsSection.Trace.BackColor }
-                             };
-        }
-        
-        public static ConsoleColor GetForeColor(SystemEventLevel level)
-        {
-            return ForeColors[level];
         }
 
         public static ConsoleColor GetBackeColor(SystemEventLevel level)
         {
             return BackColors[level];
+        }
+
+        private static IDictionary<SystemEventLevel, ConsoleColor> GetBackColors()
+        {
+            var levelsSection = (LevelsSection)ConfigurationManager.GetSection("levels") ?? new LevelsSection();
+
+            return new Dictionary<SystemEventLevel, ConsoleColor>
+                       {
+                           { SystemEventLevel.Fatal, levelsSection.Fatal.BackColor },
+                           { SystemEventLevel.Error, levelsSection.Error.BackColor },
+                           { SystemEventLevel.Warning, levelsSection.Warning.BackColor },
+                           { SystemEventLevel.Information, levelsSection.Information.BackColor },
+                           { SystemEventLevel.Debug, levelsSection.Debug.BackColor },
+                           { SystemEventLevel.Trace, levelsSection.Trace.BackColor }
+                       };   
+        }
+
+        public static ConsoleColor GetForeColor(SystemEventLevel level)
+        {
+            return ForeColors[level];
+        }
+
+        private static IDictionary<SystemEventLevel, ConsoleColor> GetForeColors()
+        {
+            var levelsSection = (LevelsSection)ConfigurationManager.GetSection("levels") ?? new LevelsSection();
+
+            return new Dictionary<SystemEventLevel, ConsoleColor>
+                       {
+                           { SystemEventLevel.Fatal, levelsSection.Fatal.BackColor },
+                           { SystemEventLevel.Error, levelsSection.Error.BackColor },
+                           { SystemEventLevel.Warning, levelsSection.Warning.BackColor },
+                           { SystemEventLevel.Information, levelsSection.Information.BackColor },
+                           { SystemEventLevel.Debug, levelsSection.Debug.BackColor },
+                           { SystemEventLevel.Trace, levelsSection.Trace.BackColor }
+                       };
+        }
+
+        public static SystemEventLevel GetLevel(String alias)
+        {
+            return LevelMappings.ContainsKey(alias) ? LevelMappings[alias] : SystemEventLevel.Trace;
+        }
+
+        private static IDictionary<String, SystemEventLevel> GetLevels()
+        {
+            var levelsSection = (LevelsSection)ConfigurationManager.GetSection("levels") ?? new LevelsSection();
+
+            return  Enumerable.Empty<KeyValuePair<String, SystemEventLevel>>()
+                              .Concat(GetAliases(levelsSection.Fatal, SystemEventLevel.Fatal))
+                              .Concat(GetAliases(levelsSection.Error, SystemEventLevel.Error))
+                              .Concat(GetAliases(levelsSection.Warning, SystemEventLevel.Warning))
+                              .Concat(GetAliases(levelsSection.Information, SystemEventLevel.Information))
+                              .Concat(GetAliases(levelsSection.Debug, SystemEventLevel.Debug))
+                              .Concat(GetAliases(levelsSection.Trace, SystemEventLevel.Trace))
+                              .ToDictionary(StringComparer.OrdinalIgnoreCase);
+        }
+
+        private static IEnumerable<KeyValuePair<String, SystemEventLevel>> GetAliases(LevelElement level, SystemEventLevel mapping)
+        {
+            return level.Aliases
+                        .Split(new[] { ",", ";", " " }, StringSplitOptions.RemoveEmptyEntries)
+                        .Concat(mapping.ToString())
+                        .Select(item => item.Trim().ToLowerInvariant())
+                        .Where(item => !String.IsNullOrWhiteSpace(item))
+                        .Distinct()
+                        .Select(item => new KeyValuePair<String, SystemEventLevel>(item, mapping));
         }
 
         public static IList<MessageListener> GetListeners(IProcessMessages messageProcessor)

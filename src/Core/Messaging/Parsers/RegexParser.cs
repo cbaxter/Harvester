@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using Harvester.Core.Configuration;
 using Harvester.Core.Processes;
 
 /* Copyright (c) 2012 CBaxter
@@ -47,11 +48,9 @@ namespace Harvester.Core.Messaging.Parsers
         {
             Verify.NotNull(message, "message");
 
-            SystemEventLevel level;
-            Match match = pattern.Match(message.Message);
-            IProcess process = processes.GetProcessById(message.ProcessId);
-
-            Enum.TryParse(match.Groups["level"].Value, true, out level);
+            var match = pattern.Match(message.Message);
+            var process = processes.GetProcessById(message.ProcessId);
+            var level = Settings.GetLevel(match.Groups["level"].Value);
 
             return match.Success
                        ? new SystemEvent
