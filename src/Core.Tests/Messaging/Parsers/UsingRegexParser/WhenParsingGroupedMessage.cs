@@ -32,8 +32,8 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingRegexParser
         {
             var extendedProperties = new FakeExtendedProperties
                                          {
-                                             { "pattern", @"(?<logger>[^:]+): (?<level>[A-Z]+) \[(?<thread>[\d])\] - (?<username>[\w]+) - (?<message>.*)" },
-                                             { "options", "IgnoreCase" }
+                                             { "pattern", @"(?<logger>[^:]+): (?<level>[A-Z]+) \[(?<thread>[\d])\] - (?<username>[\w]+) - (?<message>(.*\r*\n*)*)" },
+                                             { "options", "ExplicitCapture,IgnoreCase" }
                                          };
 
             messageParser = new RegexParser(processRetriever.Object, extendedProperties);
@@ -80,11 +80,11 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingRegexParser
         {
             var message = CreateMessage();
 
-            Assert.Equal("Test Message", messageParser.Parse(message).Message);
+            Assert.Equal("Test\r\nMessage", messageParser.Parse(message).Message);
         }
 
         [Fact]
-        public void RawMessageFromMessage()
+        public void RawMessageHasNoFormatting()
         {
             var message = CreateMessage();
 
@@ -123,7 +123,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingRegexParser
             process.Setup(mock => mock.Name).Returns("xUnit Process");
             processRetriever.Setup(mock => mock.GetProcessById(123)).Returns(process.Object);
 
-            return new OutputDebugString("xUnit Source", 123, String.Format("Test Logger: {0} [1] - CBaxter - Test Message", level));
+            return new OutputDebugString("xUnit Source", 123, String.Format("Test Logger: {0} [1] - CBaxter - Test{1}Message", level, Environment.NewLine));
         }
     }
 }

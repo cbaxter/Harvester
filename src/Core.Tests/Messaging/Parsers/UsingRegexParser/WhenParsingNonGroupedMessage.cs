@@ -73,7 +73,7 @@ namespace Harvester.Core.Tests.Messaging.Parsers.UsingRegexParser
         }
 
         [Fact]
-        public void RawMessageIsFormattedXml()
+        public void RawMessageHasNoFormatting()
         {
             var message = CreateMessage();
 
