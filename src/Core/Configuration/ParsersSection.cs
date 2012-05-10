@@ -35,16 +35,21 @@ namespace Harvester.Core.Configuration
 
         protected override Object GetElementKey(ConfigurationElement element)
         {
-            return ((ParserElement)element).TypeName;
+            var parser = (ParserElement) element;
+
+            return String.IsNullOrWhiteSpace(parser.Name) ? parser.TypeName : parser.Name;
         }
     }
 
     public class ParserElement : ConfigurationElement, IHaveExtendedProperties
     {
         private readonly IDictionary<String, String> extendedProperties = new Dictionary<String, String>(StringComparer.OrdinalIgnoreCase);
-
+        
         [ConfigurationProperty("type", IsRequired = true)]
         public String TypeName { get { return (String)base["type"]; } }
+        
+        [ConfigurationProperty("name", IsRequired = false, DefaultValue = "")]
+        public String Name { get { return (String)base["name"]; } }
         
         public String GetExtendedProperty(String property)
         {
