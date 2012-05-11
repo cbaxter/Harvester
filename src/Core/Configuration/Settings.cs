@@ -71,12 +71,12 @@ namespace Harvester.Core.Configuration
 
             return new Dictionary<SystemEventLevel, ConsoleColor>
                        {
-                           { SystemEventLevel.Fatal, levelsSection.Fatal.BackColor },
-                           { SystemEventLevel.Error, levelsSection.Error.BackColor },
-                           { SystemEventLevel.Warning, levelsSection.Warning.BackColor },
-                           { SystemEventLevel.Information, levelsSection.Information.BackColor },
-                           { SystemEventLevel.Debug, levelsSection.Debug.BackColor },
-                           { SystemEventLevel.Trace, levelsSection.Trace.BackColor }
+                           { SystemEventLevel.Fatal, levelsSection.Fatal.ForeColor },
+                           { SystemEventLevel.Error, levelsSection.Error.ForeColor },
+                           { SystemEventLevel.Warning, levelsSection.Warning.ForeColor },
+                           { SystemEventLevel.Information, levelsSection.Information.ForeColor },
+                           { SystemEventLevel.Debug, levelsSection.Debug.ForeColor },
+                           { SystemEventLevel.Trace, levelsSection.Trace.ForeColor }
                        };
         }
 
