@@ -110,6 +110,13 @@ namespace Harvester.Core.Configuration
                         .Select(item => new KeyValuePair<String, SystemEventLevel>(item, mapping));
         }
 
+        public static Func<SystemEvent, Boolean> GetFilter()
+        {
+            var filtersSection = (FiltersSection)ConfigurationManager.GetSection("filters") ?? new FiltersSection();
+
+            return filtersSection.CompileFilter();
+        }
+
         public static IList<MessageListener> GetListeners(IProcessMessages messageProcessor)
         {
             return ListenerActivators.Select(activator => activator.Invoke(messageProcessor)).ToList();

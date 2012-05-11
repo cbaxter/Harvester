@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
+using Harvester.Core.Messaging;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -17,34 +19,28 @@ using System.Configuration;
 
 namespace Harvester.Core.Configuration
 {
-    public class ParsersSection : ConfigurationSection
+    public abstract class ExtendableConfigurationElement : ConfigurationElement, IHaveExtendedProperties
     {
-        [ConfigurationProperty(null, Options = ConfigurationPropertyOptions.IsDefaultCollection)]
-        public ParserElementCollection Parsers { get { return (ParserElementCollection)base[""] ?? new ParserElementCollection(); } }
-    }
+        private readonly IDictionary<String, String> extendedProperties = new Dictionary<String, String>(StringComparer.OrdinalIgnoreCase);
 
-    [ConfigurationCollection(typeof(ParserElement), AddItemName = "parser", CollectionType = ConfigurationElementCollectionType.BasicMap)]
-    public class ParserElementCollection : ConfigurationElementCollection
-    {
-        protected override ConfigurationElement CreateNewElement()
+        public Boolean HasExtendedProperty(String property)
         {
-            return new ParserElement();
+            return extendedProperties.ContainsKey(property);
         }
 
-        protected override Object GetElementKey(ConfigurationElement element)
+        public String GetExtendedProperty(String property)
         {
-            var parser = (ParserElement) element;
+            if (!extendedProperties.ContainsKey(property))
+                throw new ArgumentException(String.Format(Localization.ExtendedPropertyNotDefined, property), "property");
 
-            return String.IsNullOrWhiteSpace(parser.Name) ? parser.TypeName : parser.Name;
+            return extendedProperties[property] ?? String.Empty;
         }
-    }
 
-    public class ParserElement : ExtendableConfigurationElement
-    {
-        [ConfigurationProperty("type", IsRequired = true)]
-        public String TypeName { get { return (String)base["type"]; } }
-        
-        [ConfigurationProperty("name", IsRequired = false, DefaultValue = "")]
-        public String Name { get { return (String)base["name"]; } }
+        protected override Boolean OnDeserializeUnrecognizedAttribute(String name, String value)
+        {
+            extendedProperties.Add(name, value);
+
+            return true;
+        }
     }
 }

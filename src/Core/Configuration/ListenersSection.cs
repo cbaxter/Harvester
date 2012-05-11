@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using Harvester.Core.Messaging;
 
@@ -39,10 +38,8 @@ namespace Harvester.Core.Configuration
         }
     }
 
-    public class ListenerElement : ConfigurationElement, IConfigureListeners
+    public class ListenerElement : ExtendableConfigurationElement, IConfigureListeners
     {
-        private readonly IDictionary<String, String> extendedProperties = new Dictionary<String, String>(StringComparer.OrdinalIgnoreCase);
-
         [ConfigurationProperty("binding", IsRequired = true)]
         public String Binding { get { return (String)base["binding"]; } }
 
@@ -54,25 +51,5 @@ namespace Harvester.Core.Configuration
 
         [ConfigurationProperty("elevatedOnly", IsRequired = false, DefaultValue = false)]
         public Boolean ElevatedOnly { get { return (Boolean)base["elevatedOnly"]; } }
-
-        public String GetExtendedProperty(String property)
-        {
-            if (!extendedProperties.ContainsKey(property))
-                throw new ArgumentException(String.Format(Localization.ExtendedPropertyNotDefined, property), "property");
-
-            return extendedProperties[property] ?? String.Empty;
-        }
-
-        public Boolean HasExtendedProperty(String property)
-        {
-            return extendedProperties.ContainsKey(property);
-        }
-
-        protected override Boolean OnDeserializeUnrecognizedAttribute(String name, String value)
-        {
-            extendedProperties.Add(name, value);
-            
-            return true;
-        }
     }
 }

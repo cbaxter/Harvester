@@ -52,11 +52,27 @@
     <Compile Include="..\.shared\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Configuration\ExtendableConfigurationElement.cs" />
+    <Compile Include="Configuration\FiltersSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Configuration\ListenersSection.cs" />
     <Compile Include="Configuration\LevelsSection.cs" />
     <Compile Include="Configuration\ParsersSection.cs" />
     <Compile Include="Configuration\Settings.cs" />
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="Filters\ComparisonFilterBase.cs" />
+    <Compile Include="Filters\CompositeFilterBase.cs" />
+    <Compile Include="Filters\CompositeFilters.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Filters\FilterBase.cs" />
+    <Compile Include="Filters\IFilterMessages.cs" />
+    <Compile Include="Filters\FilterParameters.cs" />
+    <Compile Include="Filters\ComparisonFilters.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Filters\StringComparisonFilters.cs" />
     <Compile Include="Messaging\IHaveExtendedProperties.cs" />
     <Compile Include="Messaging\IProcessMessages.cs" />
     <Compile Include="Messaging\IRenderEvents.cs" />
