@@ -72,6 +72,7 @@
     <Compile Include="Filters\ComparisonFilters.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Filters\StringComparisonFilterBase.cs" />
     <Compile Include="Filters\StringComparisonFilters.cs" />
     <Compile Include="Messaging\IHaveExtendedProperties.cs" />
     <Compile Include="Messaging\IProcessMessages.cs" />

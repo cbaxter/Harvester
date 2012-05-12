@@ -19,63 +19,39 @@ using Harvester.Core.Messaging;
 
 namespace Harvester.Core.Filters
 {
-    internal class StringComparisonFilterBase : ComparisonFilterBase
-    {
-        public struct StringOperation
-        {
-            public readonly String MethodName;
-            public readonly Object FalseResult;
-
-            public StringOperation(String methodName, Object falseResult)
-            {
-                Verify.NotWhitespace(methodName, "methodName");
-
-                MethodName = methodName;
-                FalseResult = falseResult;
-            }
-        }
-
-        protected StringComparisonFilterBase(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children, StringOperation operation)
-            : base(extendedProperties, children, (lhs, rhs) => CreateExpression(lhs, rhs, operation))
-        { }
-
-        private static BinaryExpression CreateExpression(Expression memberExpression, Expression valueExpression, StringOperation operation)
-        {
-            Verify.NotNull(valueExpression, "valueExpression");
-            Verify.NotNull(memberExpression, "memberExpression");
-            Verify.True(typeof(String).IsAssignableFrom(memberExpression.Type), "memberExpression", "Expression type must by String.");
-            Verify.True(memberExpression.NodeType == ExpressionType.MemberAccess, "memberExpression", "MemberAccess expression expected.");
-
-            return Expression.NotEqual(
-                        Expression.Call(
-                            memberExpression,
-                            typeof(String).GetMethod(operation.MethodName, new[] { typeof(String), typeof(StringComparison) }),
-                            new[] { valueExpression, Expression.Constant(StringComparison.OrdinalIgnoreCase) }
-                        ),
-                        Expression.Constant(operation.FalseResult)
-                    );
-        }
-    }
-
-
     internal class ContainsFilter : StringComparisonFilterBase
     {
         public ContainsFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
-            : base(extendedProperties, children, new StringOperation("IndexOf", -1))
+            : base(extendedProperties, children, Contains)
         { }
+
+        private static Boolean Contains(String member, String value)
+        {
+            return (member ?? String.Empty).IndexOf(value ?? String.Empty, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
     }
 
     internal class EndsWithFilter : StringComparisonFilterBase
     {
         public EndsWithFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
-            : base(extendedProperties, children, new StringOperation("EndsWith", false))
+            : base(extendedProperties, children, EndsWith)
         { }
+
+        private static Boolean EndsWith(String member, String value)
+        {
+            return (member ?? String.Empty).EndsWith(value ?? String.Empty, StringComparison.OrdinalIgnoreCase);
+        }
     }
 
     internal class StartsWithFilter : StringComparisonFilterBase
     {
         public StartsWithFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
-            : base(extendedProperties, children, new StringOperation("StartsWith", false))
+            : base(extendedProperties, children, StartsWith)
         { }
+
+        private static Boolean StartsWith(String member, String value)
+        {
+            return (member ?? String.Empty).StartsWith(value ?? String.Empty, StringComparison.OrdinalIgnoreCase);
+        }
     }
 }
