@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Harvester.Core.Messaging;
+﻿using System.Linq;
+using Harvester.Core.Filters;
+using Xunit;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -17,40 +16,28 @@ using Harvester.Core.Messaging;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests.Messaging
+namespace Harvester.Core.Tests.Filters.UsingComparisonFilter
 {
-    public class FakeExtendedProperties : IHaveExtendedProperties, IEnumerable<KeyValuePair<String, String>>
+    public class WhenCheckingEqual
     {
-        private readonly IDictionary<String, String> extendedProperties;
-
-        public FakeExtendedProperties()
+        [Fact]
+        public void ReturnTrueIfEqual()
         {
-            extendedProperties = new Dictionary<String, String>();
+            var e = new SystemEvent { Level = SystemEventLevel.Warning };
+            var extendedProperties = new FakeExtendedProperties { { "property", "Level" }, { "value", "Warning" } };
+            var filter = new EqualFilter(extendedProperties, Enumerable.Empty<IFilterMessages>());
+
+            Assert.True(Filter.Compile(filter).Invoke(e));
         }
 
-        public void Add(String key, String value)
+        [Fact]
+        public void ReturnFalseIfNotEqual()
         {
-            extendedProperties.Add(key, value);
-        }
+            var e = new SystemEvent { Level = SystemEventLevel.Error };
+            var extendedProperties = new FakeExtendedProperties { { "property", "Level" }, { "value", "Warning" } };
+            var filter = new EqualFilter(extendedProperties, Enumerable.Empty<IFilterMessages>());
 
-        public string GetExtendedProperty(String property)
-        {
-            return extendedProperties[property];
-        }
-
-        public bool HasExtendedProperty(String property)
-        {
-            return extendedProperties.ContainsKey(property);
-        }
-
-        public IEnumerator<KeyValuePair<String, String>> GetEnumerator()
-        {
-            return extendedProperties.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
+            Assert.False(Filter.Compile(filter).Invoke(e));
         }
     }
 }

@@ -23,17 +23,29 @@ namespace Harvester
 {
     internal class ConsoleRenderer : IRenderEvents
     {
-        private readonly ConsoleColor timestampColor = Settings.GetTimestampColor();
-        private readonly ConsoleColor defaultBackColor = Console.BackgroundColor;
-        private readonly StringBuilder stringBuilder = new StringBuilder();
+        private readonly StringBuilder stringBuilder;
+        private readonly ConsoleColor timestampColor;
+        private readonly ConsoleColor defaultBackColor;
+        private readonly Func<SystemEvent, Boolean> filter;
 
         private Int32 MaxSourceLength { get; set; }
         private Int32 MaxProcessNameLength { get; set; }
         private Int32 MaxProcessIdLength { get; set; }
         private Int32 MaxThreadLength { get; set; }
 
+        public ConsoleRenderer()
+        {
+            timestampColor = Settings.GetTimestampColor();
+            defaultBackColor = Console.BackgroundColor;
+            stringBuilder = new StringBuilder();
+            filter = Settings.GetFilter();
+        }
+
         public void Render(SystemEvent e)
         {
+            if (!filter.Invoke(e))
+                return;
+
             Console.ForegroundColor = timestampColor;
             Console.BackgroundColor = defaultBackColor;
             Console.Write(String.Format("{0:yyyy-MM-dd HH:mm:ss,fff}   ", e.Timestamp));

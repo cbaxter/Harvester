@@ -60,7 +60,26 @@
     <Compile Include="..\.shared\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Messaging\FakeExtendedProperties.cs" />
+    <Compile Include="Configuration\TestConfigFile.cs" />
+    <Compile Include="Configuration\UsingFilters\WhenGettingFilters.cs" />
+    <Compile Include="Configuration\UsingLevels\WhenGettingLevels.cs" />
+    <Compile Include="Configuration\UsingListeners\WhenGettingListeners.cs" />
+    <Compile Include="Configuration\UsingParsers\WhenGettingParsers.cs" />
+    <Compile Include="Filter.cs" />
+    <Compile Include="Filters\UsingComparisonFilter\WhenCheckingGreaterThan.cs" />
+    <Compile Include="Filters\UsingComparisonFilter\WhenCheckingGreaterThanOrEqual.cs" />
+    <Compile Include="Filters\UsingComparisonFilter\WhenCheckingLessThanOrEqual.cs" />
+    <Compile Include="Filters\UsingComparisonFilter\WhenCheckingLessThan.cs" />
+    <Compile Include="Filters\UsingComparisonFilter\WhenCheckingNotEqual.cs" />
+    <Compile Include="Filters\UsingComparisonFilter\WhenConvertingValues.cs" />
+    <Compile Include="Filters\UsingComparisonFilter\WhenCheckingEqual.cs" />
+    <Compile Include="FakeExtendedProperties.cs" />
+    <Compile Include="Filters\UsingCompositeFilter\WhenNotFilter.cs" />
+    <Compile Include="Filters\UsingCompositeFilter\WhenOrElseFilter.cs" />
+    <Compile Include="Filters\UsingCompositeFilter\WhenAndAlsoFilter.cs" />
+    <Compile Include="Filters\UsingStringComparisonFilter\WhenEndsWithFilter.cs" />
+    <Compile Include="Filters\UsingStringComparisonFilter\WhenContainsFilter.cs" />
+    <Compile Include="Filters\UsingStringComparisonFilter\WhenStartsWithFilter.cs" />
     <Compile Include="Messaging\Parsers\UsingLog4NetParser\WhenCheckingCanParseMessage.cs" />
     <Compile Include="Messaging\Parsers\UsingLog4NetParser\WhenParsingEmptyMessage.cs" />
     <Compile Include="Messaging\Parsers\UsingLog4NetParser\WhenParsingFullMessage.cs" />
@@ -115,6 +134,10 @@
       <Link>Harvester.snk</Link>
     </None>
     <None Include="app.config" />
+    <EmbeddedResource Include="Configuration\UsingLevels\CanParseValidLevelsSection.config" />
+    <EmbeddedResource Include="Configuration\UsingParsers\CanParseValidParsersSection.config" />
+    <EmbeddedResource Include="Configuration\UsingListeners\CanParseValidListenersSection.config" />
+    <EmbeddedResource Include="Configuration\UsingFilters\CanParseValidFiltersSection.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
