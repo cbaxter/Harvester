@@ -14,10 +14,8 @@
 
     <Target Name="Clean">
         <ItemGroup>
-            <CleanFiles Include="**\bin\$(Configuration)\**" />
-            <CleanFiles Include="**\bin\*.*" />
+            <CleanFiles Include="**\bin\$(Configuration)\**" Exclude ="**\bin\$(Configuration)\*.vshost.exe"/>
             <CleanFiles Include="**\obj\$(Configuration)\**" />
-            <CleanFiles Include="**\obj\*.*" />
         </ItemGroup>
 
         <Delete Files="@(CleanFiles)" />
