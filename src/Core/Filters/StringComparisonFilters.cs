@@ -58,23 +58,23 @@ namespace Harvester.Core.Filters
     }
 
 
-    internal class Contains : StringComparisonFilterBase
+    internal class ContainsFilter : StringComparisonFilterBase
     {
-        public Contains(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public ContainsFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, new StringOperation("IndexOf", -1))
         { }
     }
 
-    internal class EndsWith : StringComparisonFilterBase
+    internal class EndsWithFilter : StringComparisonFilterBase
     {
-        public EndsWith(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public EndsWithFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, new StringOperation("EndsWith", false))
         { }
     }
 
-    internal class StartsWith : StringComparisonFilterBase
+    internal class StartsWithFilter : StringComparisonFilterBase
     {
-        public StartsWith(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public StartsWithFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, new StringOperation("StartsWith", false))
         { }
     }

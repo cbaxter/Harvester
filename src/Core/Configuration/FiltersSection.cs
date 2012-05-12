@@ -33,7 +33,7 @@ namespace Harvester.Core.Configuration
             var filters = Filters.Cast<FilterElement>().Select(element => element.GetFilter(filterParameters));
 
             return Expression.Lambda<Func<SystemEvent, Boolean>>(
-                       new AndAlso(this, filters).CreateExpression(filterParameters),
+                       new AndAlsoFilter(this, filters).CreateExpression(filterParameters),
                        systemEvent
                    ).Compile();
         }
@@ -73,7 +73,7 @@ namespace Harvester.Core.Configuration
 
         public IFilterMessages GetFilter(FilterParameters parameters)
         {
-            var filterType = Type.GetType(String.Format("{0}.{1}", typeof(FilterParameters).Namespace, TypeName), false) ?? Type.GetType(TypeName, true);
+            var filterType = Type.GetType(String.Format("{0}.{1}Filter", typeof(FilterParameters).Namespace, TypeName), false) ?? Type.GetType(TypeName, true);
             var filters = Filters.Cast<FilterElement>().Select(element => element.GetFilter(parameters));
 
             return (IFilterMessages)Activator.CreateInstance(filterType, this, filters);

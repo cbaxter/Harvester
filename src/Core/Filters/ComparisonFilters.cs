@@ -18,44 +18,44 @@ using Harvester.Core.Messaging;
 
 namespace Harvester.Core.Filters
 {
-    internal class Equal : ComparisonFilterBase
+    internal class EqualFilter : ComparisonFilterBase
     {
-        public Equal(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public EqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Expression.Equal)
         { }
     }
 
-    internal class GreaterThan : ComparisonFilterBase
+    internal class GreaterThanFilter : ComparisonFilterBase
     {
-        public GreaterThan(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public GreaterThanFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Expression.GreaterThan)
         { }
     }
 
-    internal class GreaterThanOrEqual : ComparisonFilterBase
+    internal class GreaterThanOrEqualFilter : ComparisonFilterBase
     {
-        public GreaterThanOrEqual(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public GreaterThanOrEqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Expression.GreaterThanOrEqual)
         { }
     }
 
-    internal class LessThan : ComparisonFilterBase
+    internal class LessThanFilter : ComparisonFilterBase
     {
-        public LessThan(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public LessThanFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Expression.LessThan)
         { }
     }
 
-    internal class LessThanOrEqual : ComparisonFilterBase
+    internal class LessThanOrEqualFilter : ComparisonFilterBase
     {
-        public LessThanOrEqual(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public LessThanOrEqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Expression.LessThanOrEqual)
         { }
     }
 
-    internal class NotEqual : ComparisonFilterBase
+    internal class NotEqualFilter : ComparisonFilterBase
     {
-        public NotEqual(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public NotEqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Expression.NotEqual)
         { }
     }

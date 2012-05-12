@@ -18,16 +18,16 @@ using Harvester.Core.Messaging;
 
 namespace Harvester.Core.Filters
 {
-    internal class AndAlso : CompositeFilterBase
+    internal class AndAlsoFilter : CompositeFilterBase
     {
-        public AndAlso(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public AndAlsoFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Expression.AndAlso)
         { }
     }
 
-    internal class OrElse : CompositeFilterBase
+    internal class OrElseFilter : CompositeFilterBase
     {
-        public OrElse(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public OrElseFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Expression.OrElse)
         { }
     }
