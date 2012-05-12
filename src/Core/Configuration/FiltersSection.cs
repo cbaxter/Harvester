@@ -68,8 +68,8 @@ namespace Harvester.Core.Configuration
         [ConfigurationProperty("type", IsRequired = true)]
         public String TypeName { get { return (String)base["type"]; } }
 
-        [ConfigurationProperty("filters", IsRequired = false)]
-        public FilterElementCollection Filters { get { return this["filters"] as FilterElementCollection ?? new FilterElementCollection(); } }
+        [ConfigurationProperty("", IsRequired = false, IsDefaultCollection = true)]
+        public FilterElementCollection Filters { get { return this[""] as FilterElementCollection ?? new FilterElementCollection(); } }
 
         public IFilterMessages GetFilter(FilterParameters parameters)
         {
