@@ -31,4 +31,16 @@ namespace Harvester.Core.Filters
             : base(extendedProperties, children, Expression.OrElse)
         { }
     }
+
+    internal class NotFilter : CompositeFilterBase
+    {
+        public NotFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+            : base(extendedProperties, children, Expression.AndAlso)
+        { }
+
+        protected override Expression BuildExpression(FilterParameters parameters)
+        {
+            return Expression.Not(base.BuildExpression(parameters));
+        }
+    }
 }
