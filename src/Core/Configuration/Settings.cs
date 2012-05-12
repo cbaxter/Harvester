@@ -80,6 +80,13 @@ namespace Harvester.Core.Configuration
                        };
         }
 
+        public static ConsoleColor GetTimestampColor()
+        {
+            var levelsSection = (LevelsSection)ConfigurationManager.GetSection("levels") ?? new LevelsSection();
+
+            return levelsSection.TimestampColor;
+        }
+
         public static SystemEventLevel GetLevel(String alias)
         {
             return LevelMappings.ContainsKey(alias) ? LevelMappings[alias] : SystemEventLevel.Trace;
