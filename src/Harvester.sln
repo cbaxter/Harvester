@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog", "NLog\NLog.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraceListener", "TraceListener\TraceListener.csproj", "{74B18130-510E-41AE-AB2D-B1AF44D41E20}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows", "Windows\Windows.csproj", "{B2CF0425-5779-499B-9E3D-6B232C8E0AB3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{74B18130-510E-41AE-AB2D-B1AF44D41E20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74B18130-510E-41AE-AB2D-B1AF44D41E20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74B18130-510E-41AE-AB2D-B1AF44D41E20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2CF0425-5779-499B-9E3D-6B232C8E0AB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2CF0425-5779-499B-9E3D-6B232C8E0AB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2CF0425-5779-499B-9E3D-6B232C8E0AB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2CF0425-5779-499B-9E3D-6B232C8E0AB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
