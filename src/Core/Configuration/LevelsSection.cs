@@ -19,10 +19,10 @@ namespace Harvester.Core.Configuration
 {
     public class LevelElement : ConfigurationElement
     {
-        [ConfigurationProperty("backColor", IsRequired = true, DefaultValue = ConsoleColor.Black)]
+        [ConfigurationProperty("backColor", IsRequired = false, DefaultValue = ConsoleColor.Black)]
         public ConsoleColor BackColor { get { return (ConsoleColor)base["backColor"]; } }
 
-        [ConfigurationProperty("foreColor", IsRequired = true, DefaultValue = ConsoleColor.DarkGray)]
+        [ConfigurationProperty("foreColor", IsRequired = false, DefaultValue = ConsoleColor.DarkGray)]
         public ConsoleColor ForeColor { get { return (ConsoleColor)base["foreColor"]; } }
 
         [ConfigurationProperty("aliases", IsRequired = true, DefaultValue = "")]
