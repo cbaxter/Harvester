@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Threading;
-using Harvester.Core;
+using System.Runtime.InteropServices;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -16,33 +15,23 @@ using Harvester.Core;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester
+namespace Harvester.Core
 {
-    internal class Program
+    internal class NativeMethods
     {
-        static void Main()
+        [DllImport("user32.dll")]
+        private static extern Boolean ShowWindow(IntPtr hWnd, Int32 nCmdShow);
+
+        [DllImport("user32.dll")]
+        private static extern Boolean SetForegroundWindow(IntPtr hWnd);
+
+        public static Boolean ActivateWindow(IntPtr hWnd)
         {
-            Thread.CurrentThread.Name = "Main";
-
-            Boolean onlyInstance;
-            using (SystemMonitor.CreateSingleInstance(out onlyInstance))
-            {
-                if (onlyInstance)
-                {
-                    using (new SystemMonitor(new ConsoleRenderer()))
-                        new ManualResetEvent(false).WaitOne();
-                }
-                else
-                {
-                    Console.WriteLine(Localization.DebuggerAlreadyActive);
-                    Console.WriteLine();
-
-                    SystemMonitor.ShowExistingInstance();
-
-                    Console.WriteLine(Localization.PressAnyKeyToExit);
-                    Console.ReadKey();
-                }
-            }
+            // Activates and displays a window. If the window is minimized or maximized, the system restores it to its original
+            // size and position. An application should specify this flag when displaying the window for the first time.
+            const Int32 normal = 1;
+            
+            return ShowWindow(hWnd, normal) && SetForegroundWindow(hWnd);
         }
     }
 }

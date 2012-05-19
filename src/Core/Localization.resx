@@ -120,6 +120,9 @@
   <data name="BufferTypeNotSupported" xml:space="preserve">
     <value>Unknown buffer type specified '{0}'; supported buffer types are 'SharedMemoryBuffer' and 'NamedPipeBuffer'</value>
   </data>
+  <data name="DebuggerAlreadyActive" xml:space="preserve">
+    <value>Another instance of Harvester is already open.</value>
+  </data>
   <data name="ExtendedPropertyNotDefined" xml:space="preserve">
     <value>Extended property not defined.
 Property: {0}</value>
@@ -134,6 +137,9 @@ Example: Local\CustomBufferName</value>
   </data>
   <data name="OutputDebugStringProcessMismatch" xml:space="preserve">
     <value>Cannot combine OutputDebugString messages originating from different processes.</value>
+  </data>
+  <data name="PressAnyKeyToExit" xml:space="preserve">
+    <value>Press any key to exit application...</value>
   </data>
   <data name="ValueGreaterThanZeroExpected" xml:space="preserve">
     <value>Value must be greater than zero.</value>

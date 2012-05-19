@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 using Harvester.Core.Configuration;
 using Harvester.Core.Messaging;
 using Harvester.Core.Processes;
@@ -30,7 +34,7 @@ namespace Harvester.Core
             messageProcessor = new MessageProcessor(eventRenderer, Settings.GetParsers(new ProcessRetriever()));
             messageListeners = Settings.GetListeners(messageProcessor);
 
-            foreach(var messageListener in messageListeners)
+            foreach (var messageListener in messageListeners)
                 messageListener.Start();
         }
 
@@ -40,6 +44,40 @@ namespace Harvester.Core
 
             foreach (var messageListener in messageListeners)
                 messageListener.Dispose();
+        }
+
+        public static IDisposable CreateSingleInstance(out Boolean onlyInstance)
+        {
+            return new Mutex(true, "HarvesterSingleInstance", out onlyInstance);
+        }
+
+        public static void ShowExistingInstance()
+        {
+            using (var currentProcess = Process.GetCurrentProcess())
+            {
+                var otherInstance = Process.GetProcesses()
+                                           .Where(HasCoreAssemblyModuleLoaded)
+                                           .FirstOrDefault(process => process.Id != currentProcess.Id);
+
+                if (otherInstance == null) 
+                    return;
+
+                NativeMethods.ActivateWindow(otherInstance.MainWindowHandle);
+            }
+        }
+
+        private static Boolean HasCoreAssemblyModuleLoaded(Process process)
+        {
+            try
+            {
+                return process.Modules.Cast<ProcessModule>().Any(m => m.ModuleName == CoreAssembly.Reference.ManifestModule.Name);
+            }
+            catch (Win32Exception)
+            { 
+                // An `Access Denied` exception may be thrown if the process requires elevated 
+                // access to see module information.
+                return false;
+            }
         }
     }
 }

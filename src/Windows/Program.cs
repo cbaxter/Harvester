@@ -1,5 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
+using Harvester.Core;
 using Harvester.Forms;
 
 /* Copyright (c) 2012 CBaxter
@@ -23,9 +29,30 @@ namespace Harvester
         [STAThread]
         internal static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main());
+            Thread.CurrentThread.Name = "Main";
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) => ShowFatalException((Exception)e.ExceptionObject);
+            
+            Boolean onlyInstance;
+            using (SystemMonitor.CreateSingleInstance(out onlyInstance))
+            {
+                if (onlyInstance)
+                {
+                    Application.SetCompatibleTextRenderingDefault(false);
+                    Application.EnableVisualStyles();
+                    Application.Run(new Main());
+                }
+                else
+                {
+                    MessageBox.Show(Localization.DebuggerAlreadyActive, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    SystemMonitor.ShowExistingInstance();
+                    Application.Exit();
+                }
+            }
+        }
+
+        private static void ShowFatalException(Exception ex)
+        {
+            MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

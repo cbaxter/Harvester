@@ -20,7 +20,7 @@ using Harvester.Core.Messaging;
 
 namespace Harvester.Forms
 {
-    public partial class Main : Form, IRenderEvents
+    internal partial class Main : Form, IRenderEvents
     {
         private readonly SystemMonitor systemMonitor;
 
@@ -35,7 +35,7 @@ namespace Harvester.Forms
         {
             base.OnClosed(e);
 
-            //systemMonitor.Dispose();
+            //TODO: systemMonitor.Dispose();
         }
 
         public void Render(SystemEvent e)

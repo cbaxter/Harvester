@@ -41,6 +41,9 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>..\Resources\Icons\Harvester.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -70,18 +73,26 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\Main.resx">
-      <DependentUpon>Main.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
       <Project>{B0177C63-EE23-44A4-83D8-F3494FDE9C30}</Project>
       <Name>Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.shared\Harvester.snk">
+      <Link>Harvester.snk</Link>
+    </None>
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Resources\Icons\Harvester.ico">
+      <Link>Harvester.ico</Link>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

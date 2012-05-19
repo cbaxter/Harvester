@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using Harvester.Core;
+﻿using System.Reflection;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -16,33 +14,12 @@ using Harvester.Core;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester
+namespace Harvester.Core
 {
-    internal class Program
+    public static class CoreAssembly
     {
-        static void Main()
-        {
-            Thread.CurrentThread.Name = "Main";
+        private static readonly Assembly Assembly = typeof(CoreAssembly).Assembly;
 
-            Boolean onlyInstance;
-            using (SystemMonitor.CreateSingleInstance(out onlyInstance))
-            {
-                if (onlyInstance)
-                {
-                    using (new SystemMonitor(new ConsoleRenderer()))
-                        new ManualResetEvent(false).WaitOne();
-                }
-                else
-                {
-                    Console.WriteLine(Localization.DebuggerAlreadyActive);
-                    Console.WriteLine();
-
-                    SystemMonitor.ShowExistingInstance();
-
-                    Console.WriteLine(Localization.PressAnyKeyToExit);
-                    Console.ReadKey();
-                }
-            }
-        }
+        public static Assembly Reference { get { return Assembly; } }
     }
 }

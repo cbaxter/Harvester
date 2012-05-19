@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +61,7 @@
     <Compile Include="Configuration\LevelsSection.cs" />
     <Compile Include="Configuration\ParsersSection.cs" />
     <Compile Include="Configuration\Settings.cs" />
+    <Compile Include="CoreAssembly.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Filters\ComparisonFilterBase.cs" />
     <Compile Include="Filters\CompositeFilterBase.cs" />
@@ -110,6 +112,7 @@
     <Compile Include="Messaging\Sources\NamedPipe\PipeMessage.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\PipeMessageReader.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\PipeMessageWriter.cs" />
+    <Compile Include="NativeMethods.cs" />
     <Compile Include="Processes\IProcess.cs" />
     <Compile Include="Processes\IRetrieveProcesses.cs" />
     <Compile Include="Processes\ProcessRetriever.cs" />
@@ -133,7 +136,6 @@
       <LastGenOutput>Localization.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
