@@ -21,11 +21,11 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
 {
     public sealed class PipeMessageWriter : IWriteMessages
     {
-        private readonly IMessageBuffer memoryBuffer;
+        private readonly MessageBuffer memoryBuffer;
         private readonly String mutexName;
         private readonly Byte[] preamble;
 
-        public PipeMessageWriter(String mutexName, IMessageBuffer memoryBuffer)
+        public PipeMessageWriter(String mutexName, MessageBuffer memoryBuffer)
         {
             Verify.NotWhitespace(mutexName, "mutexName");
             Verify.NotNull(memoryBuffer, "memoryBuffer");

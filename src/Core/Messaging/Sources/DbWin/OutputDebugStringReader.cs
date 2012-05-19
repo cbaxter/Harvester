@@ -21,12 +21,12 @@ namespace Harvester.Core.Messaging.Sources.DbWin
     {
         private const Int32 MaxFragmentSize = OutputDebugString.MaxMessageSize * 16;
         private readonly Queue<OutputDebugString> queuedMessages = new Queue<OutputDebugString>();
-        private readonly IMessageBuffer messageBuffer;
+        private readonly MessageBuffer messageBuffer;
         private OutputDebugString partial;
 
         public IMessage Current { get; private set; }
 
-        public OutputDebugStringReader(IMessageBuffer messageBuffer)
+        public OutputDebugStringReader(MessageBuffer messageBuffer)
         {
             Verify.NotNull(messageBuffer, "messageBuffer");
 
@@ -35,11 +35,22 @@ namespace Harvester.Core.Messaging.Sources.DbWin
 
         public Boolean ReadNext()
         {
-            WaitForMessages();
+            try
+            {
+                WaitForMessages();
+                Current = queuedMessages.Dequeue();
+                return true;
+            }
+            catch (ObjectDisposedException)
+            {
+                // An ObjectDisposedException is thrown from the blocking call to UnmanagedMemoryAccessor.ReadArray
+                // when disposed; thus if the message buffer state is closed we can ignore the exception and return false.
+                if (messageBuffer.State != MessageBufferState.Closed)
+                    throw;
 
-            Current = queuedMessages.Dequeue();
-
-            return true;
+                Current = null;
+                return false;
+            }
         }
 
         private void WaitForMessages()

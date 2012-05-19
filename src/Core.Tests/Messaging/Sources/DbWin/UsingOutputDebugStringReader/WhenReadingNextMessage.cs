@@ -22,7 +22,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringRea
 {
     public class WhenReadingNextMessage
     {
-        private readonly Mock<IMessageBuffer> messageBuffer = new Mock<IMessageBuffer>();
+        private readonly Mock<MessageBuffer> messageBuffer = new Mock<MessageBuffer>("BufferName");
         private readonly OutputDebugStringReader messageReader;
 
         public WhenReadingNextMessage()
@@ -60,7 +60,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringRea
             messageBuffer.Setup(mock => mock.Read()).Returns(new[]
                                                                  {
                                                                      new OutputDebugString("Source", 1, '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize - 2) + '$').ToBytes(),
-                                                                     new OutputDebugString("Source", 1, String.Empty).ToBytes(),
+                                                                     new OutputDebugString("Source", 1, String.Empty).ToBytes()
                                                                  });
 
             Assert.True(ReadNextMessage(1, '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize - 2) + '$'));
@@ -90,7 +90,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringRea
                                                                  {
                                                                      new OutputDebugString("Source", 1, '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize * 15 - 2) + '$').ToBytes(),
                                                                      new OutputDebugString("Source", 1, '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize - 2) + '$').ToBytes(),
-                                                                     new OutputDebugString("Source", 1, '^' + String.Empty.PadLeft(126) + '$').ToBytes(),
+                                                                     new OutputDebugString("Source", 1, '^' + String.Empty.PadLeft(126) + '$').ToBytes()
                                                                  });
 
             Assert.True(ReadNextMessage(1, '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize * 15 - 2) + '$' + '^' + String.Empty.PadLeft(OutputDebugString.MaxMessageSize - 2) + '$'));

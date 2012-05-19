@@ -21,7 +21,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeServerB
 {
     public class WhenCreatingBuffer : IDisposable
     {
-        private readonly IMessageBuffer buffer;
+        private readonly MessageBuffer buffer;
         private readonly String pipeName;
 
         public WhenCreatingBuffer()

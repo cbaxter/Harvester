@@ -37,7 +37,7 @@ namespace Harvester.Integration.Diagnostics
         private const String NoLogger = "";
 
         private readonly IWriteMessages messageWriter;
-        private readonly IMessageBuffer messageBuffer;
+        private readonly MessageBuffer messageBuffer;
         private readonly String machineName;
         private readonly String domain;
 

@@ -18,24 +18,20 @@ using System.Threading;
 
 namespace Harvester.Core.Messaging.Sources.DbWin
 {
-    public sealed class SharedMemoryBuffer : IMessageBuffer
+    public sealed class SharedMemoryBuffer : MessageBuffer
     {
         private readonly MemoryMappedViewAccessor bufferView;
         private readonly EventWaitHandle bufferReadyEvent;
         private readonly EventWaitHandle dataReadyEvent;
         private readonly MemoryMappedFile bufferFile;
-        private readonly String name;
-
-        public String Name { get { return name; } }
-        public TimeSpan Timeout { get; set; }
 
         public SharedMemoryBuffer(String baseObjectName, Int64 capacity)
+            : base(baseObjectName)
         {
             Verify.NotWhitespace(baseObjectName, "baseObjectName");
             Verify.True(capacity > 0, "capacity", Localization.ValueGreaterThanZeroExpected);
             Verify.True(baseObjectName.StartsWith(@"Local\") || baseObjectName.StartsWith(@"Global\"), "baseObjectName", Localization.InvalidSharedMemoryBufferName);
 
-            name = baseObjectName;
             dataReadyEvent = new EventWaitHandle(false, EventResetMode.AutoReset, baseObjectName + "_DATA_READY");
             bufferReadyEvent = new EventWaitHandle(true, EventResetMode.AutoReset, baseObjectName + "_BUFFER_READY");
             bufferFile = MemoryMappedFile.CreateOrOpen(baseObjectName + "_BUFFER", capacity, MemoryMappedFileAccess.ReadWrite);
@@ -44,16 +40,20 @@ namespace Harvester.Core.Messaging.Sources.DbWin
             Timeout = TimeSpan.FromSeconds(10);
         }
 
-        public void Dispose()
+        protected override void Dispose(Boolean disposing)
         {
+            if (!disposing)
+                return;
+
             dataReadyEvent.SafeSet();
+
             bufferReadyEvent.Dispose();
             dataReadyEvent.Dispose();
             bufferView.Dispose();
             bufferFile.Dispose();
         }
 
-        public Byte[] Read()
+        protected override Byte[] ReadMessage()
         {
             dataReadyEvent.WaitOne();
 
@@ -64,7 +64,7 @@ namespace Harvester.Core.Messaging.Sources.DbWin
             return result;
         }
 
-        public void Write(Byte[] buffer)
+        protected override void WriteMessage(Byte[] buffer)
         {
             if (buffer == null)
                 return;

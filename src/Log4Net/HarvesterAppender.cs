@@ -26,7 +26,7 @@ namespace Harvester.Integration.Log4Net
     public sealed class HarvesterAppender : AppenderSkeleton
     {
         private IWriteMessages MessageWriter { get; set; }
-        private IMessageBuffer MessageBuffer { get; set; }
+        private MessageBuffer MessageBuffer { get; set; }
 
         public String BufferType { get; set; }
         public String MutexName { get; set; }

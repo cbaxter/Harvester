@@ -22,7 +22,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingPipeMessageReade
 {
     public class WhenReadingNextMessage
     {
-        private readonly Mock<IMessageBuffer> messageBuffer = new Mock<IMessageBuffer>();
+        private readonly Mock<MessageBuffer> messageBuffer = new Mock<MessageBuffer>("BufferName");
         private readonly PipeMessageReader messageReader;
 
         public WhenReadingNextMessage()

@@ -28,7 +28,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingPipeMessageWrite
 {
     public class WhenWritingMessage : IDisposable
     {
-        private readonly Mock<IMessageBuffer> messageBuffer = new Mock<IMessageBuffer>();
+        private readonly Mock<MessageBuffer> messageBuffer = new Mock<MessageBuffer>("BufferName");
         private readonly ManualResetEvent setupComplete = new ManualResetEvent(false);
         private readonly ManualResetEvent testComplete = new ManualResetEvent(false);
         private readonly PipeMessageWriter messageWriter;
@@ -38,7 +38,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingPipeMessageWrite
         {
             mutexName = "Harvester: " + Guid.NewGuid();
             messageWriter = new PipeMessageWriter(mutexName, messageBuffer.Object);
-            messageBuffer.Setup(mock => mock.Timeout).Returns(TimeSpan.FromMilliseconds(25));
+            messageBuffer.Object.Timeout = TimeSpan.FromMilliseconds(25);
         }
 
         public void Dispose()

@@ -27,7 +27,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringWri
 {
     public class WhenWritingMessage : IDisposable
     {
-        private readonly Mock<IMessageBuffer> messageBuffer = new Mock<IMessageBuffer>();
+        private readonly Mock<MessageBuffer> messageBuffer = new Mock<MessageBuffer>("BufferName");
         private readonly ManualResetEvent setupComplete = new ManualResetEvent(false);
         private readonly ManualResetEvent testComplete = new ManualResetEvent(false);
         private readonly OutputDebugStringWriter messageWriter;
@@ -37,7 +37,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.DbWin.UsingOutputDebugStringWri
         {
             mutexName = "Harvester: " + Guid.NewGuid();
             messageWriter = new OutputDebugStringWriter(mutexName, messageBuffer.Object);
-            messageBuffer.Setup(mock => mock.Timeout).Returns(TimeSpan.FromMilliseconds(25));
+            messageBuffer.Object.Timeout = TimeSpan.FromMilliseconds(25);
         }
 
         public void Dispose()

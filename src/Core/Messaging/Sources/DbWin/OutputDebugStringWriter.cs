@@ -21,15 +21,15 @@ namespace Harvester.Core.Messaging.Sources.DbWin
 {
     public sealed class OutputDebugStringWriter : IWriteMessages
     {
-        private readonly IMessageBuffer messageBuffer;
+        private readonly MessageBuffer messageBuffer;
         private readonly String mutexName;
         private readonly Byte[] buffer;
 
-        public OutputDebugStringWriter(String mutexName, IMessageBuffer messageBuffer)
+        public OutputDebugStringWriter(String mutexName, MessageBuffer messageBuffer)
             : this(mutexName, messageBuffer, new Byte[OutputDebugString.BufferSize])
         { }
 
-        public OutputDebugStringWriter(String mutexName, IMessageBuffer messageBuffer, Byte[] buffer)
+        public OutputDebugStringWriter(String mutexName, MessageBuffer messageBuffer, Byte[] buffer)
         {
             Verify.NotNull(buffer, "buffer");
             Verify.NotWhitespace(mutexName, "mutexName");

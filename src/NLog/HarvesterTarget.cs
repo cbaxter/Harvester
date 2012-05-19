@@ -27,7 +27,7 @@ namespace Harvester.Integration.NLog
     public sealed class HarvesterTarget : Target
     {
         private IWriteMessages MessageWriter { get; set; }
-        private IMessageBuffer MessageBuffer { get; set; }
+        private MessageBuffer MessageBuffer { get; set; }
         private Layout Layout { get; set; }
 
         public String BufferType { get; set; }

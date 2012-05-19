@@ -25,13 +25,13 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeClientB
     public class WhenWritingToOpenBuffer : IDisposable
     {
         private readonly NamedPipeServerStream serverPipeStream;
-        private readonly IMessageBuffer buffer;
+        private readonly MessageBuffer buffer;
         private readonly String pipeName;
 
         public WhenWritingToOpenBuffer()
         {
             pipeName = @"\\.\pipe\" + Guid.NewGuid();
-            buffer = new NamedPipeClientBuffer(".", pipeName) { Timeout = 250 };
+            buffer = new NamedPipeClientBuffer(".", pipeName) { Timeout = TimeSpan.FromMilliseconds(250) };
             serverPipeStream = new NamedPipeServerStream(pipeName, PipeDirection.InOut);
         }
 

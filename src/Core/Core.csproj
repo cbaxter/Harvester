@@ -104,8 +104,9 @@
     <Compile Include="Messaging\Sources\DbWin\OutputDebugStringWriter.cs" />
     <Compile Include="Messaging\Sources\DbWin\SharedMemoryBuffer.cs" />
     <Compile Include="Messaging\IMessage.cs" />
-    <Compile Include="Messaging\Sources\IMessageBuffer.cs" />
+    <Compile Include="Messaging\Sources\MessageBuffer.cs" />
     <Compile Include="Messaging\Sources\IReadMessages.cs" />
+    <Compile Include="Messaging\Sources\MessageBufferState.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\NamedPipeClientBuffer.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\PipeMessageListener.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\NamedPipeServerBuffer.cs" />

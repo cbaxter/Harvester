@@ -22,13 +22,13 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeClientB
 {
     public class WhenWritingToClosedBuffer : IDisposable
     {
-        private readonly IMessageBuffer buffer;
+        private readonly MessageBuffer buffer;
 
         public WhenWritingToClosedBuffer()
         {
             var pipeName = @"\\.\pipe\" + Guid.NewGuid();
 
-            buffer = new NamedPipeClientBuffer(".", pipeName) { Timeout = 250 };
+            buffer = new NamedPipeClientBuffer(".", pipeName) { Timeout = TimeSpan.FromMilliseconds(250) };
         }
 
         public void Dispose()

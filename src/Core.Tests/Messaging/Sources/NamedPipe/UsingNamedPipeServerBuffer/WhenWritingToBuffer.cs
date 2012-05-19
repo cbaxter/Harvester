@@ -22,7 +22,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeServerB
 {
     public class WhenWritingToBuffer : IDisposable
     {
-        private readonly IMessageBuffer buffer;
+        private readonly MessageBuffer buffer;
 
         public WhenWritingToBuffer()
         {

@@ -135,6 +135,12 @@ Example: \\.\pipe\CustomPipeName</value>
     <value>Invalid SharedMemoryBuffer name.
 Example: Local\CustomBufferName</value>
   </data>
+  <data name="MessageBufferBroken" xml:space="preserve">
+    <value>The underlying message buffer is broken.</value>
+  </data>
+  <data name="MessageBufferClosed" xml:space="preserve">
+    <value>The underlying message buffer is closed.</value>
+  </data>
   <data name="OutputDebugStringProcessMismatch" xml:space="preserve">
     <value>Cannot combine OutputDebugString messages originating from different processes.</value>
   </data>

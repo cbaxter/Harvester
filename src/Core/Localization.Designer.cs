@@ -109,6 +109,24 @@ namespace Harvester.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The underlying message buffer is broken..
+        /// </summary>
+        public static string MessageBufferBroken {
+            get {
+                return ResourceManager.GetString("MessageBufferBroken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The underlying message buffer is closed..
+        /// </summary>
+        public static string MessageBufferClosed {
+            get {
+                return ResourceManager.GetString("MessageBufferClosed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot combine OutputDebugString messages originating from different processes..
         /// </summary>
         public static string OutputDebugStringProcessMismatch {

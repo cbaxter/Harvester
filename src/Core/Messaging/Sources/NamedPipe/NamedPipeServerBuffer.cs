@@ -19,37 +19,35 @@ using System.Security.AccessControl;
 
 namespace Harvester.Core.Messaging.Sources.NamedPipe
 {
-    internal sealed class NamedPipeServerBuffer : IMessageBuffer
+    internal sealed class NamedPipeServerBuffer : MessageBuffer
     {
         private readonly NamedPipeServerStream pipeStream;
         private readonly MemoryStream memoryStream;
         private readonly Byte[] buffer;
-        private readonly String name;
-
-        public String Name { get { return name; } }
-        public TimeSpan Timeout { get; set; }
 
         public NamedPipeServerBuffer()
             : this(@"\\.\pipe\Harvester", "Everyone")
         { }
 
         public NamedPipeServerBuffer(String pipeName, String identity)
+            : base(pipeName)
         {
             Verify.NotWhitespace(identity, "identity");
             Verify.NotWhitespace(pipeName, "pipeName");
             Verify.True(pipeName.StartsWith(@"\\.\pipe\"), "pipeName", Localization.InvalidNamedPiperName);
 
-            //TODO: Review usage of `PipeOptions.Asynchronous` as significantly slower than `PipeOptions.None` but does not have Dispose issues with blocking `WaitForConnection`.
             pipeStream = new NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.Asynchronous, 0, 0, GetPipeSecurity(identity));
             memoryStream = new MemoryStream();
             buffer = new Byte[8192];
-            name = pipeName;
 
             Timeout = TimeSpan.FromSeconds(10);
         }
 
-        public void Dispose()
+        protected override void Dispose(Boolean disposing)
         {
+            if (!disposing)
+                return;
+
             pipeStream.Dispose();
             memoryStream.Dispose();
         }
@@ -63,7 +61,7 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
             return pipeSecurity;
         }
 
-        public Byte[] Read()
+        protected override Byte[] ReadMessage()
         {
             pipeStream.WaitForConnection();
             try
@@ -101,7 +99,7 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
             return memoryStream.ToArray();
         }
 
-        public void Write(Byte[] message)
+        protected override void WriteMessage(Byte[] message)
         {
             throw new NotSupportedException();
         }

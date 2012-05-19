@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -18,22 +19,34 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
 {
     public sealed class PipeMessageReader : IReadMessages
     {
-        private readonly IMessageBuffer memoryBuffer;
-        
+        private readonly MessageBuffer memoryBuffer;
+
         public IMessage Current { get; private set; }
 
-        public PipeMessageReader(IMessageBuffer memoryBuffer)
+        public PipeMessageReader(MessageBuffer memoryBuffer)
         {
             Verify.NotNull(memoryBuffer, "memoryBuffer");
-            
+
             this.memoryBuffer = memoryBuffer;
         }
 
         public Boolean ReadNext()
         {
-            Current = new PipeMessage(memoryBuffer.Name, memoryBuffer.Read()); 
+            try
+            {
+                Current = new PipeMessage(memoryBuffer.Name, memoryBuffer.Read());
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // An IOException or ObjectDisposedException is thrown from the NamedPipeServerStream.WaitForConnection
+                // when disposed; thus if the message buffer state is closed we can ignore the exception and return false.
+                if (memoryBuffer.State != MessageBufferState.Closed || !(ex is IOException || ex is ObjectDisposedException))
+                    throw;
 
-            return true;
+                Current = null;
+                return false;
+            }
         }
     }
 }

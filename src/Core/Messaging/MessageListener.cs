@@ -57,13 +57,10 @@ namespace Harvester.Core.Messaging
 
         protected virtual void ReadAllMessages()
         {
-            try
-            {
-                while (messageReader.ReadNext())
-                    messageProcessor.Process(messageReader.Current);
-            }
-            catch (ObjectDisposedException)
-            { }
+            // ReadNext will block and always return true until the  
+            // underlying message buffer is closed.
+            while (messageReader.ReadNext())
+                messageProcessor.Process(messageReader.Current);
         }
     }
 }

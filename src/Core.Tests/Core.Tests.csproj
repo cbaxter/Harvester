@@ -93,7 +93,6 @@
     <Compile Include="Messaging\Parsers\UsingRegexParser\WhenParsingGroupedMessage.cs" />
     <Compile Include="Messaging\Sources\DbWin\UsingOutputDebugStringListener\WhenDisposingListener.cs" />
     <Compile Include="Messaging\Sources\FakeListenerConfiguration.cs" />
-    <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeClientBuffer\WhenAdjustingTimeout.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeServerBuffer\WhenCreatingBuffer.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeServerBuffer\WhenDisposingBuffer.cs" />
     <Compile Include="Messaging\Sources\NamedPipe\UsingNamedPipeServerBuffer\WhenReadingFromBuffer.cs" />

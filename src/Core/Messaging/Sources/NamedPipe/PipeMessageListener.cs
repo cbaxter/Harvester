@@ -19,14 +19,14 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
 {
     internal class PipeMessageListener : MessageListener
     {
-        private readonly IMessageBuffer messageBuffer;
+        private readonly MessageBuffer messageBuffer;
         private readonly Mutex mutex;
 
         public PipeMessageListener(IProcessMessages messageProcessor, IConfigureListeners configuration)
             : this(GetSource(configuration), messageProcessor, new NamedPipeServerBuffer(GetSource(configuration), GetIdentity(configuration)), GetMutex(configuration))
         { }
 
-        private PipeMessageListener(String listenerName, IProcessMessages messageProcessor, IMessageBuffer messageBuffer, Mutex mutex)
+        private PipeMessageListener(String listenerName, IProcessMessages messageProcessor, MessageBuffer messageBuffer, Mutex mutex)
             : base(listenerName, messageProcessor, new PipeMessageReader(messageBuffer))
         {
             this.mutex = mutex;

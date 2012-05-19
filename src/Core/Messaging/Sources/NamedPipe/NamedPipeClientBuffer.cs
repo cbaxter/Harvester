@@ -17,21 +17,19 @@ using System.IO.Pipes;
 
 namespace Harvester.Core.Messaging.Sources.NamedPipe
 {
-    public sealed class NamedPipeClientBuffer : IMessageBuffer
+    public sealed class NamedPipeClientBuffer : MessageBuffer
     {
         private static readonly Byte[] Empty = new Byte[0];
         private readonly String serverName;
         private readonly String pipeName;
+        private Int32 timeout;
 
-        public String Name { get { return pipeName; } }
-        public Int32 Timeout { get; set; }
-        TimeSpan IMessageBuffer.Timeout { get { return TimeSpan.FromMilliseconds(Timeout); } set { Timeout = Convert.ToInt32(value.TotalMilliseconds); } }
-        
         public NamedPipeClientBuffer()
             : this(@".", @"\\.\pipe\Harvester")
         { }
 
         public NamedPipeClientBuffer(String serverName, String pipeName)
+            : base(pipeName)
         {
             Verify.NotWhitespace(pipeName, "pipeName");
             Verify.NotWhitespace(serverName, "serverName");
@@ -40,25 +38,30 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
             this.serverName = serverName;
             this.pipeName = pipeName;
 
-            Timeout = 10000;
+            Timeout = TimeSpan.FromSeconds(10);
         }
 
-        public void Dispose()
+        protected override void Dispose(Boolean disposing)
         { }
 
-        public Byte[] Read()
+        protected override Byte[] ReadMessage()
         {
             throw new NotSupportedException();
         }
 
-        public void Write(Byte[] message)
+        protected override void WriteMessage(Byte[] message)
         {
             message = message ?? Empty;
             using (var pipeStream = new NamedPipeClientStream(serverName, pipeName, PipeDirection.InOut, PipeOptions.None))
             {
-                pipeStream.Connect(Timeout);
+                pipeStream.Connect(timeout);
                 pipeStream.Write(message, 0, message.Length);
             }
+        }
+
+        protected override void OnTimeoutChanged()
+        {
+            timeout = Convert.ToInt32(Timeout.TotalMilliseconds);
         }
     }
 }

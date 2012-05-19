@@ -19,14 +19,14 @@ namespace Harvester.Core.Messaging.Sources.DbWin
 {
     internal class OutputDebugStringListener : MessageListener
     {
-        private readonly IMessageBuffer messageBuffer;
+        private readonly MessageBuffer messageBuffer;
         private readonly Mutex mutex;
 
         public OutputDebugStringListener(IProcessMessages messageProcessor, IConfigureListeners configuration)
             : this(GetSource(configuration), messageProcessor, new SharedMemoryBuffer(GetSource(configuration), OutputDebugString.BufferSize), GetMutex(configuration))
         { }
 
-        private OutputDebugStringListener(String source, IProcessMessages messageProcessor, IMessageBuffer messageBuffer, Mutex mutex)
+        private OutputDebugStringListener(String source, IProcessMessages messageProcessor, MessageBuffer messageBuffer, Mutex mutex)
             : base(source, messageProcessor, new OutputDebugStringReader(messageBuffer))
         {
             this.mutex = mutex;
