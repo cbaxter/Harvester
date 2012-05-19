@@ -25,12 +25,11 @@ namespace Harvester
             Thread.CurrentThread.Name = "Main";
 
             Boolean onlyInstance;
-            using (SystemMonitor.CreateSingleInstance(out onlyInstance))
+            using (SystemMonitor.CreateSingleInstance(new ConsoleRenderer(), out onlyInstance))
             {
                 if (onlyInstance)
                 {
-                    using (new SystemMonitor(new ConsoleRenderer()))
-                        new ManualResetEvent(false).WaitOne();
+                    new ManualResetEvent(false).WaitOne();
                 }
                 else
                 {

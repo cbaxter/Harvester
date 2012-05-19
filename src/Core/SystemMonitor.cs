@@ -28,11 +28,24 @@ namespace Harvester.Core
     {
         private readonly IList<MessageListener> messageListeners;
         private readonly IProcessMessages messageProcessor;
+        private readonly Mutex mutex;
 
-        public SystemMonitor(IRenderEvents eventRenderer)
+        private SystemMonitor(Mutex singleInstance)
         {
+            Verify.NotNull(singleInstance, "singleInstance");
+
+            messageListeners = new MessageListener[0];
+            mutex = singleInstance;
+        }
+
+        private SystemMonitor(Mutex singleInstance, IRenderEvents eventRenderer)
+        {
+            Verify.NotNull(singleInstance, "singleInstance");
+            Verify.NotNull(eventRenderer, "eventRenderer");
+
             messageProcessor = new MessageProcessor(eventRenderer, Settings.GetParsers(new ProcessRetriever()));
             messageListeners = Settings.GetListeners(messageProcessor);
+            mutex = singleInstance;
 
             foreach (var messageListener in messageListeners)
                 messageListener.Start();
@@ -40,15 +53,20 @@ namespace Harvester.Core
 
         public void Dispose()
         {
-            messageProcessor.Dispose();
-
             foreach (var messageListener in messageListeners)
                 messageListener.Dispose();
+
+            if (messageProcessor != null)
+                messageProcessor.Dispose();
+
+            mutex.Dispose();
         }
 
-        public static IDisposable CreateSingleInstance(out Boolean onlyInstance)
+        public static SystemMonitor CreateSingleInstance(IRenderEvents eventRenderer, out Boolean onlyInstance)
         {
-            return new Mutex(true, "HarvesterSingleInstance", out onlyInstance);
+            var singleInstance = new Mutex(true, "HarvesterSingleInstance", out onlyInstance);
+
+            return onlyInstance ? new SystemMonitor(singleInstance, eventRenderer) : new SystemMonitor(singleInstance);
         }
 
         public static void ShowExistingInstance()
@@ -59,7 +77,7 @@ namespace Harvester.Core
                                            .Where(HasCoreAssemblyModuleLoaded)
                                            .FirstOrDefault(process => process.Id != currentProcess.Id);
 
-                if (otherInstance == null) 
+                if (otherInstance == null)
                     return;
 
                 NativeMethods.ActivateWindow(otherInstance.MainWindowHandle);
@@ -73,9 +91,8 @@ namespace Harvester.Core
                 return process.Modules.Cast<ProcessModule>().Any(m => m.ModuleName == CoreAssembly.Reference.ManifestModule.Name);
             }
             catch (Win32Exception)
-            { 
-                // An `Access Denied` exception may be thrown if the process requires elevated 
-                // access to see module information.
+            {
+                // An `Access Denied` exception may be thrown if the process requires elevated access to see module information.
                 return false;
             }
         }

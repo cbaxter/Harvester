@@ -22,20 +22,9 @@ namespace Harvester.Forms
 {
     internal partial class Main : Form, IRenderEvents
     {
-        private readonly SystemMonitor systemMonitor;
-
         public Main()
         {
             InitializeComponent();
-
-            systemMonitor = new SystemMonitor(this);
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-
-            //TODO: systemMonitor.Dispose();
         }
 
         public void Render(SystemEvent e)

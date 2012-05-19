@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using Harvester.Core;
@@ -30,16 +26,17 @@ namespace Harvester
         internal static void Main()
         {
             Thread.CurrentThread.Name = "Main";
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => ShowFatalException((Exception)e.ExceptionObject);
-            
+
             Boolean onlyInstance;
-            using (SystemMonitor.CreateSingleInstance(out onlyInstance))
+            Main main = new Main();
+            using (SystemMonitor.CreateSingleInstance(main, out onlyInstance))
             {
                 if (onlyInstance)
                 {
-                    Application.SetCompatibleTextRenderingDefault(false);
-                    Application.EnableVisualStyles();
-                    Application.Run(new Main());
+                    Application.Run(main);
                 }
                 else
                 {
