@@ -248,6 +248,9 @@ namespace Harvester.Forms
             searchText.Items.Remove(text);
             searchText.Items.Insert(0, text);
 
+            while (searchText.Items.Count > 10)
+                searchText.Items.RemoveAt(searchText.Items.Count - 1);
+
             SearchNext();
         }
 
