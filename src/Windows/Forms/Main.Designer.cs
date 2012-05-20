@@ -271,6 +271,7 @@
             // mainToolStrip
             // 
             this.mainToolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.mainToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.mainToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.closeButton,
             this.separator1,
@@ -289,7 +290,7 @@
             this.searchButton});
             this.mainToolStrip.Location = new System.Drawing.Point(3, 0);
             this.mainToolStrip.Name = "mainToolStrip";
-            this.mainToolStrip.Size = new System.Drawing.Size(485, 25);
+            this.mainToolStrip.Size = new System.Drawing.Size(476, 25);
             this.mainToolStrip.TabIndex = 0;
             // 
             // closeButton
