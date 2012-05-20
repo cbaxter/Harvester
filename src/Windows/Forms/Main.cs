@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 using Harvester.Core;
 using Harvester.Core.Messaging;
@@ -36,6 +37,7 @@ namespace Harvester.Forms
 
             bufferedItems = new List<ListViewItem>();
             mainToolStrip.Renderer = new CheckedButtonRenderer();
+            splitContainer.Panel1MinSize = splitContainer.Panel2MinSize = 180;
 
             // Setup render timer to only update list view every 100ms.
             flushBufferedItemsTimer = new Timer { Enabled = true, Interval = 100 };
@@ -61,6 +63,9 @@ namespace Harvester.Forms
             displayThreadColumn.Click += (sender, e) => HandleEvent(() => ToggleColumnDisplay(displayThreadColumn, threadColumn));
             displaySourceColumn.Click += (sender, e) => HandleEvent(() => ToggleColumnDisplay(displaySourceColumn, sourceColumn));
             displayUserColumn.Click += (sender, e) => HandleEvent(() => ToggleColumnDisplay(displayUserColumn, userColumn));
+
+            // Wire-up system event display.
+            systemEvents.SelectedIndexChanged += (sender, e) => HandleEvent(DisplaySelectedSystemEvent);
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -74,9 +79,13 @@ namespace Harvester.Forms
                                 flushBufferedItemsTimer.Dispose();
 
                                 // Save Shell Dimensions
-                                ShellProperties.Default.WindowSize = Size;
-                                ShellProperties.Default.WindowLocation = Location;
+                                ShellProperties.Default.SplitPosition = splitContainer.SplitterDistance;
                                 ShellProperties.Default.WindowState = WindowState == FormWindowState.Minimized ? FormWindowState.Normal : WindowState;
+                                if (WindowState == FormWindowState.Normal)
+                                {
+                                    ShellProperties.Default.WindowLocation = Location;
+                                    ShellProperties.Default.WindowSize = Size;
+                                }
 
                                 ShellProperties.Default.Save();
 
@@ -112,8 +121,9 @@ namespace Harvester.Forms
 
                                 //Load Shell Dimensions
                                 Size = formSize;
-                                Location = workingArea.Contains(formLocation) ? formLocation : workingArea.Location;
                                 WindowState = ShellProperties.Default.WindowState;
+                                Location = workingArea.Contains(formLocation) ? formLocation : workingArea.Location;
+                                splitContainer.SplitterDistance = Math.Min(splitContainer.Height - splitContainer.Panel2MinSize, ShellProperties.Default.SplitPosition);
 
                                 //Load System Event Display Properties
                                 messageIdColumn.Width = SystemEventProperties.Default.IdWidth;
@@ -137,7 +147,7 @@ namespace Harvester.Forms
             var clientPosition = systemEvents.PointToClient(Cursor.Position);
 
             e.Cancel = clientPosition.Y > systemEvents.GetHeaderHeight();
-         
+
             displayIdColumn.Checked = messageIdColumn.Width > 0;
             displayTimestampColumn.Checked = timestampColumn.Width > 0;
             displayLevelColumn.Checked = levelColumn.Width > 0;
@@ -163,6 +173,7 @@ namespace Harvester.Forms
             lock (bufferedItems)
             {
                 systemEvents.Items.Clear();
+                systemEventControl.Clear();
             }
         }
 
@@ -173,8 +184,10 @@ namespace Harvester.Forms
                 if (colorPicker.ShowDialog(this) != DialogResult.OK)
                     return;
 
+                systemEventControl.SetFont(SystemEventProperties.Default.Font);
                 systemEvents.BackColor = SystemEventProperties.Default.PrimaryBackColor;
                 systemEvents.Font = SystemEventProperties.Default.Font;
+
             }
         }
 
@@ -191,7 +204,7 @@ namespace Harvester.Forms
             scrollButton.Checked = true;
             scrollButton.Image = Resources.AutoScrollOn;
 
-            if(systemEvents.Items.Count > 0)
+            if (systemEvents.Items.Count > 0)
                 systemEvents.EnsureVisible(systemEvents.Items.Count - 1);
         }
 
@@ -253,6 +266,17 @@ namespace Harvester.Forms
                 case SystemEventLevel.Debug: return SystemEventProperties.Default.DebugForeColor;
                 default: return SystemEventProperties.Default.TraceForeColor;
             }
+        }
+
+        private void DisplaySelectedSystemEvent()
+        {
+            var selectedItem = systemEvents.SelectedItems.Cast<ListViewItem>().FirstOrDefault();
+            var e = selectedItem == null ? null : selectedItem.Tag as SystemEvent;
+
+            if (e == null)
+                systemEventControl.Clear();
+            else
+                systemEventControl.Bind(e);
         }
 
         private void FlushBufferedItems()

@@ -50,6 +50,8 @@
             this.displayUserColumn = new System.Windows.Forms.ToolStripMenuItem();
             this.feedbackLabel = new System.Windows.Forms.Label();
             this.toolStripContainer = new System.Windows.Forms.ToolStripContainer();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.systemEventControl = new Harvester.Forms.SystemEventControl();
             this.mainToolStrip = new System.Windows.Forms.ToolStrip();
             this.closeButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -73,6 +75,10 @@
             this.toolStripContainer.ContentPanel.SuspendLayout();
             this.toolStripContainer.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
             this.mainToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -100,7 +106,7 @@
             this.systemEvents.MultiSelect = false;
             this.systemEvents.Name = "systemEvents";
             this.systemEvents.ShowItemToolTips = true;
-            this.systemEvents.Size = new System.Drawing.Size(1008, 705);
+            this.systemEvents.Size = new System.Drawing.Size(1008, 500);
             this.systemEvents.TabIndex = 0;
             this.systemEvents.UseCompatibleStateImageBehavior = false;
             this.systemEvents.View = System.Windows.Forms.View.Details;
@@ -166,49 +172,49 @@
             // displayIdColumn
             // 
             this.displayIdColumn.Name = "displayIdColumn";
-            this.displayIdColumn.Size = new System.Drawing.Size(152, 22);
+            this.displayIdColumn.Size = new System.Drawing.Size(149, 22);
             this.displayIdColumn.Text = "Id";
             // 
             // displayTimestampColumn
             // 
             this.displayTimestampColumn.Name = "displayTimestampColumn";
-            this.displayTimestampColumn.Size = new System.Drawing.Size(152, 22);
+            this.displayTimestampColumn.Size = new System.Drawing.Size(149, 22);
             this.displayTimestampColumn.Text = "Timestamp";
             // 
             // displayLevelColumn
             // 
             this.displayLevelColumn.Name = "displayLevelColumn";
-            this.displayLevelColumn.Size = new System.Drawing.Size(152, 22);
+            this.displayLevelColumn.Size = new System.Drawing.Size(149, 22);
             this.displayLevelColumn.Text = "Level";
             // 
             // displayProcessIdColumn
             // 
             this.displayProcessIdColumn.Name = "displayProcessIdColumn";
-            this.displayProcessIdColumn.Size = new System.Drawing.Size(152, 22);
+            this.displayProcessIdColumn.Size = new System.Drawing.Size(149, 22);
             this.displayProcessIdColumn.Text = "Process Id";
             // 
             // displayProcessNameColumn
             // 
             this.displayProcessNameColumn.Name = "displayProcessNameColumn";
-            this.displayProcessNameColumn.Size = new System.Drawing.Size(152, 22);
+            this.displayProcessNameColumn.Size = new System.Drawing.Size(149, 22);
             this.displayProcessNameColumn.Text = "Process Name";
             // 
             // displayThreadColumn
             // 
             this.displayThreadColumn.Name = "displayThreadColumn";
-            this.displayThreadColumn.Size = new System.Drawing.Size(152, 22);
+            this.displayThreadColumn.Size = new System.Drawing.Size(149, 22);
             this.displayThreadColumn.Text = "Thread";
             // 
             // displaySourceColumn
             // 
             this.displaySourceColumn.Name = "displaySourceColumn";
-            this.displaySourceColumn.Size = new System.Drawing.Size(152, 22);
+            this.displaySourceColumn.Size = new System.Drawing.Size(149, 22);
             this.displaySourceColumn.Text = "Source";
             // 
             // displayUserColumn
             // 
             this.displayUserColumn.Name = "displayUserColumn";
-            this.displayUserColumn.Size = new System.Drawing.Size(152, 22);
+            this.displayUserColumn.Size = new System.Drawing.Size(149, 22);
             this.displayUserColumn.Text = "User";
             // 
             // feedbackLabel
@@ -224,7 +230,7 @@
             // 
             // toolStripContainer.ContentPanel
             // 
-            this.toolStripContainer.ContentPanel.Controls.Add(this.systemEvents);
+            this.toolStripContainer.ContentPanel.Controls.Add(this.splitContainer);
             this.toolStripContainer.ContentPanel.Size = new System.Drawing.Size(1008, 705);
             this.toolStripContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer.Location = new System.Drawing.Point(0, 0);
@@ -236,6 +242,33 @@
             // toolStripContainer.TopToolStripPanel
             // 
             this.toolStripContainer.TopToolStripPanel.Controls.Add(this.mainToolStrip);
+            // 
+            // splitContainer
+            // 
+            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer.Name = "splitContainer";
+            this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer.Panel1
+            // 
+            this.splitContainer.Panel1.Controls.Add(this.systemEvents);
+            // 
+            // splitContainer.Panel2
+            // 
+            this.splitContainer.Panel2.Controls.Add(this.systemEventControl);
+            this.splitContainer.Size = new System.Drawing.Size(1008, 705);
+            this.splitContainer.SplitterDistance = 500;
+            this.splitContainer.TabIndex = 1;
+            // 
+            // systemEventControl
+            // 
+            this.systemEventControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.systemEventControl.Location = new System.Drawing.Point(0, 0);
+            this.systemEventControl.Name = "systemEventControl";
+            this.systemEventControl.Padding = new System.Windows.Forms.Padding(3);
+            this.systemEventControl.Size = new System.Drawing.Size(1008, 201);
+            this.systemEventControl.TabIndex = 0;
             // 
             // mainToolStrip
             // 
@@ -437,6 +470,10 @@
             this.toolStripContainer.TopToolStripPanel.PerformLayout();
             this.toolStripContainer.ResumeLayout(false);
             this.toolStripContainer.PerformLayout();
+            this.splitContainer.Panel1.ResumeLayout(false);
+            this.splitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
+            this.splitContainer.ResumeLayout(false);
             this.mainToolStrip.ResumeLayout(false);
             this.mainToolStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -486,5 +523,7 @@
         private System.Windows.Forms.ToolStripMenuItem displayThreadColumn;
         private System.Windows.Forms.ToolStripMenuItem displaySourceColumn;
         private System.Windows.Forms.ToolStripMenuItem displayUserColumn;
+        private System.Windows.Forms.SplitContainer splitContainer;
+        private SystemEventControl systemEventControl;
     }
 }
