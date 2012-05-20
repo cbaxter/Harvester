@@ -99,6 +99,7 @@
             this.systemEvents.Location = new System.Drawing.Point(0, 0);
             this.systemEvents.MultiSelect = false;
             this.systemEvents.Name = "systemEvents";
+            this.systemEvents.ShowItemToolTips = true;
             this.systemEvents.Size = new System.Drawing.Size(1008, 705);
             this.systemEvents.TabIndex = 0;
             this.systemEvents.UseCompatibleStateImageBehavior = false;
@@ -260,7 +261,7 @@
             this.toolStripSeparator4});
             this.mainToolStrip.Location = new System.Drawing.Point(3, 0);
             this.mainToolStrip.Name = "mainToolStrip";
-            this.mainToolStrip.Size = new System.Drawing.Size(468, 25);
+            this.mainToolStrip.Size = new System.Drawing.Size(437, 25);
             this.mainToolStrip.TabIndex = 0;
             // 
             // closeButton

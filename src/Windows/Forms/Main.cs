@@ -52,7 +52,7 @@ namespace Harvester.Forms
             colorButton.Click += (sender, e) => HandleEvent(ShowColorPicker);
 
             // Wire-up context menu item click handlers.
-            contextMenuStrip.Opening += (sender, e) => HandleEvent(ShowingContextMenu);
+            contextMenuStrip.Opening += (sender, e) => HandleEvent(() => ShowingContextMenu(e));
             displayIdColumn.Click += (sender, e) => HandleEvent(() => ToggleColumnDisplay(displayIdColumn, messageIdColumn));
             displayLevelColumn.Click += (sender, e) => HandleEvent(() => ToggleColumnDisplay(displayLevelColumn, levelColumn));
             displayTimestampColumn.Click += (sender, e) => HandleEvent(() => ToggleColumnDisplay(displayTimestampColumn, timestampColumn));
@@ -132,8 +132,12 @@ namespace Harvester.Forms
 
         #region Context Menu
 
-        private void ShowingContextMenu()
+        private void ShowingContextMenu(CancelEventArgs e)
         {
+            var clientPosition = systemEvents.PointToClient(Cursor.Position);
+
+            e.Cancel = clientPosition.Y > systemEvents.GetHeaderHeight();
+         
             displayIdColumn.Checked = messageIdColumn.Width > 0;
             displayTimestampColumn.Checked = timestampColumn.Width > 0;
             displayLevelColumn.Checked = levelColumn.Width > 0;

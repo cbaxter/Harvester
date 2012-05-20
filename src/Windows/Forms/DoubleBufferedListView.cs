@@ -23,8 +23,8 @@ namespace Harvester.Forms
 {
     internal class DoubleBufferedListView : ListView
     {
-        private static readonly Int32 BufferSize;
         private static readonly Int32 BufferTrimSize;
+        private static readonly Int32 BufferSize;
         private ColumnHeader fillColumn;
 
         static DoubleBufferedListView()
@@ -40,6 +40,11 @@ namespace Harvester.Forms
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
             ColumnWidthChanged += OnResize;
             Resize += OnResize;
+        }
+        
+        public Int32 GetHeaderHeight()
+        {
+            return NativeMethods.GetHeaderHeight(this);
         }
 
         public void OnResize(Object sender, EventArgs e)

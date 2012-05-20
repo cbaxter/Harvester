@@ -62,6 +62,7 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="Forms\CheckedButtonRenderer.cs" />
+    <Compile Include="NativeMethods.cs" />
     <Compile Include="Properties\SystemEventProperties.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
