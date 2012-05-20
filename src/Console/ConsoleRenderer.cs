@@ -48,7 +48,7 @@ namespace Harvester
 
             Console.ForegroundColor = timestampColor;
             Console.BackgroundColor = defaultBackColor;
-            Console.Write(String.Format("{0:yyyy-MM-dd HH:mm:ss,fff}   ", e.Timestamp));
+            Console.Write(String.Format("{0:HH:mm:ss,fff}   ", e.Timestamp));
             Console.BackgroundColor = Settings.GetBackeColor(e.Level);
             Console.ForegroundColor = Settings.GetForeColor(e.Level);
 

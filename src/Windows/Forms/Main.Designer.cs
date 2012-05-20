@@ -28,7 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.systemEvents = new System.Windows.Forms.ListView();
+            this.components = new System.ComponentModel.Container();
+            this.systemEvents = new Harvester.Forms.DoubleBufferedListView();
             this.messageIdColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.timestampColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.levelColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -38,14 +39,46 @@
             this.sourceColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.userColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.messageColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.displayIdColumn = new System.Windows.Forms.ToolStripMenuItem();
+            this.displayTimestampColumn = new System.Windows.Forms.ToolStripMenuItem();
+            this.displayLevelColumn = new System.Windows.Forms.ToolStripMenuItem();
+            this.displayProcessIdColumn = new System.Windows.Forms.ToolStripMenuItem();
+            this.displayProcessNameColumn = new System.Windows.Forms.ToolStripMenuItem();
+            this.displayThreadColumn = new System.Windows.Forms.ToolStripMenuItem();
+            this.displaySourceColumn = new System.Windows.Forms.ToolStripMenuItem();
+            this.displayUserColumn = new System.Windows.Forms.ToolStripMenuItem();
             this.feedbackLabel = new System.Windows.Forms.Label();
             this.toolStripContainer = new System.Windows.Forms.ToolStripContainer();
+            this.mainToolStrip = new System.Windows.Forms.ToolStrip();
+            this.closeButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.eraseButton = new System.Windows.Forms.ToolStripButton();
+            this.colorButton = new System.Windows.Forms.ToolStripButton();
+            this.scrollButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.levelFilterButton = new System.Windows.Forms.ToolStripButton();
+            this.processFilterButton = new System.Windows.Forms.ToolStripButton();
+            this.applicationFilterButton = new System.Windows.Forms.ToolStripButton();
+            this.sourceFilterButton = new System.Windows.Forms.ToolStripButton();
+            this.userFilterButton = new System.Windows.Forms.ToolStripButton();
+            this.messageFilterButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton11 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripButton12 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton13 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.contextMenuStrip.SuspendLayout();
             this.toolStripContainer.ContentPanel.SuspendLayout();
+            this.toolStripContainer.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer.SuspendLayout();
+            this.mainToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // systemEvents
             // 
+            this.systemEvents.BackColor = System.Drawing.Color.Black;
             this.systemEvents.CausesValidation = false;
             this.systemEvents.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.messageIdColumn,
@@ -57,8 +90,10 @@
             this.sourceColumn,
             this.userColumn,
             this.messageColumn});
+            this.systemEvents.ContextMenuStrip = this.contextMenuStrip;
             this.systemEvents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.systemEvents.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.systemEvents.ForeColor = System.Drawing.Color.DarkCyan;
             this.systemEvents.FullRowSelect = true;
             this.systemEvents.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.systemEvents.Location = new System.Drawing.Point(0, 0);
@@ -113,6 +148,68 @@
             this.messageColumn.Text = "Message";
             this.messageColumn.Width = 100;
             // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.displayIdColumn,
+            this.displayTimestampColumn,
+            this.displayLevelColumn,
+            this.displayProcessIdColumn,
+            this.displayProcessNameColumn,
+            this.displayThreadColumn,
+            this.displaySourceColumn,
+            this.displayUserColumn});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(150, 180);
+            // 
+            // displayIdColumn
+            // 
+            this.displayIdColumn.Name = "displayIdColumn";
+            this.displayIdColumn.Size = new System.Drawing.Size(152, 22);
+            this.displayIdColumn.Text = "Id";
+            // 
+            // displayTimestampColumn
+            // 
+            this.displayTimestampColumn.Name = "displayTimestampColumn";
+            this.displayTimestampColumn.Size = new System.Drawing.Size(152, 22);
+            this.displayTimestampColumn.Text = "Timestamp";
+            // 
+            // displayLevelColumn
+            // 
+            this.displayLevelColumn.Name = "displayLevelColumn";
+            this.displayLevelColumn.Size = new System.Drawing.Size(152, 22);
+            this.displayLevelColumn.Text = "Level";
+            // 
+            // displayProcessIdColumn
+            // 
+            this.displayProcessIdColumn.Name = "displayProcessIdColumn";
+            this.displayProcessIdColumn.Size = new System.Drawing.Size(152, 22);
+            this.displayProcessIdColumn.Text = "Process Id";
+            // 
+            // displayProcessNameColumn
+            // 
+            this.displayProcessNameColumn.Name = "displayProcessNameColumn";
+            this.displayProcessNameColumn.Size = new System.Drawing.Size(152, 22);
+            this.displayProcessNameColumn.Text = "Process Name";
+            // 
+            // displayThreadColumn
+            // 
+            this.displayThreadColumn.Name = "displayThreadColumn";
+            this.displayThreadColumn.Size = new System.Drawing.Size(152, 22);
+            this.displayThreadColumn.Text = "Thread";
+            // 
+            // displaySourceColumn
+            // 
+            this.displaySourceColumn.Name = "displaySourceColumn";
+            this.displaySourceColumn.Size = new System.Drawing.Size(152, 22);
+            this.displaySourceColumn.Text = "Source";
+            // 
+            // displayUserColumn
+            // 
+            this.displayUserColumn.Name = "displayUserColumn";
+            this.displayUserColumn.Size = new System.Drawing.Size(152, 22);
+            this.displayUserColumn.Text = "User";
+            // 
             // feedbackLabel
             // 
             this.feedbackLabel.AutoSize = true;
@@ -135,18 +232,212 @@
             this.toolStripContainer.TabIndex = 2;
             this.toolStripContainer.Text = "toolStripContainer1";
             // 
+            // toolStripContainer.TopToolStripPanel
+            // 
+            this.toolStripContainer.TopToolStripPanel.Controls.Add(this.mainToolStrip);
+            // 
+            // mainToolStrip
+            // 
+            this.mainToolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.mainToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.closeButton,
+            this.toolStripSeparator1,
+            this.eraseButton,
+            this.colorButton,
+            this.scrollButton,
+            this.toolStripSeparator2,
+            this.levelFilterButton,
+            this.processFilterButton,
+            this.applicationFilterButton,
+            this.sourceFilterButton,
+            this.userFilterButton,
+            this.messageFilterButton,
+            this.toolStripSeparator3,
+            this.toolStripButton11,
+            this.toolStripTextBox1,
+            this.toolStripButton12,
+            this.toolStripButton13,
+            this.toolStripSeparator4});
+            this.mainToolStrip.Location = new System.Drawing.Point(3, 0);
+            this.mainToolStrip.Name = "mainToolStrip";
+            this.mainToolStrip.Size = new System.Drawing.Size(468, 25);
+            this.mainToolStrip.TabIndex = 0;
+            // 
+            // closeButton
+            // 
+            this.closeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.closeButton.Image = global::Harvester.Properties.Resources.Close;
+            this.closeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.closeButton.Name = "closeButton";
+            this.closeButton.Size = new System.Drawing.Size(23, 22);
+            this.closeButton.Text = "Close Harvester";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // eraseButton
+            // 
+            this.eraseButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.eraseButton.Image = global::Harvester.Properties.Resources.Erase;
+            this.eraseButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.eraseButton.Name = "eraseButton";
+            this.eraseButton.Size = new System.Drawing.Size(23, 22);
+            this.eraseButton.Text = "Clear System Events";
+            // 
+            // colorButton
+            // 
+            this.colorButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.colorButton.Image = global::Harvester.Properties.Resources.ColorPicker;
+            this.colorButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.colorButton.Name = "colorButton";
+            this.colorButton.Size = new System.Drawing.Size(23, 22);
+            this.colorButton.Text = "Choose System Event Colors";
+            // 
+            // scrollButton
+            // 
+            this.scrollButton.BackColor = System.Drawing.SystemColors.Control;
+            this.scrollButton.Checked = true;
+            this.scrollButton.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.scrollButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.scrollButton.Image = global::Harvester.Properties.Resources.AutoScrollOn;
+            this.scrollButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.scrollButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.scrollButton.Name = "scrollButton";
+            this.scrollButton.Size = new System.Drawing.Size(23, 22);
+            this.scrollButton.Text = "Toggle Auto-Scroll";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // levelFilterButton
+            // 
+            this.levelFilterButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.levelFilterButton.Enabled = false;
+            this.levelFilterButton.Image = global::Harvester.Properties.Resources.FilterLogLevels;
+            this.levelFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.levelFilterButton.Name = "levelFilterButton";
+            this.levelFilterButton.Size = new System.Drawing.Size(23, 22);
+            this.levelFilterButton.Text = "toolStripButton5";
+            // 
+            // processFilterButton
+            // 
+            this.processFilterButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.processFilterButton.Enabled = false;
+            this.processFilterButton.Image = global::Harvester.Properties.Resources.FilterProcesses;
+            this.processFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.processFilterButton.Name = "processFilterButton";
+            this.processFilterButton.Size = new System.Drawing.Size(23, 22);
+            this.processFilterButton.Text = "toolStripButton6";
+            // 
+            // applicationFilterButton
+            // 
+            this.applicationFilterButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.applicationFilterButton.Enabled = false;
+            this.applicationFilterButton.Image = global::Harvester.Properties.Resources.FilterApplications;
+            this.applicationFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.applicationFilterButton.Name = "applicationFilterButton";
+            this.applicationFilterButton.Size = new System.Drawing.Size(23, 22);
+            this.applicationFilterButton.Text = "toolStripButton7";
+            // 
+            // sourceFilterButton
+            // 
+            this.sourceFilterButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.sourceFilterButton.Enabled = false;
+            this.sourceFilterButton.Image = global::Harvester.Properties.Resources.FilterSources;
+            this.sourceFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.sourceFilterButton.Name = "sourceFilterButton";
+            this.sourceFilterButton.Size = new System.Drawing.Size(23, 22);
+            this.sourceFilterButton.Text = "toolStripButton8";
+            // 
+            // userFilterButton
+            // 
+            this.userFilterButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.userFilterButton.Enabled = false;
+            this.userFilterButton.Image = global::Harvester.Properties.Resources.FilterUsers;
+            this.userFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.userFilterButton.Name = "userFilterButton";
+            this.userFilterButton.Size = new System.Drawing.Size(23, 22);
+            this.userFilterButton.Text = "toolStripButton9";
+            // 
+            // messageFilterButton
+            // 
+            this.messageFilterButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.messageFilterButton.Enabled = false;
+            this.messageFilterButton.Image = global::Harvester.Properties.Resources.FilterMessages;
+            this.messageFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.messageFilterButton.Name = "messageFilterButton";
+            this.messageFilterButton.Size = new System.Drawing.Size(23, 22);
+            this.messageFilterButton.Text = "toolStripButton10";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButton11
+            // 
+            this.toolStripButton11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton11.Enabled = false;
+            this.toolStripButton11.Image = global::Harvester.Properties.Resources.Search;
+            this.toolStripButton11.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton11.Name = "toolStripButton11";
+            this.toolStripButton11.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton11.Text = "toolStripButton11";
+            // 
+            // toolStripTextBox1
+            // 
+            this.toolStripTextBox1.Enabled = false;
+            this.toolStripTextBox1.Name = "toolStripTextBox1";
+            this.toolStripTextBox1.Size = new System.Drawing.Size(100, 25);
+            // 
+            // toolStripButton12
+            // 
+            this.toolStripButton12.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton12.Enabled = false;
+            this.toolStripButton12.Image = global::Harvester.Properties.Resources.SearchPrev;
+            this.toolStripButton12.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton12.Name = "toolStripButton12";
+            this.toolStripButton12.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton12.Text = "toolStripButton12";
+            // 
+            // toolStripButton13
+            // 
+            this.toolStripButton13.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton13.Enabled = false;
+            this.toolStripButton13.Image = global::Harvester.Properties.Resources.SearchNext;
+            this.toolStripButton13.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton13.Name = "toolStripButton13";
+            this.toolStripButton13.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton13.Text = "toolStripButton13";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1008, 730);
             this.Controls.Add(this.toolStripContainer);
             this.Controls.Add(this.feedbackLabel);
+            this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "Main";
             this.Text = "Main";
+            this.contextMenuStrip.ResumeLayout(false);
             this.toolStripContainer.ContentPanel.ResumeLayout(false);
+            this.toolStripContainer.TopToolStripPanel.ResumeLayout(false);
+            this.toolStripContainer.TopToolStripPanel.PerformLayout();
             this.toolStripContainer.ResumeLayout(false);
             this.toolStripContainer.PerformLayout();
+            this.mainToolStrip.ResumeLayout(false);
+            this.mainToolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -154,7 +445,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ListView systemEvents;
+        private Harvester.Forms.DoubleBufferedListView systemEvents;
         private System.Windows.Forms.ColumnHeader messageIdColumn;
         private System.Windows.Forms.ColumnHeader timestampColumn;
         private System.Windows.Forms.ColumnHeader levelColumn;
@@ -166,5 +457,33 @@
         private System.Windows.Forms.ColumnHeader messageColumn;
         private System.Windows.Forms.Label feedbackLabel;
         private System.Windows.Forms.ToolStripContainer toolStripContainer;
+        private System.Windows.Forms.ToolStrip mainToolStrip;
+        private System.Windows.Forms.ToolStripButton closeButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton eraseButton;
+        private System.Windows.Forms.ToolStripButton colorButton;
+        private System.Windows.Forms.ToolStripButton scrollButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton levelFilterButton;
+        private System.Windows.Forms.ToolStripButton processFilterButton;
+        private System.Windows.Forms.ToolStripButton applicationFilterButton;
+        private System.Windows.Forms.ToolStripButton sourceFilterButton;
+        private System.Windows.Forms.ToolStripButton userFilterButton;
+        private System.Windows.Forms.ToolStripButton messageFilterButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripButton toolStripButton11;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
+        private System.Windows.Forms.ToolStripButton toolStripButton12;
+        private System.Windows.Forms.ToolStripButton toolStripButton13;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem displayIdColumn;
+        private System.Windows.Forms.ToolStripMenuItem displayTimestampColumn;
+        private System.Windows.Forms.ToolStripMenuItem displayLevelColumn;
+        private System.Windows.Forms.ToolStripMenuItem displayProcessIdColumn;
+        private System.Windows.Forms.ToolStripMenuItem displayProcessNameColumn;
+        private System.Windows.Forms.ToolStripMenuItem displayThreadColumn;
+        private System.Windows.Forms.ToolStripMenuItem displaySourceColumn;
+        private System.Windows.Forms.ToolStripMenuItem displayUserColumn;
     }
 }

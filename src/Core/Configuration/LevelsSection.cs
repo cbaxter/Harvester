@@ -31,7 +31,7 @@ namespace Harvester.Core.Configuration
 
     public class LevelsSection : ConfigurationSection
     {
-        [ConfigurationProperty("timestampColor", IsRequired = true)]
+        [ConfigurationProperty("timestampColor", IsRequired = false, DefaultValue = ConsoleColor.Cyan)]
         public ConsoleColor TimestampColor { get { return (ConsoleColor)base["timestampColor"]; } }
 
         [ConfigurationProperty("fatal", IsRequired = true)]

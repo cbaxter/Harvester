@@ -1,4 +1,7 @@
-﻿
+﻿using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
+
 /* Copyright (c) 2012 CBaxter
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
@@ -13,12 +16,27 @@
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Messaging.Sources
+namespace Harvester.Forms
 {
-    public enum MessageBufferState
+    internal class CheckedButtonRenderer : ToolStripProfessionalRenderer
     {
-        Connected,
-        Broken,
-        Closed
+        protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
+        {
+            var button = e.Item as ToolStripButton;
+            if (button != null && button.Checked)
+            {
+                var size = e.Item.Size;
+
+                using (var borderPen = new Pen(SystemColors.ActiveCaption))
+                    e.Graphics.DrawRectangle(borderPen, 0, 0, size.Width - 1, size.Height - 1);
+                
+                using (var fillBrush = new LinearGradientBrush(new Rectangle(Point.Empty, size), SystemColors.GradientInactiveCaption, SystemColors.GradientActiveCaption, 90F))
+                    e.Graphics.FillRectangle(fillBrush, 1, 1, size.Width - 2, size.Height - 2);
+            }
+            else
+            {
+                base.OnRenderButtonBackground(e);
+            }
+        }
     }
 }

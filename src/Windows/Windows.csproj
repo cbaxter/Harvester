@@ -46,12 +46,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -63,6 +61,24 @@
     <Compile Include="..\.shared\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Forms\CheckedButtonRenderer.cs" />
+    <Compile Include="Properties\SystemEventProperties.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>SystemEventProperties.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ColorPicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ColorPicker.designer.cs">
+      <DependentUpon>ColorPicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DoubleBufferedListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\FormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,6 +87,16 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\ShellProperties.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>ShellProperties.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
@@ -83,17 +109,75 @@
       <Link>Harvester.snk</Link>
     </None>
     <None Include="app.config" />
+    <None Include="Properties\SystemEventProperties.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>SystemEventProperties.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Properties\ShellProperties.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>ShellProperties.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Resources\Icons\Harvester.ico">
-      <Link>Harvester.ico</Link>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
+    <EmbeddedResource Include="Forms\ColorPicker.resx">
+      <DependentUpon>ColorPicker.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Resources\Icons\Harvester.ico">
+      <Link>Resources\Icons\Harvester.ico</Link>
+    </Content>
+    <Content Include="..\Resources\Images\AutoScrollOff.png">
+      <Link>Resources\Images\AutoScrollOff.png</Link>
+    </Content>
+    <Content Include="..\Resources\Images\AutoScrollOn.png">
+      <Link>Resources\Images\AutoScrollOn.png</Link>
+    </Content>
+    <Content Include="..\Resources\Images\Close.png">
+      <Link>Resources\Images\Close.png</Link>
+    </Content>
+    <Content Include="..\Resources\Images\ColorPicker.png">
+      <Link>Resources\Images\ColorPicker.png</Link>
+    </Content>
+    <Content Include="..\Resources\Images\Erase.png">
+      <Link>Resources\Images\Erase.png</Link>
+    </Content>
+    <Content Include="..\Resources\Images\FilterApplications.png">
+      <Link>Resources\Images\FilterApplications.png</Link>
+    </Content>
+    <Content Include="..\Resources\Images\FilterLogLevels.png">
+      <Link>Resources\Images\FilterLogLevels.png</Link>
+    </Content>
+    <Content Include="..\Resources\Images\FilterMessages.png">
+      <Link>Resources\Images\FilterMessages.png</Link>
+    </Content>
+    <Content Include="..\Resources\Images\FilterProcesses.png">
+      <Link>Resources\Images\FilterProcesses.png</Link>
+    </Content>
+    <Content Include="..\Resources\Images\FilterSources.png">
+      <Link>Resources\Images\FilterSources.png</Link>
+    </Content>
+    <Content Include="..\Resources\Images\FilterUsers.png">
+      <Link>Resources\Images\FilterUsers.png</Link>
+    </Content>
+    <Content Include="..\Resources\Images\Search.png">
+      <Link>Resources\Images\Search.png</Link>
+    </Content>
+    <Content Include="..\Resources\Images\SearchNext.png">
+      <Link>Resources\Images\SearchNext.png</Link>
+    </Content>
+    <Content Include="..\Resources\Images\SearchPrev.png">
+      <Link>Resources\Images\SearchPrev.png</Link>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

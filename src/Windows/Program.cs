@@ -31,7 +31,7 @@ namespace Harvester
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => ShowFatalException((Exception)e.ExceptionObject);
 
             Boolean onlyInstance;
-            Main main = new Main();
+            using (Main main = new Main())
             using (SystemMonitor.CreateSingleInstance(main, out onlyInstance))
             {
                 if (onlyInstance)
