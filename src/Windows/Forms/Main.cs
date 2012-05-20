@@ -190,6 +190,9 @@ namespace Harvester.Forms
         {
             scrollButton.Checked = true;
             scrollButton.Image = Resources.AutoScrollOn;
+
+            if(systemEvents.Items.Count > 0)
+                systemEvents.EnsureVisible(systemEvents.Items.Count - 1);
         }
 
         private void DisableAutoScroll()
