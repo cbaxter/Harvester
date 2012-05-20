@@ -180,12 +180,6 @@
     <Content Include="..\Resources\Images\Search.png">
       <Link>Resources\Images\Search.png</Link>
     </Content>
-    <Content Include="..\Resources\Images\SearchNext.png">
-      <Link>Resources\Images\SearchNext.png</Link>
-    </Content>
-    <Content Include="..\Resources\Images\SearchPrev.png">
-      <Link>Resources\Images\SearchPrev.png</Link>
-    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

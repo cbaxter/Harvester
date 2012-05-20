@@ -127,6 +127,15 @@ namespace Harvester.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No matching system events found..
+        /// </summary>
+        public static string NoMatchesFound {
+            get {
+                return ResourceManager.GetString("NoMatchesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot combine OutputDebugString messages originating from different processes..
         /// </summary>
         public static string OutputDebugStringProcessMismatch {

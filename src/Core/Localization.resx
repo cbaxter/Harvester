@@ -141,6 +141,9 @@ Example: Local\CustomBufferName</value>
   <data name="MessageBufferClosed" xml:space="preserve">
     <value>The underlying message buffer is closed.</value>
   </data>
+  <data name="NoMatchesFound" xml:space="preserve">
+    <value>No matching system events found.</value>
+  </data>
   <data name="OutputDebugStringProcessMismatch" xml:space="preserve">
     <value>Cannot combine OutputDebugString messages originating from different processes.</value>
   </data>

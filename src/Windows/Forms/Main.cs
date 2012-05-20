@@ -53,6 +53,18 @@ namespace Harvester.Forms
             scrollButton.Click += (sender, e) => HandleEvent(ToggleAutoScroll);
             colorButton.Click += (sender, e) => HandleEvent(ShowColorPicker);
 
+            searchButton.Click += (sender, e) => HandleEvent(StartSearch);
+            searchText.KeyDown += (sender, e) => HandleEvent(() =>
+                                                                 {
+                                                                     if (e.KeyCode != Keys.Enter)
+                                                                         return;
+
+                                                                     if (searchText.Items.Count > 0 && Equals(searchText.Text, searchText.Items[0]))
+                                                                         SearchNext();
+                                                                     else
+                                                                         StartSearch();
+                                                                 });
+
             // Wire-up context menu item click handlers.
             contextMenuStrip.Opening += (sender, e) => HandleEvent(() => ShowingContextMenu(e));
             displayIdColumn.Click += (sender, e) => HandleEvent(() => ToggleColumnDisplay(displayIdColumn, messageIdColumn));
@@ -166,7 +178,7 @@ namespace Harvester.Forms
 
         #endregion
 
-        #region Tool Strip Buttons
+        #region Clear System Events
 
         private void ClearSystemEvents()
         {
@@ -176,6 +188,10 @@ namespace Harvester.Forms
                 systemEventControl.Clear();
             }
         }
+
+        #endregion
+
+        #region Show Color Picker
 
         private void ShowColorPicker()
         {
@@ -190,6 +206,10 @@ namespace Harvester.Forms
 
             }
         }
+
+        #endregion
+
+        #region Toggle Auto-Scroll
 
         private void ToggleAutoScroll()
         {
@@ -212,6 +232,53 @@ namespace Harvester.Forms
         {
             scrollButton.Checked = false;
             scrollButton.Image = Resources.AutoScrollOff;
+        }
+
+        #endregion
+
+        #region Search
+
+        private void StartSearch()
+        {
+            var text = searchText.Text;
+
+            if (String.IsNullOrWhiteSpace(text))
+                return;
+
+            searchText.Items.Remove(text);
+            searchText.Items.Insert(0, text);
+
+            SearchNext();
+        }
+
+        private void SearchNext()
+        {
+            var selectedIndex = systemEvents.SelectedIndices.Cast<Int32>().FirstOrDefault() + 1;
+
+            if (systemEvents.Items.Count == 0)
+                MessageBox.Show(Localization.NoMatchesFound, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            else
+                Search(searchText.Text, selectedIndex < systemEvents.Items.Count ? selectedIndex : 0);
+        }
+
+        private void Search(String text, Int32 startIndex)
+        {
+            var match = systemEvents.FindItemWithText(text, true, startIndex);
+            var canWrap = startIndex != 0;
+
+            if (match == null)
+            {
+                if (canWrap)
+                    Search(text, 0);
+                else
+                    MessageBox.Show(Localization.NoMatchesFound, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                systemEvents.EnsureVisible(match.Index);
+                systemEvents.SelectedItems.Clear();
+                match.Selected = true;
+            }
         }
 
         #endregion

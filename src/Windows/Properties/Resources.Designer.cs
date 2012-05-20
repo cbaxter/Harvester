@@ -150,19 +150,5 @@ namespace Harvester.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
-        internal static System.Drawing.Bitmap SearchNext {
-            get {
-                object obj = ResourceManager.GetObject("SearchNext", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap SearchPrev {
-            get {
-                object obj = ResourceManager.GetObject("SearchPrev", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }

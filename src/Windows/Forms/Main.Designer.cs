@@ -54,23 +54,20 @@
             this.systemEventControl = new Harvester.Forms.SystemEventControl();
             this.mainToolStrip = new System.Windows.Forms.ToolStrip();
             this.closeButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.separator1 = new System.Windows.Forms.ToolStripSeparator();
             this.eraseButton = new System.Windows.Forms.ToolStripButton();
             this.colorButton = new System.Windows.Forms.ToolStripButton();
             this.scrollButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.separator2 = new System.Windows.Forms.ToolStripSeparator();
             this.levelFilterButton = new System.Windows.Forms.ToolStripButton();
             this.processFilterButton = new System.Windows.Forms.ToolStripButton();
             this.applicationFilterButton = new System.Windows.Forms.ToolStripButton();
             this.sourceFilterButton = new System.Windows.Forms.ToolStripButton();
             this.userFilterButton = new System.Windows.Forms.ToolStripButton();
             this.messageFilterButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButton11 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripButton12 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton13 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.separator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.searchText = new System.Windows.Forms.ToolStripComboBox();
+            this.searchButton = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStrip.SuspendLayout();
             this.toolStripContainer.ContentPanel.SuspendLayout();
             this.toolStripContainer.TopToolStripPanel.SuspendLayout();
@@ -102,6 +99,7 @@
             this.systemEvents.ForeColor = System.Drawing.Color.DarkCyan;
             this.systemEvents.FullRowSelect = true;
             this.systemEvents.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.systemEvents.HideSelection = false;
             this.systemEvents.Location = new System.Drawing.Point(0, 0);
             this.systemEvents.MultiSelect = false;
             this.systemEvents.Name = "systemEvents";
@@ -275,26 +273,23 @@
             this.mainToolStrip.Dock = System.Windows.Forms.DockStyle.None;
             this.mainToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.closeButton,
-            this.toolStripSeparator1,
+            this.separator1,
             this.eraseButton,
             this.colorButton,
             this.scrollButton,
-            this.toolStripSeparator2,
+            this.separator2,
             this.levelFilterButton,
             this.processFilterButton,
             this.applicationFilterButton,
             this.sourceFilterButton,
             this.userFilterButton,
             this.messageFilterButton,
-            this.toolStripSeparator3,
-            this.toolStripButton11,
-            this.toolStripTextBox1,
-            this.toolStripButton12,
-            this.toolStripButton13,
-            this.toolStripSeparator4});
+            this.separator3,
+            this.searchText,
+            this.searchButton});
             this.mainToolStrip.Location = new System.Drawing.Point(3, 0);
             this.mainToolStrip.Name = "mainToolStrip";
-            this.mainToolStrip.Size = new System.Drawing.Size(437, 25);
+            this.mainToolStrip.Size = new System.Drawing.Size(485, 25);
             this.mainToolStrip.TabIndex = 0;
             // 
             // closeButton
@@ -306,10 +301,10 @@
             this.closeButton.Size = new System.Drawing.Size(23, 22);
             this.closeButton.Text = "Close Harvester";
             // 
-            // toolStripSeparator1
+            // separator1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.separator1.Name = "separator1";
+            this.separator1.Size = new System.Drawing.Size(6, 25);
             // 
             // eraseButton
             // 
@@ -342,10 +337,10 @@
             this.scrollButton.Size = new System.Drawing.Size(23, 22);
             this.scrollButton.Text = "Toggle Auto-Scroll";
             // 
-            // toolStripSeparator2
+            // separator2
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.separator2.Name = "separator2";
+            this.separator2.Size = new System.Drawing.Size(6, 25);
             // 
             // levelFilterButton
             // 
@@ -407,51 +402,24 @@
             this.messageFilterButton.Size = new System.Drawing.Size(23, 22);
             this.messageFilterButton.Text = "toolStripButton10";
             // 
-            // toolStripSeparator3
+            // separator3
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            this.separator3.Name = "separator3";
+            this.separator3.Size = new System.Drawing.Size(6, 25);
             // 
-            // toolStripButton11
+            // searchText
             // 
-            this.toolStripButton11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton11.Enabled = false;
-            this.toolStripButton11.Image = global::Harvester.Properties.Resources.Search;
-            this.toolStripButton11.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton11.Name = "toolStripButton11";
-            this.toolStripButton11.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton11.Text = "toolStripButton11";
+            this.searchText.Name = "searchText";
+            this.searchText.Size = new System.Drawing.Size(200, 25);
             // 
-            // toolStripTextBox1
+            // searchButton
             // 
-            this.toolStripTextBox1.Enabled = false;
-            this.toolStripTextBox1.Name = "toolStripTextBox1";
-            this.toolStripTextBox1.Size = new System.Drawing.Size(100, 25);
-            // 
-            // toolStripButton12
-            // 
-            this.toolStripButton12.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton12.Enabled = false;
-            this.toolStripButton12.Image = global::Harvester.Properties.Resources.SearchPrev;
-            this.toolStripButton12.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton12.Name = "toolStripButton12";
-            this.toolStripButton12.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton12.Text = "toolStripButton12";
-            // 
-            // toolStripButton13
-            // 
-            this.toolStripButton13.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton13.Enabled = false;
-            this.toolStripButton13.Image = global::Harvester.Properties.Resources.SearchNext;
-            this.toolStripButton13.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton13.Name = "toolStripButton13";
-            this.toolStripButton13.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton13.Text = "toolStripButton13";
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            this.searchButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.searchButton.Image = global::Harvester.Properties.Resources.Search;
+            this.searchButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.searchButton.Name = "searchButton";
+            this.searchButton.Size = new System.Drawing.Size(23, 22);
+            this.searchButton.Text = "Search";
             // 
             // Main
             // 
@@ -497,23 +465,19 @@
         private System.Windows.Forms.ToolStripContainer toolStripContainer;
         private System.Windows.Forms.ToolStrip mainToolStrip;
         private System.Windows.Forms.ToolStripButton closeButton;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator separator1;
         private System.Windows.Forms.ToolStripButton eraseButton;
         private System.Windows.Forms.ToolStripButton colorButton;
         private System.Windows.Forms.ToolStripButton scrollButton;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripSeparator separator2;
         private System.Windows.Forms.ToolStripButton levelFilterButton;
         private System.Windows.Forms.ToolStripButton processFilterButton;
         private System.Windows.Forms.ToolStripButton applicationFilterButton;
         private System.Windows.Forms.ToolStripButton sourceFilterButton;
         private System.Windows.Forms.ToolStripButton userFilterButton;
         private System.Windows.Forms.ToolStripButton messageFilterButton;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripButton toolStripButton11;
-        private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
-        private System.Windows.Forms.ToolStripButton toolStripButton12;
-        private System.Windows.Forms.ToolStripButton toolStripButton13;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripSeparator separator3;
+        private System.Windows.Forms.ToolStripButton searchButton;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem displayIdColumn;
         private System.Windows.Forms.ToolStripMenuItem displayTimestampColumn;
@@ -525,5 +489,6 @@
         private System.Windows.Forms.ToolStripMenuItem displayUserColumn;
         private System.Windows.Forms.SplitContainer splitContainer;
         private SystemEventControl systemEventControl;
+        private System.Windows.Forms.ToolStripComboBox searchText;
     }
 }
