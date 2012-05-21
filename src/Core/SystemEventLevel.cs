@@ -17,8 +17,8 @@ namespace Harvester.Core
 {
     public enum SystemEventLevel
     {
-        Debug = 0,
-        Trace = 1,
+        Trace = 0,
+        Debug = 1,
         Information = 2,
         Warning = 3,
         Error = 4,
