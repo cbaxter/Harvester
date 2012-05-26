@@ -21,11 +21,19 @@ namespace Harvester.Core.Tests.Filters.UsingComparisonFilter
     public class WhenCheckingNotEqual
     {
         [Fact]
+        public void NotCompositeExpression()
+        {
+            var filter = new NotEqualFilter(new FakeExtendedProperties(), Enumerable.Empty<ICreateFilterExpressions>());
+
+            Assert.False(filter.CompositeExpression);
+        }
+
+        [Fact]
         public void ReturnTrueIfNotEqual()
         {
             var e = new SystemEvent { Level = SystemEventLevel.Warning };
             var extendedProperties = new FakeExtendedProperties { { "property", "Level" }, { "value", "Warning" } };
-            var filter = new NotEqualFilter(extendedProperties, Enumerable.Empty<IFilterMessages>());
+            var filter = new NotEqualFilter(extendedProperties, Enumerable.Empty<ICreateFilterExpressions>());
 
             Assert.False(Filter.Compile(filter).Invoke(e));
         }
@@ -35,7 +43,7 @@ namespace Harvester.Core.Tests.Filters.UsingComparisonFilter
         {
             var e = new SystemEvent { Level = SystemEventLevel.Error };
             var extendedProperties = new FakeExtendedProperties { { "property", "Level" }, { "value", "Warning" } };
-            var filter = new NotEqualFilter(extendedProperties, Enumerable.Empty<IFilterMessages>());
+            var filter = new NotEqualFilter(extendedProperties, Enumerable.Empty<ICreateFilterExpressions>());
 
             Assert.True(Filter.Compile(filter).Invoke(e));
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using Harvester.Core;
 using Harvester.Core.Filters;
+using Harvester.Core.Messaging;
 using Harvester.Properties;
 
 /* Copyright (c) 2012 CBaxter
@@ -36,16 +37,19 @@ namespace Harvester.Forms
         static FilterByText()
         {
             KnownFilters = CoreAssembly.Reference
-                .GetTypes()
-                .Where(type => !type.IsAbstract && type.IsClass && typeof (IFilterMessages).IsAssignableFrom(type))
-                .Select(type => (IFilterMessages) FormatterServices.GetUninitializedObject(type))
-                .Where(filter => !filter.CompositeFilter)
-                .ToDictionary(filter => filter.FriendlyName, filter => filter.GetType());
+                                       .GetTypes()
+                                       .Where(type => !type.IsAbstract && type.IsClass && typeof (ICreateFilterExpressions).IsAssignableFrom(type))
+                                       .Select(type => (ICreateFilterExpressions) FormatterServices.GetUninitializedObject(type))
+                                       .Where(filter => !filter.CompositeExpression)
+                                       .ToDictionary(filter => filter.FriendlyName, filter => filter.GetType());
         }
 
         public FilterByText()
         {
             InitializeComponent();
+
+            addFilter.Click += (sender, e) => HandleEvent(AddFilter);
+            clearFilter.Click += (sender, e) => HandleEvent(ClearFilter);
         }
 
         public FilterByText(String propertyName)
@@ -70,6 +74,18 @@ namespace Harvester.Forms
         {
             foreach (var knownFilter in KnownFilters.Keys)
                 filterType.Items.Add(knownFilter);
+        }
+
+        private void AddFilter()
+        {
+            
+        }
+
+        private void ClearFilter()
+        {
+            filterText.Text = String.Empty;
+            filterType.SelectedItem = null;
+            negateFilter.Checked = false;
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq.Expressions;
-using Harvester.Core.Filters;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -17,22 +15,23 @@ using Harvester.Core.Filters;
  * IN THE SOFTWARE. 
  */
 
-namespace Harvester.Core.Tests
+namespace Harvester.Core.Filters
 {
-    internal static class Filter
+    internal class FilterExpression : IFilterMessages
     {
-        public static Func<SystemEvent, Boolean> Compile(ICreateFilterExpressions filter)
+        private readonly Func<SystemEvent, Boolean> filter;
+
+        public FilterExpression(ParameterExpression systemEvent, Expression body)
         {
-            var systemEvent = Expression.Parameter(typeof(SystemEvent), "e");
-            var filterParameters = new FilterParameters { systemEvent };
-            var expression = filter.CreateExpression(filterParameters);
+            Verify.NotNull(systemEvent, "systemEvent");
+            Verify.NotNull(body, "body");
 
-            Trace.WriteLine(expression);
+            filter = Expression.Lambda<Func<SystemEvent, Boolean>>(body, systemEvent).Compile();
+        }
 
-            return Expression.Lambda<Func<SystemEvent, Boolean>>(
-                       filter.CreateExpression(filterParameters),
-                       systemEvent
-                   ).Compile();
+        public Boolean Exclude(SystemEvent e)
+        {
+            return !filter.Invoke(e);
         }
     }
 }

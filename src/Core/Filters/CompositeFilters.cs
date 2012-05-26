@@ -23,7 +23,7 @@ namespace Harvester.Core.Filters
     {
         public override String FriendlyName { get { return "And Also"; } }
 
-        public AndAlsoFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public AndAlsoFilter(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
             : base(extendedProperties, children, Expression.AndAlso)
         { }
     }
@@ -32,7 +32,7 @@ namespace Harvester.Core.Filters
     {
         public override String FriendlyName { get { return "Or Else"; } }
 
-        public OrElseFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public OrElseFilter(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
             : base(extendedProperties, children, Expression.OrElse)
         { }
     }
@@ -41,7 +41,7 @@ namespace Harvester.Core.Filters
     {
         public override String FriendlyName { get { return "Not"; } }
 
-        public NotFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public NotFilter(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
             : base(extendedProperties, children, Expression.AndAlso)
         { }
 

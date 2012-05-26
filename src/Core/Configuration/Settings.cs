@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Security.Principal;
+using Harvester.Core.Filters;
 using Harvester.Core.Messaging;
 using Harvester.Core.Messaging.Parsers;
 using Harvester.Core.Processes;
@@ -117,7 +118,7 @@ namespace Harvester.Core.Configuration
                         .Select(item => new KeyValuePair<String, SystemEventLevel>(item, mapping));
         }
 
-        public static Func<SystemEvent, Boolean> GetFilter()
+        public static IFilterMessages GetFilter()
         {
             var filtersSection = (FiltersSection)ConfigurationManager.GetSection("filters") ?? new FiltersSection();
 

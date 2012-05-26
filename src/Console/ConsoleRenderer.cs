@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Text;
 using Harvester.Core;
 using Harvester.Core.Configuration;
+using Harvester.Core.Filters;
 using Harvester.Core.Messaging;
 
 /* Copyright (c) 2012 CBaxter
@@ -26,7 +27,7 @@ namespace Harvester
         private readonly StringBuilder stringBuilder;
         private readonly ConsoleColor timestampColor;
         private readonly ConsoleColor defaultBackColor;
-        private readonly Func<SystemEvent, Boolean> filter;
+        private readonly IFilterMessages filter;
 
         private Int32 MaxSourceLength { get; set; }
         private Int32 MaxProcessNameLength { get; set; }
@@ -43,7 +44,7 @@ namespace Harvester
 
         public void Render(SystemEvent e)
         {
-            if (!filter.Invoke(e))
+            if (filter.Exclude(e))
                 return;
 
             Console.ForegroundColor = timestampColor;

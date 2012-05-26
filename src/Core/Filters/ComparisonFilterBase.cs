@@ -25,12 +25,12 @@ namespace Harvester.Core.Filters
     {
         private readonly Func<Expression, Expression, BinaryExpression> expressionBuilder;
 
-        public override bool CompositeFilter { get { return false; } }
+        public override bool CompositeExpression { get { return false; } }
 
-        protected ComparisonFilterBase(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children, Func<Expression, Expression, BinaryExpression> expressionBuilder)
+        protected ComparisonFilterBase(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children, Func<Expression, Expression, BinaryExpression> expressionBuilder)
             : base(extendedProperties, children)
         {
-            Verify.False((children ?? Enumerable.Empty<IFilterMessages>()).Any(), "children", "Comparison filter cannot have any child filters defined.");
+            Verify.False((children ?? Enumerable.Empty<ICreateFilterExpressions>()).Any(), "children", "Comparison filter cannot have any child filters defined.");
             Verify.NotNull(expressionBuilder, "expressionBuilder");
 
             this.expressionBuilder = expressionBuilder;

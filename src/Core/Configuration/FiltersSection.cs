@@ -26,16 +26,13 @@ namespace Harvester.Core.Configuration
         [ConfigurationProperty(null, Options = ConfigurationPropertyOptions.IsDefaultCollection)]
         public FilterElementCollection Filters { get { return (FilterElementCollection)base[""] ?? new FilterElementCollection(); } }
 
-        public Func<SystemEvent, Boolean> CompileFilter()
+        public IFilterMessages CompileFilter()
         {
             var systemEvent = Expression.Parameter(typeof(SystemEvent), "e");
             var filterParameters = new FilterParameters { systemEvent };
             var filters = Filters.Cast<FilterElement>().Select(element => element.GetFilter(filterParameters));
 
-            return Expression.Lambda<Func<SystemEvent, Boolean>>(
-                       new AndAlsoFilter(this, filters).CreateExpression(filterParameters),
-                       systemEvent
-                   ).Compile();
+            return new FilterExpression(systemEvent, new AndAlsoFilter(this, filters).CreateExpression(filterParameters));
         }
 
         public String GetExtendedProperty(String property)
@@ -71,12 +68,12 @@ namespace Harvester.Core.Configuration
         [ConfigurationProperty("", IsRequired = false, IsDefaultCollection = true)]
         public FilterElementCollection Filters { get { return this[""] as FilterElementCollection ?? new FilterElementCollection(); } }
 
-        public IFilterMessages GetFilter(FilterParameters parameters)
+        public ICreateFilterExpressions GetFilter(FilterParameters parameters)
         {
             var filterType = Type.GetType(String.Format("{0}.{1}Filter", typeof(FilterParameters).Namespace, TypeName), false) ?? Type.GetType(TypeName, true);
             var filters = Filters.Cast<FilterElement>().Select(element => element.GetFilter(parameters));
 
-            return (IFilterMessages)Activator.CreateInstance(filterType, this, filters);
+            return (ICreateFilterExpressions)Activator.CreateInstance(filterType, this, filters);
         }
     }
 }

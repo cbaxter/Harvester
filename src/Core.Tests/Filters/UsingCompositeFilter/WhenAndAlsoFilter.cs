@@ -21,11 +21,19 @@ namespace Harvester.Core.Tests.Filters.UsingCompositeFilter
     public class WhenAndAlsoFilter
     {
         [Fact]
+        public void AlwaysCompositeExpression()
+        {
+            var filter = new AndAlsoFilter(new FakeExtendedProperties(), Enumerable.Empty<ICreateFilterExpressions>());
+
+            Assert.True(filter.CompositeExpression);
+        }
+
+        [Fact]
         public void ReturnTrueIfNoChildFilters()
         {
             var e = new SystemEvent();
             var extendedProperties = new FakeExtendedProperties { { "property", "Level" }, { "value", "Warning" } };
-            var filter = new AndAlsoFilter(extendedProperties, Enumerable.Empty<IFilterMessages>());
+            var filter = new AndAlsoFilter(extendedProperties, Enumerable.Empty<ICreateFilterExpressions>());
 
             Assert.True(Filter.Compile(filter).Invoke(e));
         }
@@ -35,7 +43,7 @@ namespace Harvester.Core.Tests.Filters.UsingCompositeFilter
         {
             var e = new SystemEvent { Level = SystemEventLevel.Warning };
             var extendedProperties = new FakeExtendedProperties { { "property", "Level" }, { "value", "Warning" } };
-            var filter = new AndAlsoFilter(new FakeExtendedProperties(), new[] { new EqualFilter(extendedProperties, Enumerable.Empty<IFilterMessages>()) });
+            var filter = new AndAlsoFilter(new FakeExtendedProperties(), new[] { new EqualFilter(extendedProperties, Enumerable.Empty<ICreateFilterExpressions>()) });
 
             Assert.True(Filter.Compile(filter).Invoke(e));
         }
@@ -45,7 +53,7 @@ namespace Harvester.Core.Tests.Filters.UsingCompositeFilter
         {
             var e = new SystemEvent { Level = SystemEventLevel.Error };
             var extendedProperties = new FakeExtendedProperties { { "property", "Level" }, { "value", "Warning" } };
-            var filter = new AndAlsoFilter(new FakeExtendedProperties(), new[] { new EqualFilter(extendedProperties, Enumerable.Empty<IFilterMessages>()) });
+            var filter = new AndAlsoFilter(new FakeExtendedProperties(), new[] { new EqualFilter(extendedProperties, Enumerable.Empty<ICreateFilterExpressions>()) });
 
             Assert.False(Filter.Compile(filter).Invoke(e));
         }
@@ -58,9 +66,9 @@ namespace Harvester.Core.Tests.Filters.UsingCompositeFilter
                              new FakeExtendedProperties(),
                              new[]
                                  {
-                                     new EqualFilter(new FakeExtendedProperties { { "property", "ProcessId" }, { "value", "1234" } }, Enumerable.Empty<IFilterMessages>()),
-                                     new EqualFilter(new FakeExtendedProperties { { "property", "Thread" }, { "value", "Unknown" } }, Enumerable.Empty<IFilterMessages>()),
-                                     new EqualFilter(new FakeExtendedProperties { { "property", "Level" }, { "value", "Error" } }, Enumerable.Empty<IFilterMessages>())
+                                     new EqualFilter(new FakeExtendedProperties { { "property", "ProcessId" }, { "value", "1234" } }, Enumerable.Empty<ICreateFilterExpressions>()),
+                                     new EqualFilter(new FakeExtendedProperties { { "property", "Thread" }, { "value", "Unknown" } }, Enumerable.Empty<ICreateFilterExpressions>()),
+                                     new EqualFilter(new FakeExtendedProperties { { "property", "Level" }, { "value", "Error" } }, Enumerable.Empty<ICreateFilterExpressions>())
                                  });
 
             Assert.True(Filter.Compile(filter).Invoke(e));
@@ -74,9 +82,9 @@ namespace Harvester.Core.Tests.Filters.UsingCompositeFilter
                              new FakeExtendedProperties(),
                              new[]
                                  {
-                                     new EqualFilter(new FakeExtendedProperties { { "property", "ProcessId" }, { "value", "1234" } }, Enumerable.Empty<IFilterMessages>()),
-                                     new EqualFilter(new FakeExtendedProperties { { "property", "Thread" }, { "value", "Unknown" } }, Enumerable.Empty<IFilterMessages>()),
-                                     new EqualFilter(new FakeExtendedProperties { { "property", "Level" }, { "value", "Error" } }, Enumerable.Empty<IFilterMessages>())
+                                     new EqualFilter(new FakeExtendedProperties { { "property", "ProcessId" }, { "value", "1234" } }, Enumerable.Empty<ICreateFilterExpressions>()),
+                                     new EqualFilter(new FakeExtendedProperties { { "property", "Thread" }, { "value", "Unknown" } }, Enumerable.Empty<ICreateFilterExpressions>()),
+                                     new EqualFilter(new FakeExtendedProperties { { "property", "Level" }, { "value", "Error" } }, Enumerable.Empty<ICreateFilterExpressions>())
                                  });
 
             Assert.False(Filter.Compile(filter).Invoke(e));

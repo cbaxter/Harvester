@@ -27,7 +27,7 @@ namespace Harvester.Core.Tests.Filters.UsingComparisonFilter
         {
             var e = new SystemEvent { Level = SystemEventLevel.Warning };
             var extendedProperties = new FakeExtendedProperties { { "property", "Level" }, { "value", "Warning" } };
-            var filter = new EqualFilter(extendedProperties, Enumerable.Empty<IFilterMessages>());
+            var filter = new EqualFilter(extendedProperties, Enumerable.Empty<ICreateFilterExpressions>());
 
             Assert.True(Filter.Compile(filter).Invoke(e));
         }
@@ -37,7 +37,7 @@ namespace Harvester.Core.Tests.Filters.UsingComparisonFilter
         {
             var e = new SystemEvent();
             var extendedProperties = new FakeExtendedProperties { { "property", "MessageId" }, { "value", e.MessageId.ToString(CultureInfo.InvariantCulture) } };
-            var filter = new EqualFilter(extendedProperties, Enumerable.Empty<IFilterMessages>());
+            var filter = new EqualFilter(extendedProperties, Enumerable.Empty<ICreateFilterExpressions>());
 
             Assert.True(Filter.Compile(filter).Invoke(e));
         }
@@ -47,7 +47,7 @@ namespace Harvester.Core.Tests.Filters.UsingComparisonFilter
         {
             var e = new SystemEvent { ProcessId = 123 };
             var extendedProperties = new FakeExtendedProperties { { "property", "ProcessId" }, { "value", "123" } };
-            var filter = new EqualFilter(extendedProperties, Enumerable.Empty<IFilterMessages>());
+            var filter = new EqualFilter(extendedProperties, Enumerable.Empty<ICreateFilterExpressions>());
 
             Assert.True(Filter.Compile(filter).Invoke(e));
         }
@@ -58,7 +58,7 @@ namespace Harvester.Core.Tests.Filters.UsingComparisonFilter
             var now = DateTime.Now;
             var e = new SystemEvent { Timestamp = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second) };
             var extendedProperties = new FakeExtendedProperties { { "property", "Timestamp" }, { "value", now.ToString("yyyy-MM-dd HH:mm:ss") } };
-            var filter = new EqualFilter(extendedProperties, Enumerable.Empty<IFilterMessages>());
+            var filter = new EqualFilter(extendedProperties, Enumerable.Empty<ICreateFilterExpressions>());
 
             Assert.True(Filter.Compile(filter).Invoke(e));
         }
@@ -68,7 +68,7 @@ namespace Harvester.Core.Tests.Filters.UsingComparisonFilter
         {
             var e = new SystemEvent { Message = "My Message" };
             var extendedProperties = new FakeExtendedProperties { { "property", "Message" }, { "value", "My Message" } };
-            var filter = new EqualFilter(extendedProperties, Enumerable.Empty<IFilterMessages>());
+            var filter = new EqualFilter(extendedProperties, Enumerable.Empty<ICreateFilterExpressions>());
 
             Assert.True(Filter.Compile(filter).Invoke(e));
         }

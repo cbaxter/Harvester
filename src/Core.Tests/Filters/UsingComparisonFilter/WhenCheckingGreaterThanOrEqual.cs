@@ -21,11 +21,19 @@ namespace Harvester.Core.Tests.Filters.UsingComparisonFilter
     public class WhenCheckingGreaterThanOrEqual
     {
         [Fact]
+        public void NotCompositeExpression()
+        {
+            var filter = new GreaterThanOrEqualFilter(new FakeExtendedProperties(), Enumerable.Empty<ICreateFilterExpressions>());
+
+            Assert.False(filter.CompositeExpression);
+        }
+
+        [Fact]
         public void ReturnTrueIfGreaterThanOrEqual()
         {
             var e = new SystemEvent { ProcessId = 50 };
             var extendedProperties = new FakeExtendedProperties { { "property", "ProcessId" }, { "value", "50" } };
-            var filter = new GreaterThanOrEqualFilter(extendedProperties, Enumerable.Empty<IFilterMessages>());
+            var filter = new GreaterThanOrEqualFilter(extendedProperties, Enumerable.Empty<ICreateFilterExpressions>());
 
             Assert.True(Filter.Compile(filter).Invoke(e));
         }
@@ -35,7 +43,7 @@ namespace Harvester.Core.Tests.Filters.UsingComparisonFilter
         {
             var e = new SystemEvent { ProcessId = 49 };
             var extendedProperties = new FakeExtendedProperties { { "property", "ProcessId" }, { "value", "50" } };
-            var filter = new GreaterThanOrEqualFilter(extendedProperties, Enumerable.Empty<IFilterMessages>());
+            var filter = new GreaterThanOrEqualFilter(extendedProperties, Enumerable.Empty<ICreateFilterExpressions>());
 
             Assert.False(Filter.Compile(filter).Invoke(e));
         }

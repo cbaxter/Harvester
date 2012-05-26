@@ -20,22 +20,22 @@ using Harvester.Core.Messaging;
 
 namespace Harvester.Core.Filters
 {
-    public abstract class FilterBase : IFilterMessages
+    public abstract class FilterBase : ICreateFilterExpressions
     {
         private readonly IHaveExtendedProperties extendedProperties;
-        private readonly IEnumerable<IFilterMessages> children;
+        private readonly IEnumerable<ICreateFilterExpressions> children;
 
         public IHaveExtendedProperties ExtendedProperties { get { return extendedProperties; } }
-        public IEnumerable<IFilterMessages> Children { get { return children; } }
-        public abstract Boolean CompositeFilter { get; }
+        public IEnumerable<ICreateFilterExpressions> Children { get { return children; } }
+        public abstract Boolean CompositeExpression { get; }
         public abstract String FriendlyName { get; }
 
-        protected  FilterBase(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        protected  FilterBase(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
         {
             Verify.NotNull(extendedProperties, "extendedProperties");
 
             this.extendedProperties = extendedProperties;
-            this.children = children ?? Enumerable.Empty<IFilterMessages>();
+            this.children = children ?? Enumerable.Empty<ICreateFilterExpressions>();
         }
 
         public Expression CreateExpression(FilterParameters parameters)

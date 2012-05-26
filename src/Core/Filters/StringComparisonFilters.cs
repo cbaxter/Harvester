@@ -23,7 +23,7 @@ namespace Harvester.Core.Filters
     {
         public override String FriendlyName { get { return "Contains"; } }
 
-        public ContainsFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public ContainsFilter(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
             : base(extendedProperties, children, Contains)
         { }
 
@@ -37,7 +37,7 @@ namespace Harvester.Core.Filters
     {
         public override String FriendlyName { get { return "Ends With"; } }
 
-        public EndsWithFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public EndsWithFilter(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
             : base(extendedProperties, children, EndsWith)
         { }
 
@@ -51,7 +51,7 @@ namespace Harvester.Core.Filters
     {
         public override String FriendlyName { get { return "Starts With"; } }
 
-        public StartsWithFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public StartsWithFilter(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
             : base(extendedProperties, children, StartsWith)
         { }
 

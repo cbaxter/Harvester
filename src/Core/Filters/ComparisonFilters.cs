@@ -23,7 +23,7 @@ namespace Harvester.Core.Filters
     {
         public override String FriendlyName { get { return "Equal To"; } }
 
-        public EqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public EqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
             : base(extendedProperties, children, Expression.Equal)
         { }
     }
@@ -32,7 +32,7 @@ namespace Harvester.Core.Filters
     {
         public override String FriendlyName { get { return "Greater Than"; } }
 
-        public GreaterThanFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public GreaterThanFilter(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
             : base(extendedProperties, children, Expression.GreaterThan)
         { }
     }
@@ -41,7 +41,7 @@ namespace Harvester.Core.Filters
     {
         public override String FriendlyName { get { return "Greater Than Or Equal To"; } }
 
-        public GreaterThanOrEqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public GreaterThanOrEqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
             : base(extendedProperties, children, Expression.GreaterThanOrEqual)
         { }
     }
@@ -50,7 +50,7 @@ namespace Harvester.Core.Filters
     {
         public override String FriendlyName { get { return "Less Than"; } }
 
-        public LessThanFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public LessThanFilter(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
             : base(extendedProperties, children, Expression.LessThan)
         { }
     }
@@ -59,7 +59,7 @@ namespace Harvester.Core.Filters
     {
         public override String FriendlyName { get { return "Less Than Or Equal To"; } }
 
-        public LessThanOrEqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public LessThanOrEqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
             : base(extendedProperties, children, Expression.LessThanOrEqual)
         { }
     }
@@ -68,7 +68,7 @@ namespace Harvester.Core.Filters
     {
         public override String FriendlyName { get { return "Not Equal To"; } }
 
-        public NotEqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
+        public NotEqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
             : base(extendedProperties, children, Expression.NotEqual)
         { }
     }

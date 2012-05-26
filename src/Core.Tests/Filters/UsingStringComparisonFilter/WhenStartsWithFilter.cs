@@ -21,11 +21,19 @@ namespace Harvester.Core.Tests.Filters.UsingStringComparisonFilter
     public class WhenStartsWithFilter
     {
         [Fact]
+        public void NotCompositeExpression()
+        {
+            var filter = new StartsWithFilter(new FakeExtendedProperties(), Enumerable.Empty<ICreateFilterExpressions>());
+
+            Assert.False(filter.CompositeExpression);
+        }
+
+        [Fact]
         public void ReturnTrueIfStringStartsWithValue()
         {
             var e = new SystemEvent { Message = "Start of Message" };
             var extendedProperties = new FakeExtendedProperties { { "property", "Message" }, { "value", "Start" } };
-            var filter = new StartsWithFilter(extendedProperties, Enumerable.Empty<IFilterMessages>());
+            var filter = new StartsWithFilter(extendedProperties, Enumerable.Empty<ICreateFilterExpressions>());
 
             Assert.True(Filter.Compile(filter).Invoke(e));
         }
@@ -35,7 +43,7 @@ namespace Harvester.Core.Tests.Filters.UsingStringComparisonFilter
         {
             var e = new SystemEvent { Message = " Start of Message" };
             var extendedProperties = new FakeExtendedProperties { { "property", "Message" }, { "value", "Start" } };
-            var filter = new StartsWithFilter(extendedProperties, Enumerable.Empty<IFilterMessages>());
+            var filter = new StartsWithFilter(extendedProperties, Enumerable.Empty<ICreateFilterExpressions>());
 
             Assert.False(Filter.Compile(filter).Invoke(e));
         }
@@ -45,7 +53,7 @@ namespace Harvester.Core.Tests.Filters.UsingStringComparisonFilter
         {
             var e = new SystemEvent { Message = "START of Message" };
             var extendedProperties = new FakeExtendedProperties { { "property", "Message" }, { "value", "Start" } };
-            var filter = new StartsWithFilter(extendedProperties, Enumerable.Empty<IFilterMessages>());
+            var filter = new StartsWithFilter(extendedProperties, Enumerable.Empty<ICreateFilterExpressions>());
 
             Assert.True(Filter.Compile(filter).Invoke(e));
         }
@@ -55,7 +63,7 @@ namespace Harvester.Core.Tests.Filters.UsingStringComparisonFilter
         {
             var e = new SystemEvent { Message = null };
             var extendedProperties = new FakeExtendedProperties { { "property", "Message" }, { "value", "Start" } };
-            var filter = new StartsWithFilter(extendedProperties, Enumerable.Empty<IFilterMessages>());
+            var filter = new StartsWithFilter(extendedProperties, Enumerable.Empty<ICreateFilterExpressions>());
 
             Assert.False(Filter.Compile(filter).Invoke(e));
         }
@@ -65,7 +73,7 @@ namespace Harvester.Core.Tests.Filters.UsingStringComparisonFilter
         {
             var e = new SystemEvent { Message = "Start of Message" };
             var extendedProperties = new FakeExtendedProperties { { "property", "Message" }, { "value", null } };
-            var filter = new StartsWithFilter(extendedProperties, Enumerable.Empty<IFilterMessages>());
+            var filter = new StartsWithFilter(extendedProperties, Enumerable.Empty<ICreateFilterExpressions>());
 
             Assert.True(Filter.Compile(filter).Invoke(e));
         }
