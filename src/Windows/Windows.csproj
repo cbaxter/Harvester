@@ -62,6 +62,30 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="Forms\CheckedButtonRenderer.cs" />
+    <Compile Include="Forms\FilterByApplication.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FilterByApplication.Designer.cs">
+      <DependentUpon>FilterByApplication.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FilterByLevel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FilterByLevel.Designer.cs">
+      <DependentUpon>FilterByLevel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FilterByProcessId.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FilterByProcessId.Designer.cs">
+      <DependentUpon>FilterByProcessId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FilterByText.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FilterByText.Designer.cs">
+      <DependentUpon>FilterByText.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SystemEventControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -128,6 +152,18 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\ColorPicker.resx">
       <DependentUpon>ColorPicker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FilterByApplication.resx">
+      <DependentUpon>FilterByApplication.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FilterByLevel.resx">
+      <DependentUpon>FilterByLevel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FilterByProcessId.resx">
+      <DependentUpon>FilterByProcessId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FilterByText.resx">
+      <DependentUpon>FilterByText.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>

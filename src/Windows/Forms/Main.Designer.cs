@@ -290,7 +290,7 @@
             this.searchButton});
             this.mainToolStrip.Location = new System.Drawing.Point(3, 0);
             this.mainToolStrip.Name = "mainToolStrip";
-            this.mainToolStrip.Size = new System.Drawing.Size(476, 25);
+            this.mainToolStrip.Size = new System.Drawing.Size(507, 25);
             this.mainToolStrip.TabIndex = 0;
             // 
             // closeButton
@@ -346,7 +346,6 @@
             // levelFilterButton
             // 
             this.levelFilterButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.levelFilterButton.Enabled = false;
             this.levelFilterButton.Image = global::Harvester.Properties.Resources.FilterLogLevels;
             this.levelFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.levelFilterButton.Name = "levelFilterButton";
@@ -356,7 +355,6 @@
             // processFilterButton
             // 
             this.processFilterButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.processFilterButton.Enabled = false;
             this.processFilterButton.Image = global::Harvester.Properties.Resources.FilterProcesses;
             this.processFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.processFilterButton.Name = "processFilterButton";
@@ -366,7 +364,6 @@
             // applicationFilterButton
             // 
             this.applicationFilterButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.applicationFilterButton.Enabled = false;
             this.applicationFilterButton.Image = global::Harvester.Properties.Resources.FilterApplications;
             this.applicationFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.applicationFilterButton.Name = "applicationFilterButton";
@@ -376,7 +373,6 @@
             // sourceFilterButton
             // 
             this.sourceFilterButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.sourceFilterButton.Enabled = false;
             this.sourceFilterButton.Image = global::Harvester.Properties.Resources.FilterSources;
             this.sourceFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.sourceFilterButton.Name = "sourceFilterButton";
@@ -386,7 +382,6 @@
             // userFilterButton
             // 
             this.userFilterButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.userFilterButton.Enabled = false;
             this.userFilterButton.Image = global::Harvester.Properties.Resources.FilterUsers;
             this.userFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.userFilterButton.Name = "userFilterButton";
@@ -396,7 +391,6 @@
             // messageFilterButton
             // 
             this.messageFilterButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.messageFilterButton.Enabled = false;
             this.messageFilterButton.Image = global::Harvester.Properties.Resources.FilterMessages;
             this.messageFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.messageFilterButton.Name = "messageFilterButton";

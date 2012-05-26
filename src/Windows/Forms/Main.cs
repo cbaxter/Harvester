@@ -53,6 +53,13 @@ namespace Harvester.Forms
             scrollButton.Click += (sender, e) => HandleEvent(ToggleAutoScroll);
             colorButton.Click += (sender, e) => HandleEvent(ShowColorPicker);
 
+            levelFilterButton.Click += (sender, e) => HandleEvent(ShowFilterByLevel);
+            processFilterButton.Click += (sender, e) => HandleEvent(ShowFilterByProcess);
+            applicationFilterButton.Click += (sender, e) => HandleEvent(ShowFilterByApplication);
+            sourceFilterButton.Click += (sender, e) => HandleEvent(ShowFilterBySource);
+            userFilterButton.Click += (sender, e) => HandleEvent(ShowFilterByUsername);
+            messageFilterButton.Click += (sender, e) => HandleEvent(ShowFilterByMessage);
+
             searchButton.Click += (sender, e) => HandleEvent(StartSearch);
             searchText.KeyDown += (sender, e) => HandleEvent(() =>
                                                                  {
@@ -232,6 +239,64 @@ namespace Harvester.Forms
         {
             scrollButton.Checked = false;
             scrollButton.Image = Resources.AutoScrollOff;
+        }
+
+        #endregion
+
+        #region Filters
+
+        private void ShowFilterByLevel()
+        {
+            using(var form = new FilterByLevel())
+            {
+                form.ShowDialog(this);
+                levelFilterButton.Checked = form.FilterEnabled;
+            }
+        }
+
+        private void ShowFilterByProcess()
+        {
+            using (var form = new FilterByProcessId())
+            {
+                form.ShowDialog(this);
+                processFilterButton.Checked = form.FilterEnabled;
+            }
+        }
+
+        private void ShowFilterByApplication()
+        {
+            using (var form = new FilterByApplication())
+            {
+                form.ShowDialog(this);
+                applicationFilterButton.Checked = form.FilterEnabled;
+            }
+        }
+
+        private void ShowFilterBySource()
+        {
+            using (var form = new FilterByText("Source"))
+            {
+                form.ShowDialog(this);
+                applicationFilterButton.Checked = form.FilterEnabled;
+            }
+        }
+
+        private void ShowFilterByUsername()
+        {
+            using (var form = new FilterByText("Username"))
+            {
+                form.ShowDialog(this);
+                applicationFilterButton.Checked = form.FilterEnabled;
+            }
+        }
+
+        private void ShowFilterByMessage()
+        {
+            using (var form = new FilterByText("Message"))
+            {
+                form.ShowDialog(this);
+                applicationFilterButton.Checked = form.FilterEnabled;
+            }
         }
 
         #endregion
