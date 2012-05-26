@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using Harvester.Core.Messaging;
 
@@ -20,6 +21,8 @@ namespace Harvester.Core.Filters
 {
     internal class AndAlsoFilter : CompositeFilterBase
     {
+        public override String FriendlyName { get { return "And Also"; } }
+
         public AndAlsoFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Expression.AndAlso)
         { }
@@ -27,6 +30,8 @@ namespace Harvester.Core.Filters
 
     internal class OrElseFilter : CompositeFilterBase
     {
+        public override String FriendlyName { get { return "Or Else"; } }
+
         public OrElseFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Expression.OrElse)
         { }
@@ -34,6 +39,8 @@ namespace Harvester.Core.Filters
 
     internal class NotFilter : CompositeFilterBase
     {
+        public override String FriendlyName { get { return "Not"; } }
+
         public NotFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Expression.AndAlso)
         { }

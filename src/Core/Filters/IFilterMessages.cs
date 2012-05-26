@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Linq.Expressions;
 
 /* Copyright (c) 2012 CBaxter
  * 
@@ -18,6 +19,8 @@ namespace Harvester.Core.Filters
 {
     public interface IFilterMessages
     {
+        String FriendlyName { get; }
+        Boolean CompositeFilter { get; }
         Expression CreateExpression(FilterParameters parameters);
     }
 }

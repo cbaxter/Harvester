@@ -54,9 +54,9 @@
             // 
             this.filterText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.filterText.Location = new System.Drawing.Point(142, 19);
+            this.filterText.Location = new System.Drawing.Point(192, 19);
             this.filterText.Name = "filterText";
-            this.filterText.Size = new System.Drawing.Size(302, 20);
+            this.filterText.Size = new System.Drawing.Size(252, 20);
             this.filterText.TabIndex = 1;
             // 
             // cancelButton
@@ -156,7 +156,8 @@
             this.filterType.FormattingEnabled = true;
             this.filterType.Location = new System.Drawing.Point(6, 19);
             this.filterType.Name = "filterType";
-            this.filterType.Size = new System.Drawing.Size(130, 21);
+            this.filterType.Size = new System.Drawing.Size(180, 21);
+            this.filterType.Sorted = true;
             this.filterType.TabIndex = 0;
             // 
             // filtersGroup

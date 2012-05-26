@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using Harvester.Core.Messaging;
 
@@ -20,6 +21,8 @@ namespace Harvester.Core.Filters
 {
     internal class EqualFilter : ComparisonFilterBase
     {
+        public override String FriendlyName { get { return "Equal To"; } }
+
         public EqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Expression.Equal)
         { }
@@ -27,6 +30,8 @@ namespace Harvester.Core.Filters
 
     internal class GreaterThanFilter : ComparisonFilterBase
     {
+        public override String FriendlyName { get { return "Greater Than"; } }
+
         public GreaterThanFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Expression.GreaterThan)
         { }
@@ -34,6 +39,8 @@ namespace Harvester.Core.Filters
 
     internal class GreaterThanOrEqualFilter : ComparisonFilterBase
     {
+        public override String FriendlyName { get { return "Greater Than Or Equal To"; } }
+
         public GreaterThanOrEqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Expression.GreaterThanOrEqual)
         { }
@@ -41,6 +48,8 @@ namespace Harvester.Core.Filters
 
     internal class LessThanFilter : ComparisonFilterBase
     {
+        public override String FriendlyName { get { return "Less Than"; } }
+
         public LessThanFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Expression.LessThan)
         { }
@@ -48,6 +57,8 @@ namespace Harvester.Core.Filters
 
     internal class LessThanOrEqualFilter : ComparisonFilterBase
     {
+        public override String FriendlyName { get { return "Less Than Or Equal To"; } }
+
         public LessThanOrEqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Expression.LessThanOrEqual)
         { }
@@ -55,6 +66,8 @@ namespace Harvester.Core.Filters
 
     internal class NotEqualFilter : ComparisonFilterBase
     {
+        public override String FriendlyName { get { return "Not Equal To"; } }
+
         public NotEqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Expression.NotEqual)
         { }

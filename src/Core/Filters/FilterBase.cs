@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Harvester.Core.Messaging;
@@ -26,6 +27,8 @@ namespace Harvester.Core.Filters
 
         public IHaveExtendedProperties ExtendedProperties { get { return extendedProperties; } }
         public IEnumerable<IFilterMessages> Children { get { return children; } }
+        public abstract Boolean CompositeFilter { get; }
+        public abstract String FriendlyName { get; }
 
         protected  FilterBase(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
         {

@@ -21,6 +21,8 @@ namespace Harvester.Core.Filters
 {
     internal class ContainsFilter : StringComparisonFilterBase
     {
+        public override String FriendlyName { get { return "Contains"; } }
+
         public ContainsFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, Contains)
         { }
@@ -33,6 +35,8 @@ namespace Harvester.Core.Filters
 
     internal class EndsWithFilter : StringComparisonFilterBase
     {
+        public override String FriendlyName { get { return "Ends With"; } }
+
         public EndsWithFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, EndsWith)
         { }
@@ -45,6 +49,8 @@ namespace Harvester.Core.Filters
 
     internal class StartsWithFilter : StringComparisonFilterBase
     {
+        public override String FriendlyName { get { return "Starts With"; } }
+
         public StartsWithFilter(IHaveExtendedProperties extendedProperties, IEnumerable<IFilterMessages> children)
             : base(extendedProperties, children, StartsWith)
         { }

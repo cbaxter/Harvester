@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+using System.Runtime.Serialization;
 using Harvester.Core;
-using Harvester.Core.Configuration;
 using Harvester.Core.Filters;
 using Harvester.Properties;
 
@@ -29,9 +24,24 @@ namespace Harvester.Forms
 {
     internal partial class FilterByText : FormBase
     {
+        private static readonly IDictionary<String, Type> KnownFilters;
+
         private readonly String propertyName;
 
-        public Boolean FilterEnabled { get { return false; } }
+        public Boolean FilterEnabled
+        {
+            get { return false; }
+        }
+
+        static FilterByText()
+        {
+            KnownFilters = CoreAssembly.Reference
+                .GetTypes()
+                .Where(type => !type.IsAbstract && type.IsClass && typeof (IFilterMessages).IsAssignableFrom(type))
+                .Select(type => (IFilterMessages) FormatterServices.GetUninitializedObject(type))
+                .Where(filter => !filter.CompositeFilter)
+                .ToDictionary(filter => filter.FriendlyName, filter => filter.GetType());
+        }
 
         public FilterByText()
         {
@@ -52,6 +62,14 @@ namespace Harvester.Forms
 
             Font = SystemEventProperties.Default.Font;
             Text = String.Format("Filter By {0}", propertyName);
+
+            PopulateFilterOptions();
+        }
+
+        private void PopulateFilterOptions()
+        {
+            foreach (var knownFilter in KnownFilters.Keys)
+                filterType.Items.Add(knownFilter);
         }
     }
 }
