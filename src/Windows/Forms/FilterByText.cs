@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Runtime.Serialization;
+using System.Windows.Forms;
 using Harvester.Core;
 using Harvester.Core.Filters;
-using Harvester.Core.Messaging;
 using Harvester.Properties;
 
 /* Copyright (c) 2012 CBaxter
@@ -25,39 +24,30 @@ namespace Harvester.Forms
 {
     internal partial class FilterByText : FormBase
     {
-        private static readonly IDictionary<String, Type> KnownFilters;
-
-        private readonly String propertyName;
+        private readonly DynamicFilterExpression filter;
+        private readonly String property;
 
         public Boolean FilterEnabled
         {
-            get { return false; }
+            get { return filter.TextFilters.Any(placeholder => String.Compare(placeholder.Property, property, StringComparison.OrdinalIgnoreCase) == 0); }
         }
 
-        static FilterByText()
+        public FilterByText(DynamicFilterExpression dynamicFilter, String propertyName)
         {
-            KnownFilters = CoreAssembly.Reference
-                                       .GetTypes()
-                                       .Where(type => !type.IsAbstract && type.IsClass && typeof (ICreateFilterExpressions).IsAssignableFrom(type))
-                                       .Select(type => (ICreateFilterExpressions) FormatterServices.GetUninitializedObject(type))
-                                       .Where(filter => !filter.CompositeExpression)
-                                       .ToDictionary(filter => filter.FriendlyName, filter => filter.GetType());
-        }
+            Verify.NotNull(dynamicFilter, "dynamicFilter");
+            Verify.NotWhitespace(propertyName, "propertyName");
+            Verify.True(dynamicFilter.HasProperty(propertyName), "propertyName", String.Format("Unknown '{0}' property specified: {1}", typeof(SystemEvent).Name, propertyName));
 
-        public FilterByText()
-        {
             InitializeComponent();
+
+            filter = dynamicFilter;
+            property = propertyName;
 
             addFilter.Click += (sender, e) => HandleEvent(AddFilter);
             clearFilter.Click += (sender, e) => HandleEvent(ClearFilter);
-        }
-
-        public FilterByText(String propertyName)
-            : this()
-        {
-            Verify.NotWhitespace(propertyName, "propertyName");
-
-            this.propertyName = propertyName;
+            resetButton.Click += (sender, e) => HandleEvent(ResetFilter);
+            filters.KeyDown += (sender, e) => HandleEvent(() => { if (e.KeyCode == Keys.Delete) RemoveFilter(); e.Handled = true; });
+            filterText.KeyDown += (sender, e) => HandleEvent(() => { if (e.KeyCode == Keys.Enter) addFilter.PerformClick(); e.Handled = true; });
         }
 
         protected override void OnLoad(EventArgs e)
@@ -65,27 +55,72 @@ namespace Harvester.Forms
             base.OnLoad(e);
 
             Font = SystemEventProperties.Default.Font;
-            Text = String.Format("Filter By {0}", propertyName);
-
-            PopulateFilterOptions();
+            Text = String.Format("Filter By {0}", property);
+            HandleEvent(PopulateFilters);
         }
 
-        private void PopulateFilterOptions()
+        private void PopulateFilters()
         {
-            foreach (var knownFilter in KnownFilters.Keys)
+            foreach (var knownFilter in filter.GetFriendlyFilterNames())
                 filterType.Items.Add(knownFilter);
+
+            foreach (var placeholder in filter.TextFilters.Where(placeholder => String.Compare(placeholder.Property, property, StringComparison.OrdinalIgnoreCase) == 0))
+                filters.Items.Add(placeholder);
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+
+            if (DialogResult == DialogResult.OK)
+                HandleEvent(ApplyFilterChanges);
+        }
+
+        private void ApplyFilterChanges()
+        {
+            filter.TextFilters = filter.TextFilters
+                                       .Where(placeholder => String.Compare(placeholder.Property, property, StringComparison.OrdinalIgnoreCase) != 0)
+                                       .Concat(filters.Items.Cast<FilterDefinition>())
+                                       .ToList();
+            filter.Update();
         }
 
         private void AddFilter()
         {
-            
+            var friendlyFilterName = filterType.SelectedItem as String;
+            var text = filterText.Text;
+
+            if (!String.IsNullOrWhiteSpace(friendlyFilterName) && !String.IsNullOrWhiteSpace(text))
+            {
+                var filterPlaceholder = negateFilter.Checked
+                                            ? FilterDefinition.ForNegativeExpression(property, friendlyFilterName, text)
+                                            : FilterDefinition.ForPositiveExpression(property, friendlyFilterName, text);
+
+                filters.Items.Add(filterPlaceholder);
+            }
+
+            ClearFilter();
         }
 
         private void ClearFilter()
         {
+            negateFilter.Checked = false;
             filterText.Text = String.Empty;
             filterType.SelectedItem = null;
-            negateFilter.Checked = false;
+            filterType.Focus();
+        }
+
+        private void RemoveFilter()
+        {
+            if (filters.SelectedItem == null)
+                return;
+
+            filters.Items.Remove(filters.SelectedItem);
+        }
+
+        private void ResetFilter()
+        {
+            filters.Items.Clear();
         }
     }
 }

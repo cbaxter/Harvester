@@ -89,6 +89,16 @@ namespace Harvester.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unknown filter type.
+        ///Friendly Name:{0}.
+        /// </summary>
+        public static string FilterTypeNotKnown {
+            get {
+                return ResourceManager.GetString("FilterTypeNotKnown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid NamedPipe name.
         ///Example: \\.\pipe\CustomPipeName.
         /// </summary>

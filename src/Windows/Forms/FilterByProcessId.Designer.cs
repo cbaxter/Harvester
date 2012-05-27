@@ -33,7 +33,7 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.mainPandel = new System.Windows.Forms.Panel();
             this.processesGroup = new System.Windows.Forms.GroupBox();
-            this.processesList = new System.Windows.Forms.CheckedListBox();
+            this.processes = new System.Windows.Forms.CheckedListBox();
             this.buttonPanel = new System.Windows.Forms.Panel();
             this.resetButton = new System.Windows.Forms.Button();
             this.mainPandel.SuspendLayout();
@@ -77,7 +77,7 @@
             this.processesGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.processesGroup.Controls.Add(this.processesList);
+            this.processesGroup.Controls.Add(this.processes);
             this.processesGroup.Location = new System.Drawing.Point(12, 12);
             this.processesGroup.Name = "processesGroup";
             this.processesGroup.Padding = new System.Windows.Forms.Padding(6);
@@ -86,17 +86,17 @@
             this.processesGroup.TabStop = false;
             this.processesGroup.Text = "Processes";
             // 
-            // processesList
+            // processes
             // 
-            this.processesList.CheckOnClick = true;
-            this.processesList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.processesList.FormattingEnabled = true;
-            this.processesList.IntegralHeight = false;
-            this.processesList.Location = new System.Drawing.Point(6, 19);
-            this.processesList.Name = "processesList";
-            this.processesList.ScrollAlwaysVisible = true;
-            this.processesList.Size = new System.Drawing.Size(378, 191);
-            this.processesList.TabIndex = 0;
+            this.processes.CheckOnClick = true;
+            this.processes.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.processes.FormattingEnabled = true;
+            this.processes.IntegralHeight = false;
+            this.processes.Location = new System.Drawing.Point(6, 19);
+            this.processes.Name = "processes";
+            this.processes.ScrollAlwaysVisible = true;
+            this.processes.Size = new System.Drawing.Size(378, 191);
+            this.processes.TabIndex = 0;
             // 
             // buttonPanel
             // 
@@ -150,7 +150,7 @@
 
         private System.Windows.Forms.Panel mainPandel;
         private System.Windows.Forms.GroupBox processesGroup;
-        private System.Windows.Forms.CheckedListBox processesList;
+        private System.Windows.Forms.CheckedListBox processes;
         private System.Windows.Forms.Panel buttonPanel;
         private System.Windows.Forms.Button resetButton;
         private System.Windows.Forms.Button cancelButton;

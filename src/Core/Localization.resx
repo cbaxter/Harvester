@@ -127,6 +127,10 @@
     <value>Extended property not defined.
 Property: {0}</value>
   </data>
+  <data name="FilterTypeNotKnown" xml:space="preserve">
+    <value>Unknown filter type.
+Friendly Name:{0}</value>
+  </data>
   <data name="InvalidNamedPiperName" xml:space="preserve">
     <value>Invalid NamedPipe name.
 Example: \\.\pipe\CustomPipeName</value>

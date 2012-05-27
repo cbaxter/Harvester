@@ -69,13 +69,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Filters\FilterBase.cs" />
+    <Compile Include="Filters\FilterDefinition.cs" />
     <Compile Include="Filters\ICreateFilterExpressions.cs" />
     <Compile Include="Filters\IFilterMessages.cs" />
     <Compile Include="Filters\FilterParameters.cs" />
     <Compile Include="Filters\ComparisonFilters.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Filters\FilterExpression.cs" />
+    <Compile Include="Filters\StaticFilterExpression.cs" />
+    <Compile Include="Filters\DynamicFilterExpression.cs" />
     <Compile Include="Filters\StringComparisonFilterBase.cs" />
     <Compile Include="Filters\StringComparisonFilters.cs" />
     <Compile Include="Messaging\IHaveExtendedProperties.cs" />

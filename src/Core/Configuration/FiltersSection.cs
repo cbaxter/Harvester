@@ -32,7 +32,7 @@ namespace Harvester.Core.Configuration
             var filterParameters = new FilterParameters { systemEvent };
             var filters = Filters.Cast<FilterElement>().Select(element => element.GetFilter(filterParameters));
 
-            return new FilterExpression(systemEvent, new AndAlsoFilter(this, filters).CreateExpression(filterParameters));
+            return new StaticFilterExpression(systemEvent, new AndAlsoFilter(this, filters).CreateExpression(filterParameters));
         }
 
         public String GetExtendedProperty(String property)

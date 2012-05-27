@@ -300,7 +300,7 @@
             this.closeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(23, 22);
-            this.closeButton.Text = "Close Harvester";
+            this.closeButton.Text = "Close Application";
             // 
             // separator1
             // 
@@ -323,7 +323,7 @@
             this.colorButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.colorButton.Name = "colorButton";
             this.colorButton.Size = new System.Drawing.Size(23, 22);
-            this.colorButton.Text = "Choose System Event Colors";
+            this.colorButton.Text = "Customize System Event Display";
             // 
             // scrollButton
             // 
@@ -350,7 +350,7 @@
             this.levelFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.levelFilterButton.Name = "levelFilterButton";
             this.levelFilterButton.Size = new System.Drawing.Size(23, 22);
-            this.levelFilterButton.Text = "toolStripButton5";
+            this.levelFilterButton.Text = "Filter by Level";
             // 
             // processFilterButton
             // 
@@ -359,7 +359,7 @@
             this.processFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.processFilterButton.Name = "processFilterButton";
             this.processFilterButton.Size = new System.Drawing.Size(23, 22);
-            this.processFilterButton.Text = "toolStripButton6";
+            this.processFilterButton.Text = "Filter by Process";
             // 
             // applicationFilterButton
             // 
@@ -368,7 +368,7 @@
             this.applicationFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.applicationFilterButton.Name = "applicationFilterButton";
             this.applicationFilterButton.Size = new System.Drawing.Size(23, 22);
-            this.applicationFilterButton.Text = "toolStripButton7";
+            this.applicationFilterButton.Text = "Filter by Application";
             // 
             // sourceFilterButton
             // 
@@ -377,7 +377,7 @@
             this.sourceFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.sourceFilterButton.Name = "sourceFilterButton";
             this.sourceFilterButton.Size = new System.Drawing.Size(23, 22);
-            this.sourceFilterButton.Text = "toolStripButton8";
+            this.sourceFilterButton.Text = "Filter by Source";
             // 
             // userFilterButton
             // 
@@ -386,7 +386,7 @@
             this.userFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.userFilterButton.Name = "userFilterButton";
             this.userFilterButton.Size = new System.Drawing.Size(23, 22);
-            this.userFilterButton.Text = "toolStripButton9";
+            this.userFilterButton.Text = "Filter by Username";
             // 
             // messageFilterButton
             // 
@@ -395,7 +395,7 @@
             this.messageFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.messageFilterButton.Name = "messageFilterButton";
             this.messageFilterButton.Size = new System.Drawing.Size(23, 22);
-            this.messageFilterButton.Text = "toolStripButton10";
+            this.messageFilterButton.Text = "Filter by Message";
             // 
             // separator3
             // 

@@ -17,11 +17,11 @@ using System.Linq.Expressions;
 
 namespace Harvester.Core.Filters
 {
-    internal class FilterExpression : IFilterMessages
+    internal class StaticFilterExpression : IFilterMessages
     {
         private readonly Func<SystemEvent, Boolean> filter;
 
-        public FilterExpression(ParameterExpression systemEvent, Expression body)
+        public StaticFilterExpression(ParameterExpression systemEvent, Expression body)
         {
             Verify.NotNull(systemEvent, "systemEvent");
             Verify.NotNull(body, "body");

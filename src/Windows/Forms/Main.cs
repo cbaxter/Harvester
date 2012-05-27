@@ -6,6 +6,8 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Harvester.Core;
+using Harvester.Core.Configuration;
+using Harvester.Core.Filters;
 using Harvester.Core.Messaging;
 using Harvester.Properties;
 
@@ -29,6 +31,7 @@ namespace Harvester.Forms
     {
 
         private readonly List<ListViewItem> bufferedItems;
+        private readonly DynamicFilterExpression filter;
         private readonly Timer flushBufferedItemsTimer;
 
         public Main()
@@ -85,6 +88,7 @@ namespace Harvester.Forms
 
             // Wire-up system event display.
             systemEvents.SelectedIndexChanged += (sender, e) => HandleEvent(DisplaySelectedSystemEvent);
+            filter = new DynamicFilterExpression(Settings.GetFilter());
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -247,7 +251,7 @@ namespace Harvester.Forms
 
         private void ShowFilterByLevel()
         {
-            using(var form = new FilterByLevel())
+            using (var form = new FilterByLevel(filter))
             {
                 form.ShowDialog(this);
                 levelFilterButton.Checked = form.FilterEnabled;
@@ -256,7 +260,7 @@ namespace Harvester.Forms
 
         private void ShowFilterByProcess()
         {
-            using (var form = new FilterByProcessId())
+            using (var form = new FilterByProcessId(filter))
             {
                 form.ShowDialog(this);
                 processFilterButton.Checked = form.FilterEnabled;
@@ -265,7 +269,7 @@ namespace Harvester.Forms
 
         private void ShowFilterByApplication()
         {
-            using (var form = new FilterByApplication())
+            using (var form = new FilterByApplication(filter))
             {
                 form.ShowDialog(this);
                 applicationFilterButton.Checked = form.FilterEnabled;
@@ -274,28 +278,28 @@ namespace Harvester.Forms
 
         private void ShowFilterBySource()
         {
-            using (var form = new FilterByText("Source"))
+            using (var form = new FilterByText(filter, "Source"))
             {
                 form.ShowDialog(this);
-                applicationFilterButton.Checked = form.FilterEnabled;
+                sourceFilterButton.Checked = form.FilterEnabled;
             }
         }
 
         private void ShowFilterByUsername()
         {
-            using (var form = new FilterByText("Username"))
+            using (var form = new FilterByText(filter, "Username"))
             {
                 form.ShowDialog(this);
-                applicationFilterButton.Checked = form.FilterEnabled;
+                userFilterButton.Checked = form.FilterEnabled;
             }
         }
 
         private void ShowFilterByMessage()
         {
-            using (var form = new FilterByText("Message"))
+            using (var form = new FilterByText(filter, "Message"))
             {
                 form.ShowDialog(this);
-                applicationFilterButton.Checked = form.FilterEnabled;
+                messageFilterButton.Checked = form.FilterEnabled;
             }
         }
 
@@ -355,6 +359,9 @@ namespace Harvester.Forms
 
         void IRenderEvents.Render(SystemEvent e)
         {
+            if (filter.Exclude(e))
+                return;
+
             lock (bufferedItems)
             {
                 bufferedItems.Add(CreateListViewItem(e));

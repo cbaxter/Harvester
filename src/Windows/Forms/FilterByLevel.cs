@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows.Forms;
 using Harvester.Core;
+using Harvester.Core.Filters;
 using Harvester.Properties;
 
 /* Copyright (c) 2012 CBaxter
@@ -21,13 +23,17 @@ namespace Harvester.Forms
 {
     internal partial class FilterByLevel : FormBase
     {
-        private SystemEventLevel Level { get; set; }
-        public Boolean FilterEnabled { get { return Level > SystemEventLevel.Trace; } }
+        private readonly DynamicFilterExpression filter;
 
-        public FilterByLevel()
+        public Boolean FilterEnabled { get { return filter.LevelFilter > SystemEventLevel.Trace; } }
+
+        public FilterByLevel(DynamicFilterExpression dynamicFilter)
         {
+            Verify.NotNull(dynamicFilter, "dynamicFilter");
+
             InitializeComponent();
 
+            filter = dynamicFilter;
             resetButton.Click += (sender, e) => HandleEvent(() => traceLevel.Checked = true);
         }
 
@@ -36,24 +42,46 @@ namespace Harvester.Forms
             base.OnLoad(e);
 
             Font = SystemEventProperties.Default.Font;
+            HandleEvent(PopulateLevel);
+        }
+
+        private void PopulateLevel()
+        {
+            switch (filter.LevelFilter)
+            {
+                case SystemEventLevel.Fatal: fatalLevel.Checked = true; break;
+                case SystemEventLevel.Error: errorLevel.Checked = true; break;
+                case SystemEventLevel.Warning: warningLevel.Checked = true; break;
+                case SystemEventLevel.Information: informationLevel.Checked = true; break;
+                case SystemEventLevel.Debug: debugLevel.Checked = true; break;
+                default: traceLevel.Checked = true; break;
+            }
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
 
+            if (DialogResult == DialogResult.OK)
+                HandleEvent(ApplyFilterChanges);
+        }
+
+        private void ApplyFilterChanges()
+        {
             if (fatalLevel.Checked)
-                Level = SystemEventLevel.Fatal;
+                filter.LevelFilter = SystemEventLevel.Fatal;
             else if (errorLevel.Checked)
-                Level = SystemEventLevel.Error;
+                filter.LevelFilter = SystemEventLevel.Error;
             else if (warningLevel.Checked)
-                Level = SystemEventLevel.Warning;
+                filter.LevelFilter = SystemEventLevel.Warning;
             else if (informationLevel.Checked)
-                Level = SystemEventLevel.Information;
+                filter.LevelFilter = SystemEventLevel.Information;
             else if (debugLevel.Checked)
-                Level = SystemEventLevel.Debug;
+                filter.LevelFilter = SystemEventLevel.Debug;
             else
-                Level = SystemEventLevel.Trace;
+                filter.LevelFilter = SystemEventLevel.Trace;
+
+            filter.Update();
         }
     }
 }

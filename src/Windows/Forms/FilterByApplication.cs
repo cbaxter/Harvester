@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Forms;
+using Harvester.Core;
+using Harvester.Core.Filters;
 using Harvester.Properties;
 
 /* Copyright (c) 2012 CBaxter
@@ -22,12 +25,17 @@ namespace Harvester.Forms
 {
     internal partial class FilterByApplication : FormBase
     {
-        public Boolean FilterEnabled { get { return processesList.CheckedItems.Count > 0; } }
+        private readonly DynamicFilterExpression filter;
 
-        public FilterByApplication()
+        public Boolean FilterEnabled { get { return filter.ApplicationFilters.Any(); } }
+
+        public FilterByApplication(DynamicFilterExpression dynamicFilter)
         {
+            Verify.NotNull(dynamicFilter, "dynamicFilter");
+
             InitializeComponent();
 
+            filter = dynamicFilter;
             resetButton.Click += (sender, e) => HandleEvent(ClearChecked);
         }
 
@@ -36,27 +44,43 @@ namespace Harvester.Forms
             base.OnLoad(e);
 
             Font = SystemEventProperties.Default.Font;
-            PopulateProcessList();
+            HandleEvent(PopulateApplications);
         }
 
-        private void PopulateProcessList()
+        private void PopulateApplications()
         {
-            var processes = new List<String>();
+            var filteredApplications = new HashSet<String>(filter.ApplicationFilters, StringComparer.OrdinalIgnoreCase);
+            var uniqueApplications = new HashSet<String>();
 
-            foreach (var process in Process.GetProcesses())
+            foreach (var process in Process.GetProcesses().OrderBy(process => process.ProcessName))
             {
-                using (process)
-                    processes.Add(process.ProcessName);
-            }
+                if (uniqueApplications.Add(process.ProcessName))
+                    applications.Items.Add(process.ProcessName, filteredApplications.Contains(process.ProcessName));
 
-            processesList.Items.AddRange(processes.Distinct().OrderBy(name => name).Cast<Object>().ToArray());
+                process.Dispose();
+            }
+        }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnClosing(e);
+
+            if (DialogResult == DialogResult.OK)
+                HandleEvent(ApplyFilterChanges);
+        }
+
+        private void ApplyFilterChanges()
+        {
+            filter.ApplicationFilters = applications.CheckedItems.Cast<String>().ToList();
+            filter.Update();
         }
 
         private void ClearChecked()
         {
-            processesList.ClearSelected();
-            foreach (Int32 index in processesList.CheckedIndices)
-                processesList.SetItemChecked(index, false);
+            applications.ClearSelected();
+
+            foreach (Int32 index in applications.CheckedIndices)
+                applications.SetItemChecked(index, false);
         }
     }
 }

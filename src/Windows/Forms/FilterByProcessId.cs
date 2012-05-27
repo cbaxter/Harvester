@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Forms;
+using Harvester.Core;
+using Harvester.Core.Filters;
 using Harvester.Properties;
 
 /* Copyright (c) 2012 CBaxter
@@ -22,12 +25,17 @@ namespace Harvester.Forms
 {
     internal partial class FilterByProcessId : FormBase
     {
-        public Boolean FilterEnabled { get { return processesList.CheckedItems.Count > 0; } }
+        private readonly DynamicFilterExpression filter;
 
-        public FilterByProcessId()
+        public Boolean FilterEnabled { get { return filter.ProcessFilters.Any(); } }
+
+        public FilterByProcessId(DynamicFilterExpression dynamicFilter)
         {
+            Verify.NotNull(dynamicFilter, "dynamicFilter");
+
             InitializeComponent();
 
+            filter = dynamicFilter;
             resetButton.Click += (sender, e) => HandleEvent(ClearChecked);
         }
 
@@ -36,50 +44,55 @@ namespace Harvester.Forms
             base.OnLoad(e);
 
             Font = SystemEventProperties.Default.Font;
-            PopulateProcessList();
+            HandleEvent(PopulateProcesses);
         }
 
-        private void PopulateProcessList()
+        private void PopulateProcesses()
         {
-            var processes = new List<ProcessInfo>();
+            var filteredProcesses = new HashSet<Int32>(filter.ProcessFilters);
 
-            foreach (var process in Process.GetProcesses())
+            foreach (var process in Process.GetProcesses().OrderBy(process => process.ProcessName).ThenBy(process => process.Id))
             {
-                using (process)
-                    processes.Add(new ProcessInfo(process));
+                processes.Items.Add(new ListItem(process.Id, process.ProcessName), filteredProcesses.Contains(process.Id));
+                process.Dispose();
             }
+        }
 
-            processesList.Items.AddRange(processes.OrderBy(info => info).Cast<Object>().ToArray());
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnClosing(e);
+
+            if (DialogResult == DialogResult.OK)
+                HandleEvent(ApplyFilterChanges);
+        }
+
+        private void ApplyFilterChanges()
+        {
+            filter.ProcessFilters = processes.CheckedItems.Cast<ListItem>().Select(info => info.Id).ToList();
+            filter.Update();
         }
 
         private void ClearChecked()
         {
-            processesList.ClearSelected();
-            foreach (Int32 index in processesList.CheckedIndices)
-                processesList.SetItemChecked(index, false);
+            processes.ClearSelected();
+            foreach (Int32 index in processes.CheckedIndices)
+                processes.SetItemChecked(index, false);
         }
 
-        private struct ProcessInfo : IComparable<ProcessInfo>
+        private struct ListItem
         {
-            private readonly Int32 id;
+            public readonly Int32 Id;
             private readonly String name;
 
-            public ProcessInfo(Process process)
+            public ListItem(Int32 processId, String processName)
             {
-                id = process.Id;
-                name = process.ProcessName;
-            }
-
-            public Int32 CompareTo(ProcessInfo other)
-            {
-                var nameCompare = String.Compare(name, other.name, StringComparison.OrdinalIgnoreCase);
-
-                return nameCompare == 0 ? id.CompareTo(other.id) : nameCompare;
+                Id = processId;
+                name = processName ?? "Unknown";
             }
 
             public override String ToString()
             {
-                return String.Format("{0} ({1})", name, id);
+                return String.Format("{0} ({1})", name, Id);
             }
         }
     }

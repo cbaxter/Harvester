@@ -32,12 +32,12 @@
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.mainPandel = new System.Windows.Forms.Panel();
-            this.processesGroup = new System.Windows.Forms.GroupBox();
-            this.processesList = new System.Windows.Forms.CheckedListBox();
+            this.applicationsGroup = new System.Windows.Forms.GroupBox();
+            this.applications = new System.Windows.Forms.CheckedListBox();
             this.buttonPanel = new System.Windows.Forms.Panel();
             this.resetButton = new System.Windows.Forms.Button();
             this.mainPandel.SuspendLayout();
-            this.processesGroup.SuspendLayout();
+            this.applicationsGroup.SuspendLayout();
             this.buttonPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,38 +65,39 @@
             // 
             // mainPandel
             // 
-            this.mainPandel.Controls.Add(this.processesGroup);
+            this.mainPandel.Controls.Add(this.applicationsGroup);
             this.mainPandel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPandel.Location = new System.Drawing.Point(0, 0);
             this.mainPandel.Name = "mainPandel";
             this.mainPandel.Size = new System.Drawing.Size(414, 234);
             this.mainPandel.TabIndex = 0;
             // 
-            // processesGroup
+            // applicationsGroup
             // 
-            this.processesGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.applicationsGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.processesGroup.Controls.Add(this.processesList);
-            this.processesGroup.Location = new System.Drawing.Point(12, 12);
-            this.processesGroup.Name = "processesGroup";
-            this.processesGroup.Padding = new System.Windows.Forms.Padding(6);
-            this.processesGroup.Size = new System.Drawing.Size(390, 216);
-            this.processesGroup.TabIndex = 0;
-            this.processesGroup.TabStop = false;
-            this.processesGroup.Text = "Applications";
+            this.applicationsGroup.Controls.Add(this.applications);
+            this.applicationsGroup.Location = new System.Drawing.Point(12, 12);
+            this.applicationsGroup.Name = "applicationsGroup";
+            this.applicationsGroup.Padding = new System.Windows.Forms.Padding(6);
+            this.applicationsGroup.Size = new System.Drawing.Size(390, 216);
+            this.applicationsGroup.TabIndex = 0;
+            this.applicationsGroup.TabStop = false;
+            this.applicationsGroup.Text = "Applications";
             // 
-            // processesList
+            // applications
             // 
-            this.processesList.CheckOnClick = true;
-            this.processesList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.processesList.FormattingEnabled = true;
-            this.processesList.IntegralHeight = false;
-            this.processesList.Location = new System.Drawing.Point(6, 19);
-            this.processesList.Name = "processesList";
-            this.processesList.ScrollAlwaysVisible = true;
-            this.processesList.Size = new System.Drawing.Size(378, 191);
-            this.processesList.TabIndex = 0;
+            this.applications.CheckOnClick = true;
+            this.applications.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.applications.FormattingEnabled = true;
+            this.applications.IntegralHeight = false;
+            this.applications.Location = new System.Drawing.Point(6, 19);
+            this.applications.Name = "applications";
+            this.applications.ScrollAlwaysVisible = true;
+            this.applications.Size = new System.Drawing.Size(378, 191);
+            this.applications.Sorted = true;
+            this.applications.TabIndex = 0;
             // 
             // buttonPanel
             // 
@@ -140,7 +141,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Filter By Application";
             this.mainPandel.ResumeLayout(false);
-            this.processesGroup.ResumeLayout(false);
+            this.applicationsGroup.ResumeLayout(false);
             this.buttonPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -149,8 +150,8 @@
         #endregion
 
         private System.Windows.Forms.Panel mainPandel;
-        private System.Windows.Forms.GroupBox processesGroup;
-        private System.Windows.Forms.CheckedListBox processesList;
+        private System.Windows.Forms.GroupBox applicationsGroup;
+        private System.Windows.Forms.CheckedListBox applications;
         private System.Windows.Forms.Panel buttonPanel;
         private System.Windows.Forms.Button resetButton;
         private System.Windows.Forms.Button cancelButton;
