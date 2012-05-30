@@ -37,8 +37,8 @@ namespace Harvester.Core.Filters
             negate = negateFilter;
             property = propertyName;
             friendlyName = friendlyFilterName;
-            friendlyDescription = String.Format("{0} \"{1}\" is {2}", friendlyFilterName, value, negateFilter ? "False" : "True");
             extendedProperties = new Dictionary<String, String> { { "property", propertyName }, { "value", value } };
+            friendlyDescription = String.Format("{0} \"{1}\" is {2}", friendlyFilterName, value, negateFilter ? "False" : "True").Trim();
         }
 
         public String GetExtendedProperty(String propertyName)
@@ -52,6 +52,13 @@ namespace Harvester.Core.Filters
         public Boolean HasExtendedProperty(String propertyName)
         {
             return extendedProperties.ContainsKey(propertyName);
+        }
+
+        public static FilterDefinition Create(String propertyName, Object value)
+        {
+            Verify.NotWhitespace(propertyName, "propertyName");
+
+            return new FilterDefinition(propertyName, String.Empty, value.ToString(), false);
         }
 
         public static FilterDefinition ForPositiveExpression(String propertyName, String filterFriendlyName, String value)

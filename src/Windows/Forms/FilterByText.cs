@@ -26,7 +26,7 @@ namespace Harvester.Forms
     {
         private readonly DynamicFilterExpression filter;
         private readonly String property;
-
+        
         public Boolean FilterEnabled
         {
             get { return filter.TextFilters.Any(placeholder => String.Compare(placeholder.Property, property, StringComparison.OrdinalIgnoreCase) == 0); }

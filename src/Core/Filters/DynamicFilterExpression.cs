@@ -83,13 +83,13 @@ namespace Harvester.Core.Filters
             var filters = new List<ICreateFilterExpressions>();
 
             if (LevelFilter > SystemEventLevel.Trace)
-                filters.Add(CreateEqualToFilter("Level", LevelFilter));
+                filters.Add(CreateGreaterThanOrEqualToFilter("Level", LevelFilter));
 
             if (ProcessFilters.Any())
                 filters.Add(new OrElseFilter(FilterDefinition.Empty, ProcessFilters.Select(pid => CreateEqualToFilter("ProcessId", pid))));
 
             if (ApplicationFilters.Any())
-                filters.Add(new OrElseFilter(FilterDefinition.Empty, ProcessFilters.Select(name => CreateEqualToFilter("ProcessName", name))));
+                filters.Add(new OrElseFilter(FilterDefinition.Empty, ApplicationFilters.Select(name => CreateEqualToFilter("ProcessName", name))));
 
             if (SourceFilters.Any())
                 filters.Add(new OrElseFilter(FilterDefinition.Empty, SourceFilters.Select(CreateTextFilter)));
@@ -103,9 +103,14 @@ namespace Harvester.Core.Filters
             dynamicFilter = new StaticFilterExpression(systemEvent, new AndAlsoFilter(FilterDefinition.Empty, filters).CreateExpression(filterParameters));
         }
 
+        private static ICreateFilterExpressions CreateGreaterThanOrEqualToFilter(String propertyName, Object value)
+        {
+            return new GreaterThanOrEqualFilter(FilterDefinition.Create(propertyName, value), NoChildren);
+        }
+
         private static ICreateFilterExpressions CreateEqualToFilter(String propertyName, Object value)
         {
-            return new EqualFilter(FilterDefinition.ForPositiveExpression(propertyName, "Equal To", value.ToString()), NoChildren);
+            return new EqualFilter(FilterDefinition.Create(propertyName, value), NoChildren);
         }
 
         private static ICreateFilterExpressions CreateTextFilter(FilterDefinition definition)
