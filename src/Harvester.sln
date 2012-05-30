@@ -35,6 +35,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraceListener", "TraceListe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows", "Windows\Windows.csproj", "{B2CF0425-5779-499B-9E3D-6B232C8E0AB3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{680AC2F2-0C11-4F0C-BA28-A23A10D4176A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F3FCA665-0DC0-402A-883F-52B5F13B762E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +76,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{74B18130-510E-41AE-AB2D-B1AF44D41E20} = {680AC2F2-0C11-4F0C-BA28-A23A10D4176A}
+		{0ACD7FBA-77ED-4F12-B88E-CA87AE89C74D} = {680AC2F2-0C11-4F0C-BA28-A23A10D4176A}
+		{FD5F597A-58C9-4688-8C23-0AE5C2EE9D53} = {680AC2F2-0C11-4F0C-BA28-A23A10D4176A}
+		{65EDA78B-79C5-4A97-B9F9-A39BF3BD4F94} = {F3FCA665-0DC0-402A-883F-52B5F13B762E}
 	EndGlobalSection
 EndGlobal

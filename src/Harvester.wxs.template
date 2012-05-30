@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Product Id="*"
+             Name="Harvester - Debug Monitor for Trace, Log4Net and NLog"
+             Language="1033" Version="${Version}"
+             Manufacturer="Chris Baxter"
+             UpgradeCode="A8D7542E-1B42-4EE3-A2C9-E1D5CDA30458">
+
+        <Package Id="*"
+                 InstallerVersion="200"
+                 Compressed="yes"
+                 InstallScope="perMachine"
+                 InstallPrivileges="elevated"
+                 Manufacturer="Chris Baxter"
+                 Comments="Copyright 2012 Chris Baxter" />
+
+        <Upgrade Id="2279C147-B1EB-405E-B184-0A37CF026843">
+            <UpgradeVersion OnlyDetect="yes" Minimum="${Version}" Property="NEWERVERSIONDETECTED" IncludeMinimum="no" />
+            <UpgradeVersion OnlyDetect="no" Maximum="${Version}" Property="OLDERVERSIONBEINGUPGRADED" IncludeMaximum="no" />
+        </Upgrade>
+
+        <PropertyRef Id="NETFRAMEWORK40CLIENT"/>
+        <Condition Message='This setup requires the .NET Framework 4.0 client profile installed.'>
+            <![CDATA[Installed OR NETFRAMEWORK40CLIENT]]>
+        </Condition>
+
+        <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFilesFolder">
+                <Directory Id="CompanyFolder" Name="CBaxter">
+                    <Directory Id="INSTALLLOCATION" Name="Harvester">
+                        <Directory Id="GAC" Name="HarvesterGac" />
+                    </Directory>
+                </Directory>
+            </Directory>
+
+            <Directory Id="ProgramMenuFolder" Name="Programs">
+                <Directory Id="ProgramMenuDir" Name="Harvester" />
+            </Directory>
+
+            <Directory Id="DesktopFolder" Name="Desktop" />
+        </Directory>
+
+        <DirectoryRef Id="INSTALLLOCATION">
+            <!-- Harvester Windows Client-->
+            <Component Id="Harvester" Guid="209C517A-8A53-42EB-AF0C-E877555F463B">
+                <File Id="HarvesterEXE" Name="Harvester.exe" DiskId="1" Source="Windows\Harvester.exe" KeyPath="yes">
+                    <Shortcut Id="HarvesterSTARTMENU" Directory="ProgramMenuDir" Name="Harvester" WorkingDirectory="INSTALLDIR" Icon="Harvester.exe" IconIndex="0" Advertise="yes" />
+                    <Shortcut Id="HarvesterDESKTOP" Directory="DesktopFolder" Name="Harvester" WorkingDirectory="INSTALLDIR" Icon="Harvester.exe" IconIndex="0" Advertise="yes" />
+                </File>
+            </Component>
+            <Component Id="HarvesterConfig" Guid="0096FD2D-8AEE-4C33-8DDF-012A868A5BC8">
+                <File Id="HarvesterCONFIG" Name="Harvester.exe.config" DiskId="1" Source="Windows\Harvester.exe.config" KeyPath="yes" />
+            </Component>
+            <Component Id="HarvesterCore" Guid="167396AC-7D65-401B-83A2-4EE3ED71BDD0">
+                <File Id="HarvesterCoreDLL" Name="Harvester.Core.dll" DiskId="1" Source="Windows\Harvester.Core.dll" KeyPath="yes" />
+            </Component>
+
+            <!-- Harvester Console Client-->
+            <Component Id="HarvesterConsole" Guid="63230724-82B6-440A-BBD7-49F78A0EBBF9">
+                <File Id="HarvesterConsoleEXE" Name="Harvester.Console.exe" DiskId="1" Source="Console\Harvester.Console.exe" KeyPath="yes">
+                    <Shortcut Id="HarvesterConsoleSTARTMENU" Directory="ProgramMenuDir" Name="Harvester (Console)" WorkingDirectory="INSTALLDIR" Icon="Harvester.Console.exe" IconIndex="0" Advertise="yes" />
+                    <Shortcut Id="HarvesterConsoleDESKTOP" Directory="DesktopFolder" Name="Harvester (Console)" WorkingDirectory="INSTALLDIR" Icon="Harvester.Console.exe" IconIndex="0" Advertise="yes" />
+                </File>
+            </Component>
+            <Component Id="HarvesterConsoleConfig" Guid="8E6957E4-2CA6-4E69-AA48-C346BAA53CE6">
+                <File Id="HarvesterConsoleCONFIG" Name="Harvester.Console.exe.config" DiskId="1" Source="Console\Harvester.Console.exe.config" KeyPath="yes" />
+            </Component>
+
+            <!-- Harvester NLog Integration-->
+            <Component Id="HarvesterIntegrationNLog" Guid="28423B87-D324-4E26-A49F-10429154905E">
+                <File Id="HarvesterIntegrationNLogDLL" Name="Harvester.Integration.NLog.dll" DiskId="1" Source="NLog\Harvester.Integration.NLog.dll" KeyPath="yes" />
+            </Component>
+
+            <!-- Harvester Log4Net Integration-->
+            <Component Id="HarvesterIntegrationLog4Net" Guid="72E86744-0FBA-429D-88B2-3E5ECE2C8378">
+                <File Id="HarvesterIntegrationLog4NetDLL" Name="Harvester.Integration.Log4Net.dll" DiskId="1" Source="Log4Net\Harvester.Integration.Log4Net.dll" KeyPath="yes" />
+            </Component>
+
+            <!-- Harvester TraceListener Integration-->
+            <Component Id="HarvesterIntegrationTrace" Guid="C3B38D7C-4DA1-49F7-BA28-A7648597C651">
+                <File Id="HarvesterIntegrationTraceDLL" Name="Harvester.Integration.TraceListener.dll" DiskId="1" Source="TraceListener\Harvester.Integration.TraceListener.dll" KeyPath="yes" />
+            </Component>
+        </DirectoryRef>
+
+        <DirectoryRef Id="GAC">
+            <Component Id="HarvesterCoreGAC" Guid="45919775-795A-49D6-939F-89875443235F">
+                <File Id="HarvesterCoreDLLGAC" Name="Harvester.Core.dll" DiskId="1" Source="Windows\Harvester.Core.dll" KeyPath="yes" Assembly=".net" />
+            </Component>
+
+            <Component Id="HarvesterIntegrationNLogGAC" Guid="6B15DBCB-1A29-49EC-9FA4-F8BF15B536C0">
+                <File Id="HarvesterIntegrationNLogDLLGAC" Name="Harvester.Integration.NLog.dll" DiskId="1" Source="NLog\Harvester.Integration.NLog.dll" KeyPath="yes" Assembly=".net" />
+            </Component>
+
+            <Component Id="HarvesterIntegrationLog4NetGAC" Guid="60B313D8-8E85-4FEA-ACE9-DE8FB727FFC7">
+                <File Id="HarvesterIntegrationLog4NetDLLGAC" Name="Harvester.Integration.Log4Net.dll" DiskId="1" Source="Log4Net\Harvester.Integration.Log4Net.dll" KeyPath="yes" Assembly=".net" />
+            </Component>
+
+            <Component Id="HarvesterIntegrationTraceGAC" Guid="C102E6A3-BCC5-4286-9361-719E5D3196A4">
+                <File Id="HarvesterIntegrationTraceDLLGAC" Name="Harvester.Integration.TraceListener.dll" DiskId="1" Source="TraceListener\Harvester.Integration.TraceListener.dll" KeyPath="yes" Assembly=".net" />
+            </Component>
+        </DirectoryRef>
+
+        <DirectoryRef Id="ProgramMenuDir">
+            <Component Id="ProgramMenuDir" Guid="3BA52519-DB88-4AC7-A727-637C810B0220">
+                <RemoveFolder Id="ProgramMenuDir" On="uninstall" />
+                <RegistryValue Root="HKCU" Key="Software\CBaxter\Harvester" Type="string" Value="" KeyPath="yes" />
+            </Component>
+        </DirectoryRef>
+
+        <Feature Id="FullFeature" Title="Harvester" Description="Debug Monitor for Log4Net and NLog." Display="expand" Level="1" ConfigurableDirectory="INSTALLLOCATION">
+            <ComponentRef Id='ProgramMenuDir' />
+            <ComponentRef Id="HarvesterCore" />
+
+            <Feature Id="RichClientFeature" Title="Rich Client" Description="Monitor system debug output in rich Windows client.
+
+Supports full filter/search capabilities." Level="1">
+                <ComponentRef Id="Harvester" />
+                <ComponentRef Id="HarvesterConfig" />
+            </Feature>
+
+            <Feature Id="ConsoleFeature" Title="Console Window" Description="Monitor system debug output in colorized Console client.
+
+Supports full filter/search capabilities." Level="1">
+                <ComponentRef Id="HarvesterConsole" />
+                <ComponentRef Id="HarvesterConsoleConfig" />
+            </Feature>
+
+            <Feature Id="IntegrationFeature" Title=".NET 4 Debugging" Description="Install this feature if you want to use Harvester while debugging a .NET 4 application." Level="1" AllowAdvertise="no">
+                <ComponentRef Id="HarvesterCoreGAC" />
+
+                <Feature Id="Log4NetIntegrationFeature" Title="Log4Net Integration" Description="Log4Net 1.2.11 Integration.
+               
+Intalled in to GAC." Level="1000">
+                    <ComponentRef Id="HarvesterIntegrationLog4Net" />
+                    <ComponentRef Id="HarvesterIntegrationLog4NetGAC" />
+                </Feature>
+
+                <Feature Id="NLogIntegrationFeature" Title="NLog Integration" Description="NLog 2.0.0 Integration.
+
+Intalled in to GAC." Level="1000">
+                    <ComponentRef Id="HarvesterIntegrationNLog" />
+                    <ComponentRef Id="HarvesterIntegrationNLogGAC" />
+                </Feature>
+
+                <Feature Id="TraceIntegrationFeature" Title="Trace Integration" Description="System.Diagnostic.Trace Integration.
+
+Intalled in to GAC." Level="1">
+                    <ComponentRef Id="HarvesterIntegrationTrace" />
+                    <ComponentRef Id="HarvesterIntegrationTraceGAC" />
+                </Feature>
+            </Feature>
+        </Feature>
+
+
+        <Icon Id="App.ico" SourceFile="Windows\Harvester.exe"/>
+        <Icon Id="Harvester.exe" SourceFile="Windows\Harvester.exe" />
+        <Icon Id="Harvester.Console.exe" SourceFile="Console\Harvester.Console.exe" />
+
+        <Property Id="ARPPRODUCTICON" Value="App.ico" />
+        <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
+
+        <InstallExecuteSequence>
+            <RemoveExistingProducts After="InstallInitialize" />
+        </InstallExecuteSequence>
+
+        <UIRef Id="WixUI_FeatureTree" />
+        <UIRef Id="WixUI_ErrorProgressText" />
+
+        <WixVariable Id="WixUIBannerBmp" Value="..\resources\WiX\WiXBanner.bmp" />
+        <WixVariable Id="WixUIDialogBmp" Value="..\resources\WiX\WiXDialog.bmp" />
+        <WixVariable Id="WixUILicenseRtf" Value="..\resources\WiX\License.rtf" />
+
+    </Product>
+</Wix>

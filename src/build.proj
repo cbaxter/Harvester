@@ -10,6 +10,7 @@
         <MinorVersion Condition="'$(MinorVersion)' == ''">0</MinorVersion>
         <RevisionNumber Condition="'$(RevisionNumber)' == ''">0</RevisionNumber>
         <Commit Condition="'$(Commit)' == ''">Unknown</Commit>
+        <BuildOutput>.artifacts</BuildOutput>
     </PropertyGroup>
 
     <Target Name="Clean">
@@ -19,6 +20,7 @@
         </ItemGroup>
 
         <Delete Files="@(CleanFiles)" />
+        <RemoveDir Directories="$(BuildOutputDir)"/>
     </Target>
 
     <Target Name="StampVersionInfo">
@@ -43,15 +45,16 @@
             <Output TaskParameter="Value" PropertyName="FileVersion" />
         </CreateProperty>
 
-        <AssemblyInfo CodeLanguage="CS" 
-                      OutputFile=".shared\VersionInfo.cs" 
-                      AssemblyVersion="$(AssemblyVersion)" 
+        <AssemblyInfo CodeLanguage="CS"
+                      OutputFile=".shared\VersionInfo.cs"
+                      AssemblyVersion="$(AssemblyVersion)"
                       AssemblyFileVersion="$(FileVersion)"
-                      AssemblyConfiguration="$(Configuration)" 
+                      AssemblyConfiguration="$(Configuration)"
                       AssemblyInformationalVersion="$(Commit)" />
     </Target>
-    
+
     <Target Name="Build" DependsOnTargets="Clean;StampVersionInfo">
+        <MakeDir Directories="$(BuildOutput)" />
         <MSBuild Projects="Harvester.sln" Targets="Build" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
     </Target>
 
@@ -63,8 +66,98 @@
         <xunit Assembly="%(TestProjects.Identity)" />
     </Target>
 
-    <Target Name="Package" DependsOnTargets="Test">
-        <!-- Placeholder -->
+    <Target Name="PackageConsole">
+        <PropertyGroup>
+            <ConsoleWorkingDir>Console\bin\$(Configuration)</ConsoleWorkingDir>
+        </PropertyGroup>
+
+        <ItemGroup>
+            <ConsoleFiles Include="$(ConsoleWorkingDir)\Harvester.Core.dll" />
+            <ConsoleFiles Include="$(ConsoleWorkingDir)\Harvester.Console.exe" />
+            <ConsoleFiles Include="$(ConsoleWorkingDir)\Harvester.Console.exe.config" />
+        </ItemGroup>
+
+        <Zip Files="@(ConsoleFiles)" WorkingDirectory="$(ConsoleWorkingDir)" ZipFileName="$(BuildOutput)\Harvester.Console.zip" />
+        <Copy SourceFiles="@(ConsoleFiles)" DestinationFolder="$(BuildOutput)\Console" />
+    </Target>
+
+    <Target Name="PackageWindows">
+        <PropertyGroup>
+            <WindowsWorkingDir>Windows\bin\$(Configuration)</WindowsWorkingDir>
+        </PropertyGroup>
+
+        <ItemGroup>
+            <WindowsFiles Include="$(WindowsWorkingDir)\Harvester.Core.dll" />
+            <WindowsFiles Include="$(WindowsWorkingDir)\Harvester.exe" />
+            <WindowsFiles Include="$(WindowsWorkingDir)\Harvester.exe.config" />
+        </ItemGroup>
+
+        <Zip Files="@(WindowsFiles)" WorkingDirectory="$(WindowsWorkingDir)" ZipFileName="$(BuildOutput)\Harvester.zip" />
+        <Copy SourceFiles="@(WindowsFiles)" DestinationFolder="$(BuildOutput)\Windows" />
+    </Target>
+
+    <Target Name="PackageLog4NetIntegration">
+        <PropertyGroup>
+            <Log4NetIntegrationDir>Log4Net\bin\$(Configuration)</Log4NetIntegrationDir>
+        </PropertyGroup>
+
+        <ItemGroup>
+            <Log4NetIntegrationFiles Include="$(Log4NetIntegrationDir)\Log4Net.dll" />
+            <Log4NetIntegrationFiles Include="$(Log4NetIntegrationDir)\Harvester.Integration.Log4Net.dll" />
+        </ItemGroup>
+
+        <Zip Files="@(Log4NetIntegrationFiles)" WorkingDirectory="$(Log4NetIntegrationDir)" ZipFileName="$(BuildOutput)\Harvester.Integration.Log4Net.zip" />
+        <Copy SourceFiles="@(Log4NetIntegrationFiles)" DestinationFolder="$(BuildOutput)\Log4Net" />
+    </Target>
+
+    <Target Name="PackageNLogIntegration">
+        <PropertyGroup>
+            <NLogIntegrationDir>NLog\bin\$(Configuration)</NLogIntegrationDir>
+        </PropertyGroup>
+
+        <ItemGroup>
+            <NLogIntegrationFiles Include="$(NLogIntegrationDir)\NLog.dll" />
+            <NLogIntegrationFiles Include="$(NLogIntegrationDir)\Harvester.Integration.NLog.dll" />
+        </ItemGroup>
+
+        <Zip Files="@(NLogIntegrationFiles)" WorkingDirectory="$(NLogIntegrationDir)" ZipFileName="$(BuildOutput)\Harvester.Integration.NLog.zip" />
+        <Copy SourceFiles="@(NLogIntegrationFiles)" DestinationFolder="$(BuildOutput)\NLog" />
+    </Target>
+
+    <Target Name="PackageTraceListenerIntegration">
+        <PropertyGroup>
+            <TraceIntegrationDir>TraceListener\bin\$(Configuration)</TraceIntegrationDir>
+        </PropertyGroup>
+
+        <ItemGroup>
+            <TraceIntegrationFiles Include="$(TraceIntegrationDir)\Harvester.Integration.TraceListener.dll" />
+        </ItemGroup>
+
+        <Zip Files="@(TraceIntegrationFiles)" WorkingDirectory="$(TraceIntegrationDir)" ZipFileName="$(BuildOutput)\Harvester.Integration.TraceListener.zip" />
+        <Copy SourceFiles="@(TraceIntegrationFiles)" DestinationFolder="$(BuildOutput)\TraceListener" />
+    </Target>
+
+    <Target Name="PackageSetup">
+        <ItemGroup>
+            <Tokens Include="Version">
+                <ReplacementValue>$(AssemblyVersion)</ReplacementValue>
+            </Tokens>
+        </ItemGroup>
+
+        <TemplateFile Template="Harvester.wxs.template" OutputFileName="$(BuildOutput)\Harvester.wxs" Tokens="@(Tokens)" />
+        <Exec Command="..\Lib\WiX\candle.exe -out $(BuildOutput)\Harvester.wixobj $(BuildOutput)\Harvester.wxs" />
+        <Exec Command="..\Lib\WiX\light.exe -ext WixUIExtension -ext WixNetFxExtension -out $(BuildOutput)\Harvester.msi $(BuildOutput)\Harvester.wixobj" />
+    </Target>
+
+    <Target Name="Package" DependsOnTargets="Build">
+        <MakeDir Directories="$(BuildOutputDir)"/>
+
+        <CallTarget Targets="PackageConsole" />
+        <CallTarget Targets="PackageWindows" />
+        <CallTarget Targets="PackageLog4NetIntegration" />
+        <CallTarget Targets="PackageNLogIntegration" />
+        <CallTarget Targets="PackageTraceListenerIntegration" />
+        <CallTarget Targets="PackageSetup" />
     </Target>
 
 </Project>
