@@ -21,6 +21,10 @@ namespace Harvester.Core.Filters
 {
     internal abstract class StringComparisonFilterBase : ComparisonFilterBase
     {
+        private static readonly IEnumerable<Type> StringType = new[] { typeof(String) };
+
+        protected override IEnumerable<Type> SupportedTypes { get { return StringType; } }
+
         protected StringComparisonFilterBase(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children, Func<String, String, Boolean> comparer)
             : base(extendedProperties, children, (lhs, rhs) => CreateExpression(lhs, rhs, comparer))
         { }

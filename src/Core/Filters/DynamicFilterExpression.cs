@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.Serialization;
 using FilterActivator = System.Func<Harvester.Core.Messaging.IHaveExtendedProperties, Harvester.Core.Filters.ICreateFilterExpressions>;
 
 namespace Harvester.Core.Filters
@@ -13,7 +12,7 @@ namespace Harvester.Core.Filters
         private static readonly IEnumerable<FilterDefinition> EmptyDefinitions = Enumerable.Empty<FilterDefinition>();
         private static readonly IEnumerable<String> EmptyApplications = Enumerable.Empty<String>();
         private static readonly IEnumerable<Int32> EmptyProcesses = Enumerable.Empty<Int32>();
-        private static readonly IDictionary<String, FilterActivator> KnownFilters;
+        private static readonly IDictionary<String, FilterActivator> FilterActivators;
         private static readonly HashSet<String> Properties;
 
         private readonly ParameterExpression systemEvent = Expression.Parameter(typeof(SystemEvent), "e");
@@ -36,12 +35,12 @@ namespace Harvester.Core.Filters
         static DynamicFilterExpression()
         {
             Properties = new HashSet<String>(typeof(SystemEvent).GetProperties().Select(property => property.Name));
-            KnownFilters = CoreAssembly.Reference
-                                       .GetTypes()
-                                       .Where(type => !type.IsAbstract && type.IsClass && typeof(ICreateFilterExpressions).IsAssignableFrom(type))
-                                       .Select(type => (ICreateFilterExpressions)FormatterServices.GetUninitializedObject(type))
-                                       .Where(filter => !filter.CompositeExpression)
-                                       .ToDictionary(filter => filter.FriendlyName, filter => CreateFilterActivator(filter.GetType()));
+            FilterActivators = CoreAssembly.Reference
+                                           .GetTypes()
+                                           .Where(type => !type.IsAbstract && type.IsClass && typeof(ICreateFilterExpressions).IsAssignableFrom(type))
+                                           .Select(type => (ICreateFilterExpressions)Activator.CreateInstance(type, FilterDefinition.Empty, NoChildren))
+                                           .Where(filter => !filter.CompositeExpression)
+                                           .ToDictionary(filter => filter.FriendlyName, filter => CreateFilterActivator(filter.GetType()));
         }
 
         public DynamicFilterExpression(IFilterMessages filter)
@@ -63,19 +62,27 @@ namespace Harvester.Core.Filters
             return String.Compare(propertyName, definition.Property, StringComparison.OrdinalIgnoreCase) == 0;
         }
 
-        public IEnumerable<String> GetFriendlyFilterNames()
+        public IEnumerable<String> GetSupportedFilterNames(Type type)
         {
-            return KnownFilters.Keys;
+            Verify.NotNull(type, "type");
+
+            return FilterActivators.Values
+                                   .Select(activator => activator.Invoke(FilterDefinition.Empty))
+                                   .Where(filter => !filter.CompositeExpression && filter.IsTypeSupported(type))
+                                   .Select(filter => filter.FriendlyName)
+                                   .ToList();
         }
 
         public Boolean HasProperty(String propertyName)
         {
+            Verify.NotWhitespace(propertyName, "propertyName");
+
             return Properties.Contains(propertyName);
         }
 
-        public bool Exclude(SystemEvent e)
+        public Boolean Exclude(SystemEvent e)
         {
-            return staticFilter.Exclude(e) || dynamicFilter != null && dynamicFilter.Exclude(e);
+            return e == null || staticFilter.Exclude(e) || dynamicFilter != null && dynamicFilter.Exclude(e);
         }
 
         public void Update()
@@ -116,7 +123,7 @@ namespace Harvester.Core.Filters
         private static ICreateFilterExpressions CreateTextFilter(FilterDefinition definition)
         {
             FilterActivator activator;
-            if (!KnownFilters.TryGetValue(definition.FriendlyName, out activator))
+            if (!FilterActivators.TryGetValue(definition.FriendlyName, out activator))
                 throw new ArgumentException(String.Format(Localization.FilterTypeNotKnown, definition.FriendlyName), "definition");
 
             var expressionBuilder = activator.Invoke(definition);

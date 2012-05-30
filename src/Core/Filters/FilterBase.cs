@@ -22,18 +22,22 @@ namespace Harvester.Core.Filters
 {
     public abstract class FilterBase : ICreateFilterExpressions
     {
-        private readonly IHaveExtendedProperties extendedProperties;
         private readonly IEnumerable<ICreateFilterExpressions> children;
-
-        public IHaveExtendedProperties ExtendedProperties { get { return extendedProperties; } }
-        public IEnumerable<ICreateFilterExpressions> Children { get { return children; } }
-        public abstract Boolean CompositeExpression { get; }
+        private readonly IHaveExtendedProperties extendedProperties;
+        private readonly HashSet<Type> supportedTypes;
+        
         public abstract String FriendlyName { get; }
+        public abstract Boolean CompositeExpression { get; }
+        public IEnumerable<ICreateFilterExpressions> Children { get { return children; } }
+        public IHaveExtendedProperties ExtendedProperties { get { return extendedProperties; } }
+        protected virtual IEnumerable<Type> UnsupportedTypes { get { return Types.Empty; } }
+        protected virtual IEnumerable<Type> SupportedTypes { get { return Types.BuiltIn; } }
 
-        protected  FilterBase(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
+        protected FilterBase(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
         {
             Verify.NotNull(extendedProperties, "extendedProperties");
 
+            this.supportedTypes = GetSupportedTypes();
             this.extendedProperties = extendedProperties;
             this.children = children ?? Enumerable.Empty<ICreateFilterExpressions>();
         }
@@ -45,6 +49,16 @@ namespace Harvester.Core.Filters
             return BuildExpression(parameters);
         }
 
+        public Boolean IsTypeSupported(Type type)
+        {
+            return supportedTypes.Contains(type);
+        }
+
+        private HashSet<Type> GetSupportedTypes()
+        {
+            return new HashSet<Type>(SupportedTypes.Except(UnsupportedTypes));
+        }
+        
         protected abstract Expression BuildExpression(FilterParameters parameters);
     }
 }

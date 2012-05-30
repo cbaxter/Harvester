@@ -61,8 +61,8 @@ namespace Harvester.Forms
 
         private void PopulateFilters()
         {
-            foreach (var knownFilter in filter.GetFriendlyFilterNames())
-                filterType.Items.Add(knownFilter);
+            foreach (var filterName in filter.GetSupportedFilterNames(typeof(String)))
+                filterType.Items.Add(filterName);
 
             foreach (var placeholder in filter.TextFilters.Where(placeholder => String.Compare(placeholder.Property, property, StringComparison.OrdinalIgnoreCase) == 0))
                 filters.Items.Add(placeholder);
@@ -87,14 +87,14 @@ namespace Harvester.Forms
 
         private void AddFilter()
         {
-            var friendlyFilterName = filterType.SelectedItem as String;
+            var filterName = filterType.SelectedItem as String;
             var text = filterText.Text;
 
-            if (!String.IsNullOrWhiteSpace(friendlyFilterName) && !String.IsNullOrWhiteSpace(text))
+            if (!String.IsNullOrWhiteSpace(filterName) && !String.IsNullOrWhiteSpace(text))
             {
                 var filterPlaceholder = negateFilter.Checked
-                                            ? FilterDefinition.ForNegativeExpression(property, friendlyFilterName, text)
-                                            : FilterDefinition.ForPositiveExpression(property, friendlyFilterName, text);
+                                            ? FilterDefinition.ForNegativeExpression(property, filterName, text)
+                                            : FilterDefinition.ForPositiveExpression(property, filterName, text);
 
                 filters.Items.Add(filterPlaceholder);
             }

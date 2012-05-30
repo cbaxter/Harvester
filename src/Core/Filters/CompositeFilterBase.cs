@@ -24,7 +24,8 @@ namespace Harvester.Core.Filters
     {
         private readonly Func<Expression, Expression, BinaryExpression> expressionBuilder;
 
-        public override bool CompositeExpression { get { return true; } }
+        public override Boolean CompositeExpression { get { return true; } }
+        protected override IEnumerable<Type> SupportedTypes { get { return Types.Empty; } }
 
         protected CompositeFilterBase(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children, Func<Expression, Expression, BinaryExpression> expressionBuilder)
             : base(extendedProperties, children)

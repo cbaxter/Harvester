@@ -21,6 +21,8 @@ namespace Harvester.Core.Filters
     {
         String FriendlyName { get; }
         Boolean CompositeExpression { get; }
+
+        Boolean IsTypeSupported(Type type);
         Expression CreateExpression(FilterParameters parameters);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using Harvester.Core.Messaging;
 
@@ -31,6 +32,7 @@ namespace Harvester.Core.Filters
     internal class GreaterThanFilter : ComparisonFilterBase
     {
         public override String FriendlyName { get { return "Greater Than"; } }
+        protected override IEnumerable<Type> SupportedTypes { get { return Types.Comparable; } }
 
         public GreaterThanFilter(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
             : base(extendedProperties, children, Expression.GreaterThan)
@@ -40,6 +42,7 @@ namespace Harvester.Core.Filters
     internal class GreaterThanOrEqualFilter : ComparisonFilterBase
     {
         public override String FriendlyName { get { return "Greater Than Or Equal To"; } }
+        protected override IEnumerable<Type> SupportedTypes { get { return Types.Comparable; } }
 
         public GreaterThanOrEqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
             : base(extendedProperties, children, Expression.GreaterThanOrEqual)
@@ -49,6 +52,7 @@ namespace Harvester.Core.Filters
     internal class LessThanFilter : ComparisonFilterBase
     {
         public override String FriendlyName { get { return "Less Than"; } }
+        protected override IEnumerable<Type> SupportedTypes { get { return Types.Comparable; } }
 
         public LessThanFilter(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
             : base(extendedProperties, children, Expression.LessThan)
@@ -58,6 +62,7 @@ namespace Harvester.Core.Filters
     internal class LessThanOrEqualFilter : ComparisonFilterBase
     {
         public override String FriendlyName { get { return "Less Than Or Equal To"; } }
+        protected override IEnumerable<Type> SupportedTypes { get { return Types.Comparable; } }
 
         public LessThanOrEqualFilter(IHaveExtendedProperties extendedProperties, IEnumerable<ICreateFilterExpressions> children)
             : base(extendedProperties, children, Expression.LessThanOrEqual)

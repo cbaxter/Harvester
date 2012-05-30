@@ -85,7 +85,7 @@
     <Compile Include="Filters\UsingDynamicFilterExpression\WhenBuildingTextFilters.cs" />
     <Compile Include="Filters\UsingDynamicFilterExpression\WhenBuildingUsernameFilters.cs" />
     <Compile Include="Filters\UsingDynamicFilterExpression\WhenCheckingHasProperty.cs" />
-    <Compile Include="Filters\UsingDynamicFilterExpression\WhenGettingFriendlyFilterNames.cs" />
+    <Compile Include="Filters\UsingDynamicFilterExpression\WhenGettingSupportedFilterNames.cs" />
     <Compile Include="Filters\UsingDynamicFilterExpression\WithStaticFilterDefinition.cs" />
     <Compile Include="Filters\UsingFilterDefinition\WhenCreatingNegativeExpression.cs" />
     <Compile Include="Filters\UsingFilterDefinition\WhenCreatingPositiveExpression.cs" />

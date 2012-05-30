@@ -53,6 +53,7 @@
     <Compile Include="..\.shared\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Types.cs" />
     <Compile Include="Configuration\ExtendableConfigurationElement.cs" />
     <Compile Include="Configuration\FiltersSection.cs">
       <SubType>Code</SubType>
