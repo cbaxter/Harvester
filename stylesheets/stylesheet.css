@@ -149,13 +149,6 @@ img {
   max-width: 739px;
   padding: 5px;
   margin: 10px 0 10px 0;
-  border: 1px solid #ebebeb;
-
-  box-shadow: 0 0 5px #ebebeb;
-  -webkit-box-shadow: 0 0 5px #ebebeb;
-  -moz-box-shadow: 0 0 5px #ebebeb;
-  -o-box-shadow: 0 0 5px #ebebeb;
-  -ms-box-shadow: 0 0 5px #ebebeb;
 }
 
 pre, code {
@@ -169,9 +162,6 @@ pre, code {
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
-
-
-
 }
 
 pre {
@@ -257,11 +247,6 @@ form {
   padding: 20px;
 }
 
-img {
-  width: 100%;
-  max-width: 100%;
-}
-
 /*******************************************************************************
 Full-Width Styles
 *******************************************************************************/
@@ -272,7 +257,7 @@ Full-Width Styles
 
 .inner {
   position: relative;
-  max-width: 640px;
+  max-width: 960px;
   padding: 20px 10px;
   margin: 0 auto;
 }
@@ -304,6 +289,14 @@ Full-Width Styles
 #header_wrap .inner {
   padding: 50px 10px 30px 10px;
 }
+
+#project_logo {
+  position: absolute;
+  left: -120px;
+  height: 100px;  
+  width: 100px;
+}
+
 
 #project_title {
   margin: 0;
@@ -341,7 +334,7 @@ Full-Width Styles
   background: url(../images/sprite_download.png) no-repeat bottom left;
 }
 
-.tar_download_link {
+.msi_download_link {
   display: block;
   float: right;
   width: 90px;
@@ -356,7 +349,7 @@ Full-Width Styles
   background: url(../images/sprite_download.png) no-repeat top left;
 }
 
-.tar_download_link:hover {
+.msi_download_link:hover {
   background: url(../images/sprite_download.png) no-repeat top right;
 }
 
