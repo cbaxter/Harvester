@@ -62,6 +62,7 @@ body {
   font-size: 16px;
   font-family: 'Myriad Pro', Calibri, Helvetica, Arial, sans-serif;
   line-height: 1.5;
+  overflow-y:scroll;
   -webkit-font-smoothing: antialiased;
 }
 
