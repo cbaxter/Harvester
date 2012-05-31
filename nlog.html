@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Harvester : Debug Viewer for Trace, NLog &amp; Log4Net " />
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <title>Harvester - NLog Configuration</title>
+</head>
+<body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <nav id="nav_banner">
+            <ul>
+              <li><a href="http://cbaxter.github.com/Harvester">Home</a></li>
+              <li><a href="http://cbaxter.github.com/Harvester/documentation.html">Documentation</a></li>
+              <li><a href="https://github.com/cbaxter/Harvester/downloads">Downloads</a></li>
+              <li><a href="https://github.com/cbaxter/Harvester/issues?state=open">Issues</a></li>
+              <li><a href="http://harvester.codeplex.com/discussions">Forums</a></li>
+              <li><a href="https://github.com/cbaxter/Harvester">GitHub</a></li>
+            </ul>
+          </nav>
+           
+          <img id="project_logo" src="images/harvester_logo.png" alt="Harvester" />
+
+          <h1 id="project_title">Harvester</h1>
+          <h2 id="project_tagline">Debug Viewer for Trace, NLog &amp; Log4Net </h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/downloads/cbaxter/Harvester/Harvester.zip">Download this application as a .zip file</a>
+              <a class="msi_download_link" href="https://github.com/downloads/cbaxter/Harvester/Harvester.msi">Download this application as a .msi file</a>
+            </section>
+        </header>
+    </div>
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+        <h3>Documentation - Log4Net HarvesterAppender</h3>
+       
+        <p>Integrating your application with Harvester is as easy as adding an additional appender to the Log4Net configuration section.</P>
+        
+        <h5>OutputDebugString Target</h5>
+
+        <p><strong>Recommended for Microsoft .NET 3.5 or earlier applications!</strong></p>
+
+        <p>NLog's built in OutputDebugString target is a viable option to push debug messages to Harvester. The OutputDebugString target will work with
+        Microsoft .NET 3.5 and earlier applications regardless of whether or not you are debugging within Visual Studio. However, starting with Microsoft
+        .NET 4.0 and Visual Studio 2010, a native debugger is always attached when debugging a managed application in Visual Studio. As only a single 
+        native debugger may capture OutputDebugString messages, Harvester will not be able to capture log messages if debugging your application in Visual 
+        Studio 2012.</p>
+        
+        <p><strong>In order to capture log messages for a Microsoft .NET 4.0 or latter application while debugging use the Harvester Target documented below.</strong></p>
+
+        <pre><code>&lt;nlog xmlns=&quot;http://www.nlog-project.org/schemas/NLog.xsd&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+    &lt;targets&gt;
+        &lt;target xsi:type=&quot;OutputDebugString&quot; name=&quot;DbWin&quot; layout=&quot;Log4JXmlEventLayout&quot;&gt;
+            &lt;layout xsi:type=&quot;Log4JXmlEventLayout&quot;&gt;
+            &lt;/layout&gt;
+        &lt;/target&gt;
+    &lt;/targets&gt;
+    &lt;rules&gt;
+        &lt;logger name=&quot;*&quot; minlevel=&quot;Trace&quot; writeTo=&quot;DbWin&quot;/&gt;
+    &lt;/rules&gt;
+&lt;/nlog&gt;</code></pre>
+        <p>Note: Harvester will capture all application output regardless of message format, but for optimal results, a layout of XmlLayout should be used.</p>
+    
+        <h5>Harvester Target</h5>
+
+        <p><strong>Recommended for Microsoft .NET 4.0 or later applications!</strong></p>
+
+        <p>Harvester provides a custom target to facilitate capturing log messages regardless of whether or not a native debugger is attached. The Harvester target
+        allows you to configure the type of message buffer used along with the corresponding binding and mutex name. </p>
+        
+        <pre><code>&lt;nlog xmlns=&quot;http://www.nlog-project.org/schemas/NLog.xsd&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+    &lt;extensions&gt;
+        &lt;add assembly=&quot;Harvester.Integration.NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=2335e074c59acad6&quot;/&gt;
+    &lt;/extensions&gt;
+    &lt;targets&gt;
+            &lt;target xsi:type=&quot;Harvester&quot; name=&quot;Harvester&quot; bufferType=&quot;NamedPipeBuffer&quot; binding =&quot;\\.\pipe\Harvester&quot; mutexName=&quot;HarvesterMutex&quot; /&gt;
+    &lt;/targets&gt;
+    &lt;rules&gt;
+            &lt;logger name=&quot;*&quot; minlevel=&quot;Trace&quot; writeTo=&quot;Harvester&quot; /&gt;
+    &lt;/rules&gt;
+&lt;/nlog&gt;</code></pre>
+
+        <p><strong>BufferType</strong></p>
+        <p>Currently two buffer types are supported:</p>
+        <ul>
+            <li><strong>NamedPipeBuffer</strong> - Recommend buffer type for all applications.</li>
+            <li><strong>SharedMemoryBuffer</strong> - Legacy buffer type supported by Harvester prior to version 2.0.0.</li>
+        </ul>
+        <p>Note: Using a SharedMemoryBuffer for applications hosted in IIS is not supported.</p>
+
+        <p><strong>Binding</strong></p>
+        <p>A valid binding must be provided based on the slected buffer type.</p>
+        <ul>
+            <li><strong>NamedPipeBuffer</strong> - Must be a valid local pipe name (i.e., \\.\pipe\SomeName).</li>
+            <li><strong>SharedMemoryBuffer</strong> - Must be a valid memory mapped file name (i.e., Local\SomeName or Global\SomeName).</li>
+        </ul>
+        <p>Note: A binding name must correspond to a configured Harvester <a href="listeners.html">listener</a>.</p>
+
+        <p><strong>MutexName</strong></p>
+        <p>The mutex name that correspond to the bound Harvester <a href="listeners.html">listener</a>.</p>
+        
+      </section>
+    </div>
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+        <footer class="inner">
+        <p class="copyright">Harvester maintained by <a href="https://github.com/cbaxter">cbaxter</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+</body>
+</html>

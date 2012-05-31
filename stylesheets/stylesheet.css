@@ -277,6 +277,37 @@ Full-Width Styles
   border-bottom-right-radius: 2px;
 }
 
+#nav_banner {
+  display: block;
+  position: absolute;
+  top:0;
+  right: 10px;
+  z-index: 10;
+  padding: 8px 60px 8px 10px;
+  color: #fff;
+  background: url('../images/blacktocat.png') #0090ff no-repeat 95% 50%;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(0,0,0,.5);
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+#nav_banner ul {
+  list-style-type: none;
+}
+
+#nav_banner li {
+  padding: 4px 10px; display:block;float: left;
+}
+
+#nav_banner a {
+  color: #fff;
+}
+
+#nav_banner a:hover {
+  color: #aaa;
+}
+
 #header_wrap {
   background: #212121;
   background: -moz-linear-gradient(top, #373737, #212121);

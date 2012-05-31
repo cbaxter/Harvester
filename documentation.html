@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
     <meta name="description" content="Harvester : Debug Viewer for Trace, NLog &amp; Log4Net " />
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-    <title>Harvester</title>
+    <title>Harvester - Documentation</title>
 </head>
 <body>
     <!-- HEADER -->
@@ -13,7 +13,7 @@
         <header class="inner">
           <nav id="nav_banner">
             <ul>
-              <li><a href="http://cbaxter.github.com/Harvester" class="underlined">Home</a></li>
+              <li><a href="http://cbaxter.github.com/Harvester">Home</a></li>
               <li><a href="http://cbaxter.github.com/Harvester/documentation.html">Documentation</a></li>
               <li><a href="https://github.com/cbaxter/Harvester/downloads">Downloads</a></li>
               <li><a href="https://github.com/cbaxter/Harvester/issues?state=open">Issues</a></li>
@@ -36,12 +36,33 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
         <section id="main_content" class="inner">
-        <h3>Project Description</h3>
-        <p>Harvester enables you to monitor all Win32 debug output from all local applications running on your machine. Watch real time Trace, NLog and Log4Net output across multiple applications at the same time. Trace a call from client to server and back without having to look at multiple log files.</p>
-        <p>Inspired by tools such as <a href="http://harvester.codeplex.com/wikipage?title=http%3a%2f%2ftechnet.microsoft.com%2fen-us%2fsysinternals%2fbb896647&referringTitle=Home">Windows Sysinternals DbgView</a>, <a href="http://harvester.codeplex.com/wikipage?title=http%3a%2f%2fwww.codeproject.com%2fKB%2ftrace%2fDbMonNET.aspx&referringTitle=Home">DBMon.NET </a>and <a href="http://harvester.codeplex.com/wikipage?title=http%3a%2f%2flogging.apache.org%2fchainsaw%2findex.html&referringTitle=Home">Chainsaw</a>. Harvester provides a simple .NET implementation that aims to merge the best of all aforementioned applications. Watch all OutputDebugString output from all application running on your local machine in a single view (Client/Server and everything in between). Great for monitoring websites during development to ensure that they are behaving as expected!</p>
-        <p>With Harvester there is no longer a need to monitor your applications log files during application development.</p>
+        <h3>Documentation</h3>
+
+        <h5>Application Itegration</h5>
         
-        <img src="images/harvester_screens.png" />
+        <p>When using applications developed against the Microsoft .NET Framework 3.5 or earlier, all output will be captured by Harvester regardless of whether or not a 
+        debugger has been attached (i.e., launched via F5 or CTRL-F5). However, if developing an application with the Microsoft .NET Framework 4.0 or later, output will NOT 
+        be captured by Harvester when a debugger has been attached (i.e., launched with F5).</P>
+        <p>If developing an application with the Microsoft .NET Framework 4.0 or later consider using one of the following integration options to enable monitoring of debug
+        output even if a native debugger is attached.</p>
+
+        <ul>
+          <li><a href="log4net.html">Log4Net - Harvester Appender</a></li>
+          <li><a href="nlog.html">NLog - Harvester Target</a></li>
+          <li><a href="trace.html">Trace - TraceListener</a></li>
+        </ul>
+
+        <h5>Harvester Configuration</h5>
+        
+        <p>Harvester allows for custom configuration of filters, levels, listeners and parsers via the appropriate app.config file.</p>
+
+        <ul>
+          <li><a href="filters.html">Filters</a></li>
+          <li><a href="levels.html">Levels</a></li>
+          <li><a href="listeners.html">Listeners</a></li>
+          <li><a href="parsers.html">Parsers</a></li>
+        </ul>
+
       </section>
     </div>
     <!-- FOOTER  -->
