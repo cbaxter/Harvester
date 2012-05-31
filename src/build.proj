@@ -20,7 +20,7 @@
         </ItemGroup>
 
         <Delete Files="@(CleanFiles)" />
-        <RemoveDir Directories="$(BuildOutputDir)"/>
+        <RemoveDir Directories="$(BuildOutput)"/>
     </Target>
 
     <Target Name="StampVersionInfo">
@@ -66,75 +66,27 @@
         <xunit Assembly="%(TestProjects.Identity)" />
     </Target>
 
-    <Target Name="PackageConsole">
-        <PropertyGroup>
-            <ConsoleWorkingDir>Console\bin\$(Configuration)</ConsoleWorkingDir>
-        </PropertyGroup>
-
+    <Target Name="PackageBinaries">
         <ItemGroup>
-            <ConsoleFiles Include="$(ConsoleWorkingDir)\Harvester.Core.dll" />
-            <ConsoleFiles Include="$(ConsoleWorkingDir)\Harvester.Console.exe" />
-            <ConsoleFiles Include="$(ConsoleWorkingDir)\Harvester.Console.exe.config" />
+            <BinaryFiles Include="Windows\bin\$(Configuration)\Harvester.exe" />
+            <BinaryFiles Include="Windows\bin\$(Configuration)\Harvester.exe.config" />
+            <BinaryFiles Include="Core\bin\$(Configuration)\Harvester.Core.dll" />
+            <BinaryFiles Include="Console\bin\$(Configuration)\Harvester.Console.exe" />
+            <BinaryFiles Include="Console\bin\$(Configuration)\Harvester.Console.exe.config" />
+            <BinaryFiles Include="Log4net\bin\$(Configuration)\Log4Net.dll" />
+            <BinaryFiles Include="Log4net\bin\$(Configuration)\Harvester.Integration.Log4Net.dll" />
+            <BinaryFiles Include="NLog\bin\$(Configuration)\NLog.dll" />
+            <BinaryFiles Include="NLog\bin\$(Configuration)\Harvester.Integration.NLog.dll" />
+            <BinaryFiles Include="TraceListener\bin\$(Configuration)\Harvester.Integration.TraceListener.dll" />
         </ItemGroup>
 
-        <Zip Files="@(ConsoleFiles)" WorkingDirectory="$(ConsoleWorkingDir)" ZipFileName="$(BuildOutput)\Harvester.Console.zip" />
-        <Copy SourceFiles="@(ConsoleFiles)" DestinationFolder="$(BuildOutput)\Console" />
-    </Target>
-
-    <Target Name="PackageWindows">
-        <PropertyGroup>
-            <WindowsWorkingDir>Windows\bin\$(Configuration)</WindowsWorkingDir>
-        </PropertyGroup>
+        <Copy SourceFiles="@(BinaryFiles)" DestinationFolder="$(BuildOutput)\bin" />
 
         <ItemGroup>
-            <WindowsFiles Include="$(WindowsWorkingDir)\Harvester.Core.dll" />
-            <WindowsFiles Include="$(WindowsWorkingDir)\Harvester.exe" />
-            <WindowsFiles Include="$(WindowsWorkingDir)\Harvester.exe.config" />
+            <ZipFiles Include="$(BuildOutput)\bin\**" />
         </ItemGroup>
-
-        <Zip Files="@(WindowsFiles)" WorkingDirectory="$(WindowsWorkingDir)" ZipFileName="$(BuildOutput)\Harvester.zip" />
-        <Copy SourceFiles="@(WindowsFiles)" DestinationFolder="$(BuildOutput)\Windows" />
-    </Target>
-
-    <Target Name="PackageLog4NetIntegration">
-        <PropertyGroup>
-            <Log4NetIntegrationDir>Log4Net\bin\$(Configuration)</Log4NetIntegrationDir>
-        </PropertyGroup>
-
-        <ItemGroup>
-            <Log4NetIntegrationFiles Include="$(Log4NetIntegrationDir)\Log4Net.dll" />
-            <Log4NetIntegrationFiles Include="$(Log4NetIntegrationDir)\Harvester.Integration.Log4Net.dll" />
-        </ItemGroup>
-
-        <Zip Files="@(Log4NetIntegrationFiles)" WorkingDirectory="$(Log4NetIntegrationDir)" ZipFileName="$(BuildOutput)\Harvester.Integration.Log4Net.zip" />
-        <Copy SourceFiles="@(Log4NetIntegrationFiles)" DestinationFolder="$(BuildOutput)\Log4Net" />
-    </Target>
-
-    <Target Name="PackageNLogIntegration">
-        <PropertyGroup>
-            <NLogIntegrationDir>NLog\bin\$(Configuration)</NLogIntegrationDir>
-        </PropertyGroup>
-
-        <ItemGroup>
-            <NLogIntegrationFiles Include="$(NLogIntegrationDir)\NLog.dll" />
-            <NLogIntegrationFiles Include="$(NLogIntegrationDir)\Harvester.Integration.NLog.dll" />
-        </ItemGroup>
-
-        <Zip Files="@(NLogIntegrationFiles)" WorkingDirectory="$(NLogIntegrationDir)" ZipFileName="$(BuildOutput)\Harvester.Integration.NLog.zip" />
-        <Copy SourceFiles="@(NLogIntegrationFiles)" DestinationFolder="$(BuildOutput)\NLog" />
-    </Target>
-
-    <Target Name="PackageTraceListenerIntegration">
-        <PropertyGroup>
-            <TraceIntegrationDir>TraceListener\bin\$(Configuration)</TraceIntegrationDir>
-        </PropertyGroup>
-
-        <ItemGroup>
-            <TraceIntegrationFiles Include="$(TraceIntegrationDir)\Harvester.Integration.TraceListener.dll" />
-        </ItemGroup>
-
-        <Zip Files="@(TraceIntegrationFiles)" WorkingDirectory="$(TraceIntegrationDir)" ZipFileName="$(BuildOutput)\Harvester.Integration.TraceListener.zip" />
-        <Copy SourceFiles="@(TraceIntegrationFiles)" DestinationFolder="$(BuildOutput)\TraceListener" />
+        
+        <Zip Files="@(ZipFiles)" WorkingDirectory="$(BuildOutput)\bin" ZipFileName="$(BuildOutput)\Harvester.zip" />
     </Target>
 
     <Target Name="PackageSetup">
@@ -149,14 +101,8 @@
         <Exec Command="..\Lib\WiX\light.exe -ext WixUIExtension -ext WixNetFxExtension -out $(BuildOutput)\Harvester.msi $(BuildOutput)\Harvester.wixobj" />
     </Target>
 
-    <Target Name="Package" DependsOnTargets="Build">
-        <MakeDir Directories="$(BuildOutputDir)"/>
-
-        <CallTarget Targets="PackageConsole" />
-        <CallTarget Targets="PackageWindows" />
-        <CallTarget Targets="PackageLog4NetIntegration" />
-        <CallTarget Targets="PackageNLogIntegration" />
-        <CallTarget Targets="PackageTraceListenerIntegration" />
+    <Target Name="Package" DependsOnTargets="Test">
+        <CallTarget Targets="PackageBinaries" />
         <CallTarget Targets="PackageSetup" />
     </Target>
 
