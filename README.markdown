@@ -1,4 +1,4 @@
-# JSTest.NET #
+# Harvester #
 
 Harvester enables you to monitor all Win32 debug output from all local applications running on your machine. Watch real time Trace, NLog and Log4Net output across multiple applications at the same time. Trace a call from client to server and back without having to look at multiple log files.
 
