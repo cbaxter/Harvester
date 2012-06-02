@@ -29,7 +29,7 @@ namespace Harvester.Forms
 {
     internal partial class Main : FormBase, IRenderEvents
     {
-
+        private readonly IDictionary<Keys, Action> accelerators;
         private readonly List<ListViewItem> bufferedItems;
         private readonly DynamicFilterExpression filter;
         private readonly Timer flushBufferedItemsTimer;
@@ -42,15 +42,18 @@ namespace Harvester.Forms
             mainToolStrip.Renderer = new CheckedButtonRenderer();
             splitContainer.Panel1MinSize = splitContainer.Panel2MinSize = 180;
 
-            // Setup render timer to only update list view every 100ms.
+            WireUpToolStrip();
+            WireUpContextMenu();
+            WireUpSystemEvents();
+
+            accelerators = GetAccelerators();
+            filter = new DynamicFilterExpression(Settings.GetFilter());
             flushBufferedItemsTimer = new Timer { Enabled = true, Interval = 100 };
             flushBufferedItemsTimer.Tick += (sender, e) => HandleEvent(FlushBufferedItems);
+        }
 
-            // Setup system events list view to stop auto-scroll if selection changes.
-            systemEvents.SetFillColumn(messageColumn);
-            systemEvents.ItemSelectionChanged += (sender, e) => HandleEvent(DisableAutoScroll);
-
-            // Wire-up tool strip button click event handlers.
+        private void WireUpToolStrip()
+        {
             closeButton.Click += (sender, e) => HandleEvent(Application.Exit);
             eraseButton.Click += (sender, e) => HandleEvent(ClearSystemEvents);
             scrollButton.Click += (sender, e) => HandleEvent(ToggleAutoScroll);
@@ -74,8 +77,10 @@ namespace Harvester.Forms
                                                                      else
                                                                          StartSearch();
                                                                  });
+        }
 
-            // Wire-up context menu item click handlers.
+        private void WireUpContextMenu()
+        {
             contextMenuStrip.Opening += (sender, e) => HandleEvent(() => ShowingContextMenu(e));
             displayIdColumn.Click += (sender, e) => HandleEvent(() => ToggleColumnDisplay(displayIdColumn, messageIdColumn));
             displayLevelColumn.Click += (sender, e) => HandleEvent(() => ToggleColumnDisplay(displayLevelColumn, levelColumn));
@@ -85,10 +90,31 @@ namespace Harvester.Forms
             displayThreadColumn.Click += (sender, e) => HandleEvent(() => ToggleColumnDisplay(displayThreadColumn, threadColumn));
             displaySourceColumn.Click += (sender, e) => HandleEvent(() => ToggleColumnDisplay(displaySourceColumn, sourceColumn));
             displayUserColumn.Click += (sender, e) => HandleEvent(() => ToggleColumnDisplay(displayUserColumn, userColumn));
+        }
 
-            // Wire-up system event display.
+        private void WireUpSystemEvents()
+        {
+            systemEvents.SetFillColumn(messageColumn);
+            systemEvents.ItemSelectionChanged += (sender, e) => HandleEvent(DisableAutoScroll);
             systemEvents.SelectedIndexChanged += (sender, e) => HandleEvent(DisplaySelectedSystemEvent);
-            filter = new DynamicFilterExpression(Settings.GetFilter());
+        }
+
+        private IDictionary<Keys, Action> GetAccelerators()
+        {
+            return new Dictionary<Keys, Action>
+                       {
+                           {Keys.Control | Keys.Shift | Keys.C, eraseButton.PerformClick}, 
+                           {Keys.Control | Keys.Shift | Keys.D, colorButton.PerformClick}, 
+                           {Keys.Control | Keys.Shift | Keys.V, scrollButton.PerformClick}, 
+                           {Keys.Control | Keys.Shift | Keys.L, levelFilterButton.PerformClick},
+                           {Keys.Control | Keys.Shift | Keys.P, processFilterButton.PerformClick},
+                           {Keys.Control | Keys.Shift | Keys.A, applicationFilterButton.PerformClick}, 
+                           {Keys.Control | Keys.Shift | Keys.S, sourceFilterButton.PerformClick},
+                           {Keys.Control | Keys.Shift | Keys.U, userFilterButton.PerformClick}, 
+                           {Keys.Control | Keys.Shift | Keys.M, messageFilterButton.PerformClick}, 
+                           {Keys.Control | Keys.Shift | Keys.F, searchText.Focus}, 
+                           {Keys.Control | Keys.F, searchButton.PerformClick}
+                       };
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -161,6 +187,16 @@ namespace Harvester.Forms
                                 systemEvents.Font = SystemEventProperties.Default.Font;
                                 systemEvents.BackColor = SystemEventProperties.Default.PrimaryBackColor;
                             });
+        }
+
+        protected override Boolean ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            Action accelerator;
+            if (!accelerators.TryGetValue(keyData, out accelerator))
+                return base.ProcessCmdKey(ref msg, keyData); ;
+
+            accelerator.Invoke();
+            return true;
         }
 
         #region Context Menu

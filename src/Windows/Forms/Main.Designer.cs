@@ -300,7 +300,7 @@
             this.closeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(23, 22);
-            this.closeButton.Text = "Close Application";
+            this.closeButton.Text = "Close Application (Alt+F4)";
             // 
             // separator1
             // 
@@ -314,7 +314,7 @@
             this.eraseButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.eraseButton.Name = "eraseButton";
             this.eraseButton.Size = new System.Drawing.Size(23, 22);
-            this.eraseButton.Text = "Clear System Events";
+            this.eraseButton.Text = "Clear System Events (Ctrl+Shift-C)";
             // 
             // colorButton
             // 
@@ -323,7 +323,7 @@
             this.colorButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.colorButton.Name = "colorButton";
             this.colorButton.Size = new System.Drawing.Size(23, 22);
-            this.colorButton.Text = "Customize System Event Display";
+            this.colorButton.Text = "Customize Display (Ctrl+Shift+D)";
             // 
             // scrollButton
             // 
@@ -336,7 +336,7 @@
             this.scrollButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.scrollButton.Name = "scrollButton";
             this.scrollButton.Size = new System.Drawing.Size(23, 22);
-            this.scrollButton.Text = "Toggle Auto-Scroll";
+            this.scrollButton.Text = "Toggle Auto-Scroll (Ctrl+Shift+V)";
             // 
             // separator2
             // 
@@ -350,7 +350,7 @@
             this.levelFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.levelFilterButton.Name = "levelFilterButton";
             this.levelFilterButton.Size = new System.Drawing.Size(23, 22);
-            this.levelFilterButton.Text = "Filter by Level";
+            this.levelFilterButton.Text = "Filter by Level (Ctrl+Shift+L)";
             // 
             // processFilterButton
             // 
@@ -359,7 +359,7 @@
             this.processFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.processFilterButton.Name = "processFilterButton";
             this.processFilterButton.Size = new System.Drawing.Size(23, 22);
-            this.processFilterButton.Text = "Filter by Process";
+            this.processFilterButton.Text = "Filter by Process (Ctrl+Shift+P)";
             // 
             // applicationFilterButton
             // 
@@ -368,7 +368,7 @@
             this.applicationFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.applicationFilterButton.Name = "applicationFilterButton";
             this.applicationFilterButton.Size = new System.Drawing.Size(23, 22);
-            this.applicationFilterButton.Text = "Filter by Application";
+            this.applicationFilterButton.Text = "Filter by Application (Ctrl+Shift+A)";
             // 
             // sourceFilterButton
             // 
@@ -377,7 +377,7 @@
             this.sourceFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.sourceFilterButton.Name = "sourceFilterButton";
             this.sourceFilterButton.Size = new System.Drawing.Size(23, 22);
-            this.sourceFilterButton.Text = "Filter by Source";
+            this.sourceFilterButton.Text = "Filter by Source (Ctrl+Shift+S)";
             // 
             // userFilterButton
             // 
@@ -386,7 +386,7 @@
             this.userFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.userFilterButton.Name = "userFilterButton";
             this.userFilterButton.Size = new System.Drawing.Size(23, 22);
-            this.userFilterButton.Text = "Filter by Username";
+            this.userFilterButton.Text = "Filter by Username (Ctrl+Shift+U)";
             // 
             // messageFilterButton
             // 
@@ -395,7 +395,7 @@
             this.messageFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.messageFilterButton.Name = "messageFilterButton";
             this.messageFilterButton.Size = new System.Drawing.Size(23, 22);
-            this.messageFilterButton.Text = "Filter by Message";
+            this.messageFilterButton.Text = "Filter by Message (Ctrl+Shift+M)";
             // 
             // separator3
             // 
@@ -406,6 +406,7 @@
             // 
             this.searchText.Name = "searchText";
             this.searchText.Size = new System.Drawing.Size(200, 25);
+            this.searchText.ToolTipText = "Search (Ctrl+Shift+F)";
             // 
             // searchButton
             // 
@@ -415,6 +416,7 @@
             this.searchButton.Name = "searchButton";
             this.searchButton.Size = new System.Drawing.Size(23, 22);
             this.searchButton.Text = "Search";
+            this.searchButton.ToolTipText = "Search (Ctrl+F)";
             // 
             // Main
             // 
