@@ -38,8 +38,44 @@
         <section id="main_content" class="inner">
         <h3>Documentation - Listeners</h3>
        
-        <p>Coming Soon</p>
+        <p>The listeners configuration section is used to define the set of message listeners used by Harvester. A valid message listener must 
+        be derived from <a href="https://github.com/cbaxter/Harvester/blob/master/src/Core/Messaging/MessageListener.cs">MessageListener</a>.</p>
       
+        <pre><code>&lt;listeners&gt;
+    &lt;listener binding=&quot;Local\DBWIN&quot; mutex=&quot;DBWinMutex&quot; type=&quot;Harvester.Core.Messaging.Sources.DbWin.OutputDebugStringListener, Harvester.Core&quot; /&gt;
+    &lt;listener binding=&quot;Local\HRVSTWIN&quot; mutex=&quot;HrvstWinMutex&quot; type=&quot;Harvester.Core.Messaging.Sources.DbWin.OutputDebugStringListener, Harvester.Core&quot; /&gt;
+    &lt;listener binding=&quot;Global\DBWIN&quot; mutex=&quot;DBWinMutex&quot; elevatedOnly=&quot;true&quot; type=&quot;Harvester.Core.Messaging.Sources.DbWin.OutputDebugStringListener, Harvester.Core&quot; /&gt;
+    &lt;listener binding=&quot;\\.\pipe\Harvester&quot; mutex=&quot;HarvesterMutex&quot; identity=&quot;Everyone&quot; type=&quot;Harvester.Core.Messaging.Sources.NamedPipe.PipeMessageListener, Harvester.Core&quot;/&gt;
+&lt;/listeners&gt;</code></pre>
+
+        <p><strong>binding</strong></p>
+        <p>A binding name that identifies the message channel to be used by the listener.<br />
+        Default Value: none.</p>
+
+        <p><strong>elevatedOnly</strong></p>
+        <p>A true/false value indicating if elevated access (i.e., Administrator role) is required for the message listener to start.<br />
+        Default Value: false.</p>
+
+        <p><strong>mutex</strong></p>
+        <p>A unique mutex name used by applications to determine if a specific message listener is running.<br />
+        Default Value: none.</p>
+
+        <p><strong>type</strong></p>
+        <p>An assembly qualified name for a message listener type.<br />
+        Default Value: none.</p>
+
+        <h5>OutputDebugStringListener</h5> 
+        <p>Uses shared memory mapped files (i.e., OutputDebugString buffer) to read trace messages from individual applications. Typically used to read messages 
+        from Microsoft .NET 3.5 or earlier applications or if NamedPipes cannot be created.<br />
+        Note: Starting with Microsoft .NET 4.0, when debugging an application in Visual Studio 2010 or later  messages will be captured by this listener.</p>
+        <pre><code>&lt;listener binding=&quot;Local\DBWIN&quot; mutex=&quot;DBWinMutex&quot; type=&quot;Harvester.Core.Messaging.Sources.DbWin.OutputDebugStringListener, Harvester.Core&quot; /&gt;</code></pre>
+        <p>A valid binding name must begin with either the local (i.e., Local\...) or global (i.e., Global\...) session.</p>
+
+        <h5>PipeMessageListener</h5> 
+        <p>Uses local named pipes to read trace messages from individual applications. Typically used to read messages 
+        from Microsoft .NET 4.0 or later applications or if capturing output from applications running in IIS.</p>
+        <pre><code>&lt;listener binding=&quot;\\.\pipe\Harvester&quot; mutex=&quot;HarvesterMutex&quot; identity=&quot;Everyone&quot; type=&quot;Harvester.Core.Messaging.Sources.NamedPipe.PipeMessageListener, Harvester.Core&quot;/&gt;</code></pre>
+        <p>A valid binding name must begin with a local pipe name (i.e., \\.\pipe\...).</p>
 
       </section>
     </div>

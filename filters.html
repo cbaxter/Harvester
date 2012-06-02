@@ -38,9 +38,119 @@
         <section id="main_content" class="inner">
         <h3>Documentation - Filters</h3>
        
-        <p>Coming Soon</p>
-      
+        <p>The filters configuration section is used to define message filters used by Harvester. A valid message filter must 
+        implement <a href="https://github.com/cbaxter/Harvester/blob/master/src/Core/Filters/ICreateFilterExpressions.cs">ICreateFilterExpressions</a>.</p>
 
+        <pre><code>&lt;filters&gt;
+    &lt;filter type=&quot;GreaterThanOrEqual&quot; property=&quot;Level&quot; value=&quot;Information&quot; /&gt;
+    &lt;filter type=&quot;Equal&quot; property=&quot;ProcessName&quot; value=&quot;MyCustomProcessName&quot; /&gt;
+    &lt;filter type=&quot;Not&quot;&gt;
+        &lt;filter type=&quot;OrElse&quot;&gt;
+            &lt;filter type=&quot;Contains&quot; property=&quot;Message&quot; value=&quot;MyContainsString&quot; /&gt;
+            &lt;filter type=&quot;StartsWith&quot; property=&quot;Message&quot; value=&quot;MyStartswithString&quot; /&gt;
+        &lt;/filter&gt;
+    &lt;/filter&gt;
+&lt;/filters&gt;</code></pre>
+
+        <p>Note: All filters defined at the root level use an implicit AndAlso filter.</p>
+      
+        <ul>
+            <li><a href="#ComparisonFilters">Comparison Filters</a></li>
+            <li><a href="#CompositeFilters">Composite Filters</a></li>
+            <li><a href="#StringFilters">String Filters</a></li>
+        </ul>
+
+        <p><strong>property</strong></p>
+        <p>A <a href="https://github.com/cbaxter/Harvester/blob/master/src/Core/SystemEvent.cs">SystemEvent</a> property name. A property attribute is required 
+        for any comparison filter and will be ignored for any composite filter.<br />
+        Default Value: none.</p>
+
+        <p><strong>type</strong></p>
+        <p>An assembly qualified name for a message filter type. All built in filter types allow for abbreviated names as documented below.<br />
+        Default Value: none.</p>
+
+        <p><strong>value</strong></p>
+        <p>A <a href="https://github.com/cbaxter/Harvester/blob/master/src/Core/SystemEvent.cs">SystemEvent</a> property value. A value attribute is required 
+        for any comparison filter and will be ignored for any composite filter.<br />
+        Default Value: none.</p>
+        
+        <a name="ComparisonFilters"></a>
+        <h5>Comparison Filters</h5> 
+
+        <p><strong>Equal</strong></p>
+        <p>Based on the <a href="http://msdn.microsoft.com/en-us/library/bb352749">Equal</a> expression. Creates a BinaryExpression that represents an 
+        equality comparison.</p>
+        <pre><code>&lt;filter type=&quot;Equal&quot; property=&quot;&quot; value=&quot;&quot; /&gt;</code></pre>
+        
+        <p><strong>Greater Than</strong></p>
+        <p>Based on the <a href="http://msdn.microsoft.com/en-us/library/bb356438">GreaterThan</a> expression. Creates a BinaryExpression that represents a 
+        "greater than" numeric comparison.</p>
+        <pre><code>&lt;filter type=&quot;GreaterThan&quot; property=&quot;&quot; value=&quot;&quot; /&gt;</code></pre>
+        
+        <p><strong>Greater Than Or Equal</strong></p>
+        <p>Based on the <a href="http://msdn.microsoft.com/en-us/library/bb347364">GreaterThanOrEqual</a> expression. Creates a BinaryExpression that represents a 
+        "greater than or equal" numeric comparison.</p>
+        <pre><code>&lt;filter type=&quot;GreaterThanOrEqual&quot; property=&quot;&quot; value=&quot;&quot; /&gt;</code></pre>
+        
+        <p><strong>Less Than</strong></p>
+        <p>Based on the <a href="http://msdn.microsoft.com/en-us/library/bb301967">LessThan</a> expression. Creates a BinaryExpression that represents a
+        "less than" numeric comparison.</p>
+        <pre><code>&lt;filter type=&quot;LessThan&quot; property=&quot;&quot; value=&quot;&quot; /&gt;</code></pre>
+        
+        <p><strong>Less Than Or Equal</strong></p>
+        <p>Based on the <a href="http://msdn.microsoft.com/en-us/library/bb300261">LessThanOrEqual</a> expression. Creates a BinaryExpression that represents a 
+        "less than or equal" numeric comparison.</p>
+        <pre><code>&lt;filter type=&quot;LessThanOrEqual&quot; property=&quot;&quot; value=&quot;&quot; /&gt;</code></pre>
+        
+        <p><strong>Not Equal</strong></p>
+        <p>Based on the <a href="http://msdn.microsoft.com/en-us/library/bb354591">NotEqual</a> expression. Creates a BinaryExpression that represents an 
+        inequality comparison.</p>
+        <pre><code>&lt;filter type=&quot;NotEqual&quot; property=&quot;&quot; value=&quot;&quot; /&gt;</code></pre>
+
+        <a name="CompositeFilters"></a>
+        <h5>Composite Filters</h5> 
+        
+        <p><strong>And Also</strong></p>
+        <p>Based on the <a href="http://msdn.microsoft.com/en-us/library/bb353520">AndAlso</a> expression. Creates a BinaryExpression that represents a 
+        conditional AND operation that evaluates the second operand only if the first operand evaluates to true.</p>
+        <pre><code>&lt;filter type=&quot;AndAlso&quot;&gt;
+    ...
+&lt;/filter&gt;</code></pre>
+
+        <p><strong>Not</strong></p>
+        <p>Based on the <a href="http://msdn.microsoft.com/en-us/library/bb299047">Not</a> expression. Creates a BinaryExpression that represents a 
+        conditional OR operation that evaluates the second operand only if the first operand evaluates to false.</p>
+        <pre><code>&lt;filter type=&quot;Not&quot;&gt;
+    ...
+&lt;/filter&gt;</code></pre>
+
+        <p><strong>Or Else</strong></p>
+        <p>Based on the <a href="http://msdn.microsoft.com/en-us/library/bb353063">OrElse</a> expression. Creates a BinaryExpression that represents a 
+        conditional AND operation that evaluates the second operand only if the first operand evaluates to true.</p>
+        <pre><code>&lt;filter type=&quot;OrElse&quot;&gt;
+    ...
+&lt;/filter&gt;</code></pre>
+        
+        <a name="StringFilters"></a>
+        <h5>String Filters</h5>  
+        
+        <p>All string filters are case-insensitive.</p>
+
+        <p><strong>Contains</strong></p>
+        <p>Based on <a href="http://msdn.microsoft.com/en-us/library/dy85x1sa">Contains</a>. Returns true if the value attribute occurs within this string, or if 
+        value is the empty string (""); otherwise, false.</p>
+        <pre><code>&lt;filter type=&quot;Contains&quot; property=&quot;&quot; value=&quot;&quot; /&gt;</code></pre>
+
+        <p><strong>Ends With</strong></p>
+        <p>Based on the <a href="http://msdn.microsoft.com/en-us/library/2333wewz">EndsWith</a>. Returns true if the value attribute occurs at the end of this 
+        string; otherwise, false.</p>
+        <pre><code>&lt;filter type=&quot;EndsWith&quot; property=&quot;&quot; value=&quot;&quot; /&gt;</code></pre>
+
+        <p><strong>Starts With</strong></p>
+        <p>Based on the <a href="http://msdn.microsoft.com/en-us/library/baketfxw">StartsWith</a>. Returns true if the value attribute occurs at the start of this 
+        string; otherwise, false.</p>
+        <pre><code>&lt;filter type=&quot;StartsWith&quot; property=&quot;&quot; value=&quot;&quot; /&gt;</code></pre>
+        
       </section>
     </div>
     <!-- FOOTER  -->

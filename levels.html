@@ -37,10 +37,38 @@
     <div id="main_content_wrap" class="outer">
         <section id="main_content" class="inner">
         <h3>Documentation - Levels</h3>
+                
+        <p>The levels configuration section is used to define the color scheme used by the Harvester console as well as define any aliases for each log level.</p>
        
-        <p>Coming Soon</p>
-      
+        <pre><code>&lt;levels timestampColor=&quot;Cyan&quot;&gt;
+    &lt;fatal backColor=&quot;Red&quot;   foreColor=&quot;White&quot;    aliases=&quot;fatal&quot; /&gt;
+    &lt;error backColor=&quot;Black&quot; foreColor=&quot;Red&quot;      aliases=&quot;error&quot; /&gt;
+    &lt;warn  backColor=&quot;Black&quot; foreColor=&quot;Yellow&quot;   aliases=&quot;warn,warning&quot; /&gt;
+    &lt;info  backColor=&quot;Black&quot; foreColor=&quot;White&quot;    aliases=&quot;info,information&quot; /&gt;
+    &lt;debug backColor=&quot;Black&quot; foreColor=&quot;DarkGray&quot; aliases=&quot;debug&quot; /&gt;
+    &lt;trace backColor=&quot;Black&quot; foreColor=&quot;DarkCyan&quot; aliases=&quot;trace&quot; /&gt;
+&lt;/levels&gt;</code></pre>
 
+        <p><strong>aliases</strong></p>
+        <p>A comma (,) or semi-colon (;) delimited list of string values that should map to the associated log level.<br />
+        Default Value: Corresponding SystemEventLevel (i.e., debug).<br />
+        Applies To: Console, Windows</p>
+
+        <p><strong>backColor</strong></p>
+        <p>A <a href="http://msdn.microsoft.com/en-us/library/system.consolecolor.aspx">Console Color</a> used to highlight the text component of a message.<br />
+        Default Value: ConsoleColor.Black.<br />
+        Applies To: Console Only</p>
+
+        <p><strong>foreColor</strong></p>
+        <p>A <a href="http://msdn.microsoft.com/en-us/library/system.consolecolor.aspx">Console Color</a> used to render the text component of a message.<br />
+        Default Value: ConsoleColor.DarkGray.<br />
+        Applies To: Console Only</p>
+
+        <p><strong>timestampColor</strong></p>
+        <p>A <a href="http://msdn.microsoft.com/en-us/library/system.consolecolor.aspx">Console Color</a> used to render the timestamp component of a message.<br />
+        Default Value: ConsoleColor.Cyan.<br />
+        Applies To: Console Only</p>
+                
       </section>
     </div>
     <!-- FOOTER  -->

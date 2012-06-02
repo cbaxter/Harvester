@@ -38,9 +38,69 @@
         <section id="main_content" class="inner">
         <h3>Documentation - Log4Net HarvesterAppender</h3>
        
-        <p>Coming Soon</p>
-      
+        <p>Integrating your application with Harvester is as easy as adding an additional appender to the Log4Net configuration section.</P>
+        
+        <h5>OutputDebugString Appender</h5>
 
+        <p><strong>Recommended for Microsoft .NET 3.5 or earlier applications!</strong></p>
+
+        <p>Log4Net's built in OutputDebugString appender is a viable option to push debug messages to Harvester. The OutputDebugString appender will work with
+        Microsoft .NET 3.5 and earlier applications regardless of whether or not you are debugging within Visual Studio. However, starting with Microsoft
+        .NET 4.0 and Visual Studio 2010, a native debugger is always attached when debugging a managed application in Visual Studio. As only a single 
+        native debugger may capture OutputDebugString messages, Harvester will not be able to capture log messages if debugging your application in Visual 
+        Studio 2010.</p>
+        
+        <p><strong>In order to capture log messages for a Microsoft .NET 4.0 or latter application while debugging use the Harvester Appender documented below.</strong></p>
+
+        <pre><code>&lt;log4net&gt;
+    &lt;appender name=&quot;OutputDebugStringAppender&quot; type=&quot;log4net.Appender.OutputDebugStringAppender&quot; &gt;
+        &lt;layout type=&quot;log4net.Layout.XMLLayout&quot; /&gt;
+    &lt;/appender&gt;
+    &lt;root&gt;
+        &lt;level value=&quot;DEBUG&quot; /&gt;
+        &lt;appender-ref ref=&quot;OutputDebugStringAppender&quot; /&gt;
+    &lt;/root&gt;
+&lt;/log4net&gt;</code></pre>
+        <p>Note: Harvester will capture all application output regardless of message format, but for optimal results, a layout of XmlLayout should be used.</p>
+    
+        <h5>Harvester Appender</h5>
+
+        <p><strong>Recommended for Microsoft .NET 4.0 or later applications!</strong></p>
+
+        <p>Harvester provides a custom appender to facilitate capturing log messages regardless of whether or not a native debugger is attached. The Harvester appender
+        allows you to configure the type of message buffer used along with the corresponding binding and mutex name. </p>
+        
+        <pre><code>&lt;log4net&gt;
+    &lt;appender name=&quot;HarvesterAppender&quot; type=&quot;Harvester.Integration.Log4Net.HarvesterAppender, Harvester.Integration.Log4Net, Version=2.0.0.0, Culture=neutral, PublicKeyToken=2335e074c59acad6&quot;&gt;
+        &lt;binding value=&quot;\\.\pipe\Harvester&quot; /&gt;
+        &lt;bufferType value=&quot;NamedPipeBuffer&quot; /&gt;
+        &lt;mutex value=&quot;HarvesterMutex&quot; /&gt;
+    &lt;/appender&gt;
+    &lt;root&gt;
+        &lt;level value=&quot;DEBUG&quot; /&gt;
+        &lt;appender-ref ref=&quot;HarvesterAppender&quot; /&gt;
+    &lt;/root&gt;
+&lt;/log4net&gt;</code></pre>
+
+        <p><strong>Binding</strong></p>
+        <p>A valid binding must be provided based on the selected buffer type.</p>
+        <ul>
+            <li><strong>NamedPipeBuffer</strong> - Must be a valid local pipe name (i.e., \\.\pipe\SomeName).</li>
+            <li><strong>SharedMemoryBuffer</strong> - Must be a valid memory mapped file name (i.e., Local\SomeName or Global\SomeName).</li>
+        </ul>
+        <p>Note: A binding name must correspond to a configured Harvester <a href="listeners.html">listener</a>.</p>
+
+        <p><strong>BufferType</strong></p>
+        <p>Currently two buffer types are supported:</p>
+        <ul>
+            <li><strong>NamedPipeBuffer</strong> - Recommend buffer type for all applications.</li>
+            <li><strong>SharedMemoryBuffer</strong> - Legacy buffer type supported by Harvester prior to version 2.0.0.</li>
+        </ul>
+        <p>Note: Using a SharedMemoryBuffer for applications hosted in IIS is not supported.</p>
+
+        <p><strong>MutexName</strong></p>
+        <p>The mutex name that correspond to the bound Harvester <a href="listeners.html">listener</a>.</p>
+        
       </section>
     </div>
     <!-- FOOTER  -->

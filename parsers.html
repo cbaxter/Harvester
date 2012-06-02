@@ -36,10 +36,62 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
         <section id="main_content" class="inner">
-        <h3>Documentation - Parsers</h3>
+<h3>Documentation - Parsers</h3>
+                
+        <p>The parsers configuration section is used to define the set of message parsers used by Harvester. A valid parser must 
+        implement <a href="https://github.com/cbaxter/Harvester/blob/master/src/Core/Messaging/Parsers/IParseMessages.cs">IParseMessages</a>.
+        Parsers will be evaluated in the order that they are defined in configuration and the first parser that indicates it can parse a 
+        given message will be used. If no suitable parser is found, a basic log message will still be rendered.</p>
        
-        <p>Coming Soon</p>
-      
+        <pre><code>&lt;parsers&gt;
+    &lt;parser name=&quot;log4net&quot; type=&quot;Harvester.Core.Messaging.Parsers.Log4NetParser, Harvester.Core&quot; /&gt;
+    &lt;parser name=&quot;log4j&quot; type=&quot;Harvester.Core.Messaging.Parsers.Log4JParser, Harvester.Core&quot; /&gt;
+    &lt;parser name=&quot;default&quot; type=&quot;Harvester.Core.Messaging.Parsers.DefaultParser, Harvester.Core&quot; /&gt;
+&lt;/parsers&gt;</code></pre>
+
+        <p><strong>type</strong></p>
+        <p>An assembly qualified name for a parser type.<br />
+        Default Value: none.</p>
+
+        <p><strong>name</strong></p>
+        <p>An optional name to identify the parser instance (required if multiple parsers of the same type defined).<br />
+        Default Value: type.Name.</p>
+                        
+        <h5>DefaultParser</h5>
+
+        <p>Accepts any message as a Trace level message. The default parser should be used as an explicit fallback parser 
+        if desired and is typically defined at the end of the parsers section.</p>
+        <pre><code>&lt;parser name=&quot;default&quot; type=&quot;Harvester.Core.Messaging.Parsers.DefaultParser, Harvester.Core&quot; /&gt;</code></pre>
+        
+        <h5>Log4JParser</h5> 
+        <p>For use with <a href="http://nlog-project.org/">NLog</a>, the Log4JParser will parse NLog messages using the XMLLayout or XmlLayoutSchemaLog4j layout.</p>
+        <pre><code>&lt;parser name=&quot;log4net&quot; type=&quot;Harvester.Core.Messaging.Parsers.Log4NetParser, Harvester.Core&quot; /&gt;</code></pre>
+
+        <h5>Log4NetParser</h5> 
+        <p>For use with <a href="http://logging.apache.org/log4net/">Log4Net</a>, the Log4NetParser will parse Log4net messages using the Log4JXmlEventLayout layout.<br />
+        Note: Due to Log4Net re-writing the xml namespace from log4j to log4net when using XmlLayoutSchemaLog4j, the Log4JParser cannot be used.</p>
+        <pre><code>&lt;parser name=&quot;log4net&quot; type=&quot;Harvester.Core.Messaging.Parsers.Log4NetParser, Harvester.Core&quot; /&gt;</code></pre>
+
+        <h5>RegexParser</h5>
+        <p>For use with custom message formats. Multiple regex parsers may be defined in the parsers configuration section if an explicit name is provided.</p>
+        <pre><code>&lt;parser name=&quot;custom&quot; type=&quot;Harvester.Core.Messaging.Parsers.RegexParser, Harvester.Core&quot; pattern=&quot;&quot; options=&quot;&quot; /&gt;</code></pre>
+
+        <p><strong>options</strong></p>
+        <p>The comma (,) separated list of <a href="http://msdn.microsoft.com/en-us/library/system.text.regularexpressions.regexoptions.aspx">RegexOptions</a> that should be used with this regex parser's regular expression.<br />
+        Default Value: none.<br />
+        Recommended Value: IgnoreCase, ExplicitCapture, Compiled</p>
+
+        <p><strong>pattern</strong></p>
+        <p>The regular expression used to parse the log message. The pattern may contain one or more of the following named match groups:</p>
+        <ul>
+            <li>level</li>
+            <li>logger</li>
+            <li>message</li>
+            <li>thread</li>
+            <li>username</li>
+        </ul>
+        <p>Default Value: none.</p>
+        
 
       </section>
     </div>
