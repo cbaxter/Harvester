@@ -29,3 +29,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   - [NuGet Package Manager](http://visualstudiogallery.msdn.microsoft.com/27077b70-9dad-4c64-adcf-c7cf6bc9970c)
   - Run `build.cmd` to install all dependencies
   - Run `package.cmd` to create deployment pacakge
+  
+## NuGet Packages ##
+
+- [Harvester.Core 2.0.0.0] (https://nuget.org/packages/Harvester.Core/2.0.0.0)
+- [Harvester.Integration.Log4Net 2.0.0.0] (https://nuget.org/packages/Harvester.Integration.Log4Net/2.0.0.0)
+- [Harvester.Integration.NLog 2.0.0.0] (https://nuget.org/packages/Harvester.Integration.NLog/2.0.0.0)
+- [Harvester.Integration.TraceListener 2.0.0.0] (https://nuget.org/packages/Harvester.Integration.TraceListener/2.0.0.0)
