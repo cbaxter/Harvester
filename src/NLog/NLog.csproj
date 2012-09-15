@@ -61,8 +61,10 @@
     <None Include="..\.shared\Harvester.snk">
       <Link>Harvester.snk</Link>
     </None>
+    <None Include="Content\App.config.transform" />
     <None Include="NLog.nuspec" />
     <None Include="packages.config" />
+    <None Include="Content\Web.config.transform" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

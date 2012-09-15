@@ -1,0 +1,10 @@
+﻿<configuration>
+    <nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <extensions>
+            <add assembly="Harvester.Integration.NLog, Culture=neutral, PublicKeyToken=2335e074c59acad6"/>
+        </extensions>
+        <targets>
+            <target xsi:type="Harvester" name="Harvester" bufferType="NamedPipeBuffer" binding ="\\.\pipe\Harvester" mutexName="HarvesterMutex" />
+        </targets>
+    </nlog>
+</configuration>
