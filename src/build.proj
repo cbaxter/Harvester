@@ -66,6 +66,21 @@
         <xunit Assembly="%(TestProjects.Identity)" />
     </Target>
 
+    <Target Name="PackageAssemblies">
+        <ItemGroup>
+            <Package Include="Core" />
+            <Package Include="Log4Net" />
+            <Package Include="NLog" />
+            <Package Include="TraceListener" />
+        </ItemGroup>
+
+        <PropertyGroup>
+            <NuGetExe>".nuget/nuget.exe"</NuGetExe>
+        </PropertyGroup>
+        
+        <Exec Command="$(NuGetExe) pack %(Package.Identity)\%(Package.Identity).csproj -OutputDirectory $(BuildOutput)" />
+    </Target>
+
     <Target Name="PackageBinaries">
         <ItemGroup>
             <BinaryFiles Include="Windows\bin\$(Configuration)\Harvester.exe" />
@@ -102,6 +117,7 @@
     </Target>
 
     <Target Name="Package" DependsOnTargets="Test">
+        <CallTarget Targets="PackageAssemblies" />
         <CallTarget Targets="PackageBinaries" />
         <CallTarget Targets="PackageSetup" />
     </Target>

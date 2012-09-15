@@ -135,6 +135,7 @@
     <None Include="..\.shared\Harvester.snk">
       <Link>Harvester.snk</Link>
     </None>
+    <None Include="Core.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Localization.resx">
