@@ -32,7 +32,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   
 ## NuGet Packages ##
 
-- [Harvester.Core 2.0.0.0] (https://nuget.org/packages/Harvester.Core/2.0.0.0)
-- [Harvester.Integration.Log4Net 2.0.0.0] (https://nuget.org/packages/Harvester.Integration.Log4Net/2.0.0.0)
-- [Harvester.Integration.NLog 2.0.0.0] (https://nuget.org/packages/Harvester.Integration.NLog/2.0.0.0)
-- [Harvester.Integration.TraceListener 2.0.0.0] (https://nuget.org/packages/Harvester.Integration.TraceListener/2.0.0.0)
+- [Harvester.Core] (https://nuget.org/packages/Harvester.Core)
+- [Harvester.Integration.Log4Net] (https://nuget.org/packages/Harvester.Integration.Log4Net)
+- [Harvester.Integration.NLog] (https://nuget.org/packages/Harvester.Integration.NLog)
+- [Harvester.Integration.TraceListener] (https://nuget.org/packages/Harvester.Integration.TraceListener)
