@@ -60,6 +60,9 @@
     <None Include="..\.shared\Harvester.snk">
       <Link>Harvester.snk</Link>
     </None>
+    <None Include="Content\App.config.transform" />
+    <None Include="Content\Web.config.transform" />
+    <None Include="Log4Net.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
