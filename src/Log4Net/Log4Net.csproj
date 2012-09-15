@@ -60,6 +60,7 @@
     <None Include="..\.shared\Harvester.snk">
       <Link>Harvester.snk</Link>
     </None>
+    <None Include="Log4Net.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

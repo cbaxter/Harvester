@@ -61,6 +61,7 @@
     <None Include="..\.shared\Harvester.snk">
       <Link>Harvester.snk</Link>
     </None>
+    <None Include="NLog.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
