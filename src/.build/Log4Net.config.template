@@ -1,0 +1,15 @@
+<configuration>
+    <configSections>
+        <section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler, log4net" />
+    </configSections>
+    <log4net>
+        <appender name="HarvesterAppender" type="Harvester.Integration.Log4Net.HarvesterAppender, Harvester.Integration.Log4Net, Version=${Version}, Culture=neutral, PublicKeyToken=2335e074c59acad6">
+            <binding value="\\.\pipe\Harvester" />
+            <bufferType value="NamedPipeBuffer" />
+            <mutex value="HarvesterMutex" />
+        </appender>
+    </log4net>
+    <root>
+        <appender-ref ref="HarvesterAppender" />
+    </root>
+</configuration>

@@ -12,7 +12,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{842F0390-D2E7-4775-B14E-5020135A5DF1}"
 	ProjectSection(SolutionItems) = preProject
 		build.proj = build.proj
-		Harvester.wxs.template = Harvester.wxs.template
+		.build\Harvester.wxs.template = .build\Harvester.wxs.template
+		.build\Log4Net.config.template = .build\Log4Net.config.template
+		.build\NLog.config.template = .build\NLog.config.template
+		.build\TraceListener.config.template = .build\TraceListener.config.template
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{B0177C63-EE23-44A4-83D8-F3494FDE9C30}"

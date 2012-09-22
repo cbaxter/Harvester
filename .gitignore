@@ -21,6 +21,7 @@ _ReSharper.Harvester/
 # Generated Files
 # -------------------------
 /src/.shared/VersionInfo.cs
+/src/**/Content/*.config.transform
 
 # Other Files
 # -------------------------
