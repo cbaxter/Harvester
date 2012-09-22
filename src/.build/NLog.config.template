@@ -1,10 +1,16 @@
-﻿<configuration>
+<configuration>
+    <configSections>
+        <section name="nlog" type="NLog.Config.ConfigSectionHandler, NLog"/>
+    </configSections>
     <nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <extensions>
-            <add assembly="Harvester.Integration.NLog, Culture=neutral, PublicKeyToken=2335e074c59acad6"/>
+            <add assembly="Harvester.Integration.NLog, Version=${Version}, Culture=neutral, PublicKeyToken=2335e074c59acad6"/>
         </extensions>
         <targets>
             <target xsi:type="Harvester" name="Harvester" bufferType="NamedPipeBuffer" binding ="\\.\pipe\Harvester" mutexName="HarvesterMutex" />
         </targets>
+        <rules>
+            <logger name="*" minlevel="Trace" writeTo="Harvester" />
+        </rules>
     </nlog>
 </configuration>

@@ -4,6 +4,7 @@
     <UsingTask TaskName="Xunit.Runner.MSBuild.xunit" AssemblyFile="..\lib\MSBuild\xUnit\xunit.runner.msbuild.dll" />
 
     <PropertyGroup>
+        <NuGetExe>".nuget/nuget.exe"</NuGetExe>
         <Platform Condition="'$(Platform)' == ''">Any CPU</Platform>
         <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
         <MajorVersion Condition="'$(MajorVersion)' == ''">0</MajorVersion>
@@ -20,10 +21,10 @@
         </ItemGroup>
 
         <Delete Files="@(CleanFiles)" />
-        <RemoveDir Directories="$(BuildOutput)"/>
+        <RemoveDir Directories="$(BuildOutput)" />
     </Target>
 
-    <Target Name="StampVersionInfo">
+    <Target Name="StampVersionInfo" DependsOnTargets="Clean">
         <PropertyGroup>
             <GetBuildDateScript><![CDATA[ public static string ScriptMain() { return Convert.ToInt32(DateTime.Now.Date.Subtract(new DateTime(2011, 2, 11)).TotalDays).ToString(); } ]]></GetBuildDateScript>
             <GetBuildTimeScript><![CDATA[ public static string ScriptMain() { return Convert.ToInt32(DateTime.Now.Subtract(DateTime.Today).TotalMinutes).ToString(); } ]]></GetBuildTimeScript>
@@ -53,7 +54,28 @@
                       AssemblyInformationalVersion="$(Commit)" />
     </Target>
 
-    <Target Name="Build" DependsOnTargets="Clean;StampVersionInfo">
+    <Target Name="GenerateFiles" DependsOnTargets="StampVersionInfo">
+        <ItemGroup>
+            <Tokens Include="Version">
+                <ReplacementValue>$(AssemblyVersion)</ReplacementValue>
+            </Tokens>
+        </ItemGroup>
+
+        <ItemGroup>
+            <Package Include="Core" />
+            <Package Include="Log4Net" />
+            <Package Include="NLog" />
+            <Package Include="TraceListener" />
+        </ItemGroup>
+
+        <MakeDir Directories="$(BuildOutput)" />
+        
+        <TemplateFile Template=".build\Harvester.wxs.template" OutputFileName="..\$(BuildOutput)\Harvester.wxs" Tokens="@(Tokens)" />
+        <TemplateFile Template=".build\%(Package.Identity).config.template" OutputFileName="..\%(Package.Identity)\Content\App.config.transform" Tokens="@(Tokens)" Condition="Exists('.build\%(Package.Identity).config.template')" />
+        <TemplateFile Template=".build\%(Package.Identity).config.template" OutputFileName="..\%(Package.Identity)\Content\Web.config.transform" Tokens="@(Tokens)" Condition="Exists('.build\%(Package.Identity).config.template')" />
+    </Target>
+
+    <Target Name="Build" DependsOnTargets="GenerateFiles">
         <MakeDir Directories="$(BuildOutput)" />
         <MSBuild Projects="Harvester.sln" Targets="Build" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
     </Target>
@@ -67,17 +89,6 @@
     </Target>
 
     <Target Name="PackageAssemblies">
-        <ItemGroup>
-            <Package Include="Core" />
-            <Package Include="Log4Net" />
-            <Package Include="NLog" />
-            <Package Include="TraceListener" />
-        </ItemGroup>
-
-        <PropertyGroup>
-            <NuGetExe>".nuget/nuget.exe"</NuGetExe>
-        </PropertyGroup>
-        
         <Exec Command="$(NuGetExe) pack %(Package.Identity)\%(Package.Identity).csproj -OutputDirectory $(BuildOutput)" />
     </Target>
 
@@ -105,13 +116,6 @@
     </Target>
 
     <Target Name="PackageSetup">
-        <ItemGroup>
-            <Tokens Include="Version">
-                <ReplacementValue>$(AssemblyVersion)</ReplacementValue>
-            </Tokens>
-        </ItemGroup>
-
-        <TemplateFile Template="Harvester.wxs.template" OutputFileName="$(BuildOutput)\Harvester.wxs" Tokens="@(Tokens)" />
         <Exec Command="..\Lib\WiX\candle.exe -out $(BuildOutput)\Harvester.wixobj $(BuildOutput)\Harvester.wxs" />
         <Exec Command="..\Lib\WiX\light.exe -ext WixUIExtension -ext WixNetFxExtension -out $(BuildOutput)\Harvester.msi $(BuildOutput)\Harvester.wixobj" />
     </Target>
