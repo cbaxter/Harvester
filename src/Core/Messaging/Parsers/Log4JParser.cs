@@ -25,7 +25,8 @@ namespace Harvester.Core.Messaging.Parsers
         {
             Verify.NotNull(extendedProperties, "extendedProperties");
 
-            //HACK: NLog now extends standard log4j XML structure with custom NLog namespace (i.e., <nlog:properties /> element). 
+            //NOTE: NLog extends standard log4j XML structure with custom NLog namespace; add `nlog` namespace to the XML namespace manager to
+            //      allow the XML document to be parsed if originated from NLog even though we are only interested in the core log4j elements.
             NamespaceManager.AddNamespace("nlog", "http://nlog-project.org/log4j/");
         }
 
