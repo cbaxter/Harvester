@@ -27,17 +27,17 @@ namespace Harvester.Core.Processes
         public Int32 Id { get { return processId; } }
         public String Name { get { return processName; } }
         public DateTime? ExitTime { get { return exitTime; } }
-        public Boolean HasExited { get { return process == null || process.HasExited; } }
+        public Boolean HasExited { get { return exitTime.HasValue; } }
 
         public ProcessWrapper(Process process)
         {
             Verify.NotNull(process, "process");
 
             this.process = process;
+            this.processId = process.Id;
+            this.processName = process.ProcessName;
             this.process.Exited += OnProcessExited;
-
-            processId = process.Id;
-            processName = process.ProcessName;
+            this.process.EnableRaisingEvents = true;
         }
 
         private void OnProcessExited(Object sender, EventArgs e)
