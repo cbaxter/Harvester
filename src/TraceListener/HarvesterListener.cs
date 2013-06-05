@@ -104,13 +104,13 @@ namespace Harvester.Integration.Diagnostics
         public override void TraceData(TraceEventCache eventCache, String source, TraceEventType eventType, Int32 id, Object data)
         {
             if (Filter == null || Filter.ShouldTrace(eventCache, source, eventType, id, null, null, data, null))
-                WriteEvent(DateTime.Now, TraceEventType.Verbose, NoCategory, NoMessage, new[] { data });
+                WriteEvent(DateTime.Now, eventType, source, NoMessage, new[] { data });
         }
 
         public override void TraceData(TraceEventCache eventCache, String source, TraceEventType eventType, Int32 id, params Object[] data)
         {
             if (data != null && (Filter == null || Filter.ShouldTrace(eventCache, source, eventType, id, null, null, null, data)))
-                WriteEvent(DateTime.Now, TraceEventType.Verbose, NoCategory, NoMessage, data);
+                WriteEvent(DateTime.Now, eventType, source, NoMessage, data);
         }
 
         public override void TraceTransfer(TraceEventCache eventCache, String source, Int32 id, String message, Guid relatedActivityId)
