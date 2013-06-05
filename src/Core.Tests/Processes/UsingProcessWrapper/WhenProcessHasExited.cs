@@ -22,7 +22,7 @@ namespace Harvester.Core.Tests.Processes.UsingProcessWrapper
     public class WhenProcessHasExited
     {
         [Fact]
-        public void ThrowInvalidOperationExceptionIfWrappingProcess()
+        public void ThrowInvalidOperationExceptionIfWrappingExitedProcess()
         {
             using (var process = Process.Start(new ProcessStartInfo("cmd") { CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden }))
             {
@@ -34,16 +34,17 @@ namespace Harvester.Core.Tests.Processes.UsingProcessWrapper
         }
 
         [Fact]
-        public void ExitTimeSetWhenHasExitedChecked()
+        public void ExitTimeSetWhenProcessExits()
         {
             using (var process = Process.Start(new ProcessStartInfo("cmd") { CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden }))
             {
                 var processWrapper = new ProcessWrapper(process);
 
-                process.KillAndWaitForExit();
-
                 Assert.Null(processWrapper.ExitTime);
                 Assert.False(processWrapper.HasExited);
+
+                process.KillAndWaitForExit();
+
                 Assert.True(processWrapper.HasExited);
                 Assert.NotNull(processWrapper.ExitTime);
             }
