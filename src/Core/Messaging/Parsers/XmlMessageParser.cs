@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Xml;
 using Harvester.Core.Processes;
@@ -28,6 +26,8 @@ namespace Harvester.Core.Messaging.Parsers
         private readonly XmlParserContext xmlParserContext;
         private readonly IRetrieveProcesses processes;
 
+        protected XmlNamespaceManager NamespaceManager { get { return xmlNamespaceManager; } }
+
         protected XmlMessageParser(IRetrieveProcesses processRetriever, String namespacePrefix, String namespaceUri)
         {
             Verify.NotNull(processRetriever, "processRetriever");
@@ -51,7 +51,7 @@ namespace Harvester.Core.Messaging.Parsers
 
             using (var reader = new XmlTextReader(message.Message ?? String.Empty, XmlNodeType.Element, xmlParserContext))
                 document.Load(reader);
-            
+
             return new SystemEvent
                        {
                            Level = GetLevel(document),

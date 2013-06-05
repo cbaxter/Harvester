@@ -24,6 +24,9 @@ namespace Harvester.Core.Messaging.Parsers
             : base(processRetriever, "log4j", "http://logging.apache.org/log4j/")
         {
             Verify.NotNull(extendedProperties, "extendedProperties");
+
+            //HACK: NLog now extends standard log4j XML structure with custom NLog namespace (i.e., <nlog:properties /> element). 
+            NamespaceManager.AddNamespace("nlog", "http://nlog-project.org/log4j/");
         }
 
         public override Boolean CanParseMessage(String message)

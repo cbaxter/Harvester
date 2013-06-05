@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyCompany("CBaxter")]
 [assembly: AssemblyProduct("Harvester")]
-[assembly: AssemblyCopyright("Copyright © CBaxter 2012")]
+[assembly: AssemblyCopyright("Copyright © CBaxter 2012-2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]
