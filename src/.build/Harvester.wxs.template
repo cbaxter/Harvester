@@ -12,7 +12,7 @@
                  InstallScope="perMachine"
                  InstallPrivileges="elevated"
                  Manufacturer="Chris Baxter"
-                 Comments="Copyright 2012 Chris Baxter" />
+                 Comments="Copyright 2011-2013 Chris Baxter" />
 
         <Upgrade Id="2279C147-B1EB-405E-B184-0A37CF026843">
             <UpgradeVersion OnlyDetect="yes" Minimum="${Version}" Property="NEWERVERSIONDETECTED" IncludeMinimum="no" />
