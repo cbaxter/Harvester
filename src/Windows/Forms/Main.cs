@@ -371,22 +371,39 @@ namespace Harvester.Forms
 
         private void Search(String text, Int32 startIndex)
         {
-            var match = systemEvents.FindItemWithText(text, true, startIndex);
-            var canWrap = startIndex != 0;
+            ListViewItem match;
 
-            if (match == null)
+            while ((match = Find(text, startIndex)) == null)
             {
+                var canWrap = startIndex != 0;
                 if (canWrap)
-                    Search(text, 0);
+                {
+                    startIndex = 0;
+                }
                 else
+                {
                     MessageBox.Show(Localization.NoMatchesFound, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
             }
-            else
+
+            systemEvents.EnsureVisible(match.Index);
+            systemEvents.SelectedItems.Clear();
+            match.Selected = true;
+        }
+
+        private ListViewItem Find(String text, Int32 startIndex)
+        {
+            for (var i = startIndex; i < systemEvents.Items.Count; i++)
             {
-                systemEvents.EnsureVisible(match.Index);
-                systemEvents.SelectedItems.Clear();
-                match.Selected = true;
+                var item = systemEvents.Items[i];
+                var e = item.Tag as SystemEvent;
+
+                if (e != null && e.RawMessage.Value.IndexOf(text, StringComparison.InvariantCultureIgnoreCase) >= 0)
+                    return item;
             }
+
+            return null;
         }
 
         #endregion
