@@ -29,28 +29,28 @@ using Harvester.Core.Messaging.Sources.NamedPipe;
 
 namespace Harvester.Integration.Diagnostics
 {
+    /// <summary>
+    /// Harvester integration <see cref="TraceListener"/>.
+    /// </summary>
     public sealed class HarvesterListener : TraceListener
     {
-        private static readonly Object[] NoData = new Object[0];
-        private const String NoCategory = "";
-        private const String NoMessage = "";
-        private const String NoLogger = "";
-
+        private readonly String domain = AppDomain.CurrentDomain.FriendlyName;
+        private readonly String machineName = Environment.MachineName;
         private readonly IWriteMessages messageWriter;
         private readonly MessageBuffer messageBuffer;
-        private readonly String machineName;
-        private readonly String domain;
 
+        /// <summary>
+        /// Gets a value indicating whether the trace listener is thread safe.
+        /// </summary>
         public override bool IsThreadSafe { get { return true; } }
 
-        public HarvesterListener(String initalizeData)
+        /// <summary>
+        /// Initializes a new instance of <see cref="HarvesterListener"/>.
+        /// </summary>
+        /// <param name="initializeData">The message buffer initialization string (i.e., Binding=\\.\pipe\Harvester; Buffer Type=NamedPipeBuffer; Mutex Name=HarvesterMutex;)</param>
+        public HarvesterListener(String initializeData)
         {
-            initalizeData = initalizeData ?? String.Empty;
-
-            machineName = Environment.MachineName;
-            domain = AppDomain.CurrentDomain.FriendlyName;
-
-            var parsedInitializeData = ParseInitializationData(initalizeData);
+            var parsedInitializeData = ParseInitializationData(initializeData ?? String.Empty);
             var binding = parsedInitializeData.ContainsKey("Binding") ? parsedInitializeData["Binding"] : @"\\.\pipe\Harvester";
             var mutexName = parsedInitializeData.ContainsKey("Mutex Name") ? parsedInitializeData["Mutex Name"] : "HarvesterMutex";
             var bufferType = parsedInitializeData.ContainsKey("Buffer Type") ? parsedInitializeData["Buffer Type"] : "NamedPipeBuffer";
@@ -70,6 +70,10 @@ namespace Harvester.Integration.Diagnostics
             }
         }
 
+        /// <summary>
+        /// Parse the initialization data string to determine the underlying message buffer/write implementations.
+        /// </summary>
+        /// <param name="initializeData">The message buffer initialization string (i.e., Binding=\\.\pipe\Harvester; Buffer Type=NamedPipeBuffer; Mutex Name=HarvesterMutex;)</param>
         private static IDictionary<String, String> ParseInitializationData(String initializeData)
         {
             if (String.IsNullOrWhiteSpace(initializeData))
@@ -81,6 +85,10 @@ namespace Harvester.Integration.Diagnostics
                                  .ToDictionary(item => (item[0] ?? String.Empty).Trim(), item => (item[1] ?? String.Empty).Trim(), StringComparer.OrdinalIgnoreCase);
         }
 
+        /// <summary>
+        /// Releases the unmanaged resources used by the <see cref="T:System.Diagnostics.TraceListener"/> and optionally releases the managed resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources. </param>
         protected override void Dispose(Boolean disposing)
         {
             base.Dispose(disposing);
@@ -91,159 +99,278 @@ namespace Harvester.Integration.Diagnostics
             messageBuffer.Dispose();
         }
 
+        /// <summary>
+        /// Emits an error message to the listener you create when you implement the <see cref="TraceListener"/> class.
+        /// </summary>
+        /// <param name="message">A message to emit.</param>
         public override void Fail(String message)
         {
-            Fail(message, NoCategory);
+            Fail(message, String.Empty);
         }
 
+        /// <summary>
+        /// Emits an error message and a detailed error message to the listener you create when you implement the <see cref="TraceListener"/> class.
+        /// </summary>
+        /// <param name="message">A message to emit. </param><param name="detailMessage">A detailed message to emit.</param>
         public override void Fail(String message, String detailMessage)
         {
-            WriteEvent(DateTime.Now, TraceEventType.Critical, NoLogger, message + Environment.NewLine + detailMessage, NoData);
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.Append("Fail: ");
+            stringBuilder.Append(message);
+
+            if (!String.IsNullOrWhiteSpace(detailMessage))
+            {
+                stringBuilder.Append(" ");
+                stringBuilder.Append(detailMessage);
+            }
+
+            WriteEvent(DateTime.Now, TraceEventType.Critical, String.Empty, stringBuilder.ToString());
         }
 
+        /// <summary>
+        /// Writes trace information, a data object and event information to the listener specific output.
+        /// </summary>
+        /// <param name="eventCache">A <see cref="TraceEventCache"/> object that contains the current process ID, thread ID, and stack trace information.</param>
+        /// <param name="source">A name used to identify the output, typically the name of the application that generated the trace event.</param>
+        /// <param name="eventType">One of the <see cref="TraceEventType"/> values specifying the type of event that has caused the trace.</param>
+        /// <param name="id">A numeric identifier for the event.</param>
+        /// <param name="data">The trace data to emit.</param>
         public override void TraceData(TraceEventCache eventCache, String source, TraceEventType eventType, Int32 id, Object data)
         {
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
             if (Filter == null || Filter.ShouldTrace(eventCache, source, eventType, id, null, null, data, null))
-                WriteEvent(DateTime.Now, eventType, source, NoMessage, new[] { data });
+                WriteEvent(eventCache.DateTime, eventType, source, data == null ? String.Empty : data.ToString());
+            // ReSharper restore ConditionIsAlwaysTrueOrFalse
         }
 
+        /// <summary>
+        /// Writes trace information, an array of data objects and event information to the listener specific output.
+        /// </summary>
+        /// <param name="eventCache">A <see cref="TraceEventCache"/> object that contains the current process ID, thread ID, and stack trace information.</param>
+        /// <param name="source">A name used to identify the output, typically the name of the application that generated the trace event.</param>
+        /// <param name="eventType">One of the <see cref="TraceEventType"/> values specifying the type of event that has caused the trace.</param>
+        /// <param name="id">A numeric identifier for the event.</param>
+        /// <param name="data">An array of objects to emit as data.</param>
         public override void TraceData(TraceEventCache eventCache, String source, TraceEventType eventType, Int32 id, params Object[] data)
         {
-            if (data != null && (Filter == null || Filter.ShouldTrace(eventCache, source, eventType, id, null, null, null, data)))
-                WriteEvent(DateTime.Now, eventType, source, NoMessage, data);
+            if (Filter == null || Filter.ShouldTrace(eventCache, source, eventType, id, null, null, null, data))
+            {
+                var stringBuilder = new StringBuilder();
+
+                if (data != null)
+                {
+                    for (var i = 0; i < data.Length; ++i)
+                    {
+                        if (i != 0)
+                            stringBuilder.Append(", ");
+
+                        if (data[i] != null)
+                            stringBuilder.Append(data[i]);
+                    }
+                }
+
+                WriteEvent(eventCache.DateTime, eventType, source, stringBuilder.ToString());
+            }
         }
 
+        /// <summary>
+        /// Writes trace information, a message, a related activity identity and event information to the listener specific output.
+        /// </summary>
+        /// <param name="eventCache">A <see cref="TraceEventCache"/> object that contains the current process ID, thread ID, and stack trace information.</param>
+        /// <param name="source">A name used to identify the output, typically the name of the application that generated the trace event.</param>
+        /// <param name="id">A numeric identifier for the event.</param>
+        /// <param name="message">A message to write.</param>
+        /// <param name="relatedActivityId">A <see cref="Guid"/>  object identifying a related activity.</param>
         public override void TraceTransfer(TraceEventCache eventCache, String source, Int32 id, String message, Guid relatedActivityId)
         {
             TraceEvent(eventCache, source, TraceEventType.Transfer, id, message + ", relatedActivityId=" + relatedActivityId);
         }
 
+        /// <summary>
+        /// Writes trace and event information to the listener specific output.
+        /// </summary>
+        /// <param name="eventCache">A <see cref="TraceEventCache"/> object that contains the current process ID, thread ID, and stack trace information.</param>
+        /// <param name="source">A name used to identify the output, typically the name of the application that generated the trace event.</param>
+        /// <param name="eventType">One of the <see cref="TraceEventType"/> values specifying the type of event that has caused the trace.</param>
+        /// <param name="id">A numeric identifier for the event.</param>
         public override void TraceEvent(TraceEventCache eventCache, String source, TraceEventType eventType, Int32 id)
         {
-            if (Filter == null || Filter.ShouldTrace(eventCache, source, eventType, id, null, null, null, null))
-                WriteEvent(eventCache.DateTime, eventType, source, NoMessage, NoData);
+            TraceEvent(eventCache, source, eventType, id, String.Empty);
         }
 
+        /// <summary>
+        /// Writes trace information, a message, and event information to the listener specific output.
+        /// </summary>
+        /// <param name="eventCache">A <see cref="TraceEventCache"/> object that contains the current process ID, thread ID, and stack trace information.</param>
+        /// <param name="source">A name used to identify the output, typically the name of the application that generated the trace event.</param>
+        /// <param name="eventType">One of the <see cref="TraceEventType"/> values specifying the type of event that has caused the trace.</param>
+        /// <param name="id">A numeric identifier for the event.</param>
+        /// <param name="message">A message to write.</param>
         public override void TraceEvent(TraceEventCache eventCache, String source, TraceEventType eventType, Int32 id, String message)
         {
             if (Filter == null || Filter.ShouldTrace(eventCache, source, eventType, id, message, null, null, null))
-                WriteEvent(eventCache.DateTime, eventType, source, message, NoData);
+                WriteEvent(eventCache.DateTime, eventType, source, message);
         }
 
+        /// <summary>
+        /// Writes trace information, a formatted array of objects and event information to the listener specific output.
+        /// </summary>
+        /// <param name="eventCache">A <see cref="TraceEventCache"/> object that contains the current process ID, thread ID, and stack trace information.</param>
+        /// <param name="source">A name used to identify the output, typically the name of the application that generated the trace event.</param>
+        /// <param name="eventType">One of the <see cref="TraceEventType"/> values specifying the type of event that has caused the trace.</param>
+        /// <param name="id">A numeric identifier for the event.</param>
+        /// <param name="format">A format string that contains zero or more format items, which correspond to objects in the <paramref name="args"/> array.</param>
+        /// <param name="args">An object array containing zero or more objects to format.</param>
         public override void TraceEvent(TraceEventCache eventCache, String source, TraceEventType eventType, Int32 id, String format, params Object[] args)
         {
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
             if (Filter == null || Filter.ShouldTrace(eventCache, source, eventType, id, format, args, null, null))
-                WriteEvent(eventCache.DateTime, eventType, source, String.Format(format, args), NoData);
+                WriteEvent(eventCache.DateTime, eventType, source, args == null ? format : String.Format(format, args));
+            // ReSharper enable ConditionIsAlwaysTrueOrFalse
         }
 
+        /// <summary>
+        /// Writes the value of the object's <see cref="M:System.Object.ToString"/> method to the listener you create when you implement the <see cref="TraceListener"/> class.
+        /// </summary>
+        /// <param name="value">An <see cref="Object"/> whose fully qualified class name you want to write.</param>
         public override void Write(Object value)
         {
             if (value != null && (Filter == null || Filter.ShouldTrace(null, String.Empty, TraceEventType.Verbose, 0, null, null, value, null)))
-                WriteEvent(DateTime.Now, TraceEventType.Verbose, NoLogger, value.ToString(), NoData);
+                WriteEvent(DateTime.Now, null, String.Empty, value.ToString());
         }
 
+        /// <summary>
+        /// Writes a category name and the value of the object's <see cref="Object.ToString"/> method to the listener you create when you implement the <see cref="TraceListener"/> class.
+        /// </summary>
+        /// <param name="value">An <see cref="Object"/> whose fully qualified class name you want to write. </param>
+        /// <param name="category">A category name used to organize the output. </param>
         public override void Write(Object value, String category)
         {
             if (Filter == null || Filter.ShouldTrace(null, String.Empty, TraceEventType.Verbose, 0, category, null, value, null))
-                WriteEvent(DateTime.Now, TraceEventType.Verbose, category ?? NoCategory, value == null ? NoMessage : value.ToString(), null);
+                WriteEvent(DateTime.Now, null, category, value == null ? String.Empty : value.ToString());
         }
 
+        /// <summary>
+        /// When overridden in a derived class, writes the specified message to the listener you create in the derived class.
+        /// </summary>
+        /// <param name="message">A message to write.</param>
         public override void Write(String message)
         {
-            WriteEvent(DateTime.Now, TraceEventType.Verbose, NoCategory, message, NoData);
+            WriteEvent(DateTime.Now, null, String.Empty, message);
         }
 
+        /// <summary>
+        /// Writes a category name and a message to the listener you create when you implement the <see cref="TraceListener"/> class.
+        /// </summary>
+        /// <param name="message">A message to write. </param>
+        /// <param name="category">A category name used to organize the output.</param>
         public override void Write(String message, String category)
         {
             if (Filter == null || Filter.ShouldTrace(null, String.Empty, TraceEventType.Verbose, 0, message + Environment.NewLine, null, null, null))
-                WriteEvent(DateTime.Now, TraceEventType.Verbose, category ?? NoCategory, message, NoData);
+                WriteEvent(DateTime.Now, null, category, message);
         }
 
+        /// <summary>
+        /// No action.
+        /// </summary>
         protected override void WriteIndent()
         {
             /* Do Nothing */
         }
 
+        /// <summary>
+        /// Writes the value of the object's <see cref="Object.ToString"/> method to the listener you create when you implement the <see cref="TraceListener"/> class, followed by a line terminator.
+        /// </summary>
+        /// <param name="value">An <see cref="Object"/> whose fully qualified class name you want to write.</param>
         public override void WriteLine(Object value)
         {
             if (value != null && (Filter == null || Filter.ShouldTrace(null, String.Empty, TraceEventType.Verbose, 0, null, null, value, null)))
-                WriteEvent(DateTime.Now, TraceEventType.Verbose, NoCategory, value + Environment.NewLine, NoData);
+                WriteEvent(DateTime.Now, null, String.Empty, value + Environment.NewLine);
         }
 
+        /// <summary>
+        /// Writes a category name and the value of the object's <see cref="Object.ToString"/> method to the listener you create when you implement the <see cref="TraceListener"/> class, followed by a line terminator.
+        /// </summary>
+        /// <param name="value">An <see cref="T:System.Object"/> whose fully qualified class name you want to write.</param>
+        /// <param name="category">A category name used to organize the output.</param>
         public override void WriteLine(Object value, String category)
         {
             if (Filter == null || Filter.ShouldTrace(null, String.Empty, TraceEventType.Verbose, 0, category, null, value, null))
-                WriteEvent(DateTime.Now, TraceEventType.Verbose, category ?? NoCategory, value == null ? NoMessage : value + Environment.NewLine, NoData);
+                WriteEvent(DateTime.Now, null, category, value == null ? String.Empty : value + Environment.NewLine);
         }
 
+        /// <summary>
+        /// When overridden in a derived class, writes a message to the listener you create in the derived class, followed by a line terminator.
+        /// </summary>
+        /// <param name="message">A message to write.</param>
         public override void WriteLine(String message)
         {
             Write(message + Environment.NewLine);
         }
 
+        /// <summary>
+        /// Writes a category name and a message to the listener you create when you implement the <see cref="TraceListener"/> class, followed by a line terminator.
+        /// </summary>
+        /// <param name="message">A message to write. </param>
+        /// <param name="category">A category name used to organize the output.</param>
         public override void WriteLine(String message, String category)
         {
             if (Filter == null || Filter.ShouldTrace(null, String.Empty, TraceEventType.Verbose, 0, message + Environment.NewLine, null, null, null))
-                WriteEvent(DateTime.Now, TraceEventType.Verbose, category ?? NoCategory, message, NoData);
+                WriteEvent(DateTime.Now, null, category, message);
         }
 
-        private void WriteEvent(DateTime timestamp, TraceEventType level, String logger, String message, IList<Object> data)
+        /// <summary>
+        /// Write out the log4net XML message based on the trace event data provided.
+        /// </summary>
+        /// <param name="timestamp">The date and time when the trace event occurred.</param>
+        /// <param name="level">The trace event level.</param>
+        /// <param name="logger">The trace source name or category.</param>
+        /// <param name="message">The message to log.</param>
+        private void WriteEvent(DateTime timestamp, TraceEventType? level, String logger, String message)
         {
             var xml = new StringBuilder();
-
+            
             using (var stringWriter = new StringWriter(xml))
             using (var xmlWriter = new XmlTextWriter(stringWriter))
             {
                 xmlWriter.WriteStartElement("log4net:event");
+
+                // Write out core trace event attributes.
                 xmlWriter.WriteAttributeString("logger", logger);
                 xmlWriter.WriteAttributeString("timestamp", timestamp.ToLocalTime().ToString("yyyy-MM-ddTHH:mm:ss.ffffffzzzz"));
+                xmlWriter.WriteAttributeString("username", GetCurrentUsername());
                 xmlWriter.WriteAttributeString("level", GetLevelFromType(level));
                 xmlWriter.WriteAttributeString("thread", GetCurrentThread());
                 xmlWriter.WriteAttributeString("domain", domain);
-                xmlWriter.WriteAttributeString("username", GetCurrentUsername());
 
-                xmlWriter.WriteStartElement("log4net:message");
-                xmlWriter.WriteString(message);
-                xmlWriter.WriteEndElement();
-
-                xmlWriter.WriteStartElement("log4net:properties");
-
-                xmlWriter.WriteStartElement("log4net:data");
-                xmlWriter.WriteAttributeString("name", "log4net:HostName");
-                xmlWriter.WriteAttributeString("value", machineName);
-                xmlWriter.WriteEndElement();
-
-                var activityId = Trace.CorrelationManager.ActivityId;
-                if (activityId != Guid.Empty)
+                // Write out message element if available.
+                if (!String.IsNullOrWhiteSpace(message))
                 {
-                    xmlWriter.WriteStartElement("log4net:data");
-                    xmlWriter.WriteAttributeString("name", "correlationManager:ActivityId");
-                    xmlWriter.WriteAttributeString("value", activityId.ToString());
+                    xmlWriter.WriteStartElement("log4net:message");
+                    xmlWriter.WriteString(message);
                     xmlWriter.WriteEndElement();
                 }
 
+                // Write out trace event extended properties.
+                xmlWriter.WriteStartElement("log4net:properties");
+
+                // Write out the machine name.
+                if (!String.IsNullOrWhiteSpace(machineName))
+                    WriteProperty(xmlWriter, "log4net:HostName", machineName);
+
+                // Include the correlation manager's activity ID if available.
+                var activityId = Trace.CorrelationManager.ActivityId;
+                if (activityId != Guid.Empty)
+                    WriteProperty(xmlWriter, "correlationManager:ActivityId", activityId);
+
+                // Include the correlation manager's logical stack trace frames if available
                 var logicalOperationStack = Trace.CorrelationManager.LogicalOperationStack;
                 if (logicalOperationStack.Count > 0)
                 {
                     var frames = logicalOperationStack.ToArray();
                     for (var i = 0; i < frames.Length; i++)
-                    {
-                        xmlWriter.WriteStartElement("log4net:data");
-                        xmlWriter.WriteAttributeString("name", "correlationManager:LogicalOperationStack[" + i + "]");
-                        xmlWriter.WriteAttributeString("value", frames[i].ToString());
-                        xmlWriter.WriteEndElement();
-                    }
-                }
-
-                if (data != null)
-                {
-                    for (var i = 0; i < data.Count; i++)
-                    {
-                        xmlWriter.WriteStartElement("log4net:data");
-                        xmlWriter.WriteAttributeString("name", "data[" + i + "]");
-                        xmlWriter.WriteAttributeString("value", data[i] == null ? String.Empty : data[i].ToString());
-                        xmlWriter.WriteEndElement();
-                    }
+                        WriteProperty(xmlWriter, "correlationManager:LogicalOperationStack[" + i + "]", frames[i]);
                 }
 
                 xmlWriter.WriteEndElement();
@@ -253,8 +380,29 @@ namespace Harvester.Integration.Diagnostics
             messageWriter.Write(xml.ToString());
         }
 
-        private static String GetLevelFromType(TraceEventType eventType)
+        /// <summary>
+        /// Write out the propert name/value pair.
+        /// </summary>
+        /// <param name="xmlWriter">The underlying XML writer.</param>
+        /// <param name="name">The data element name.</param>
+        /// <param name="value">The data element value.</param>
+        private static void WriteProperty(XmlWriter xmlWriter, String name, Object value)
         {
+            xmlWriter.WriteStartElement("log4net:data");
+            xmlWriter.WriteAttributeString("name", name);
+            xmlWriter.WriteAttributeString("value", value == null ? String.Empty : value.ToString());
+            xmlWriter.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Get the <see cref="String"/> logging level based on the <see cref="TraceEventType"/>.
+        /// </summary>
+        /// <param name="eventType">The trace event type to capture.</param>
+        private static String GetLevelFromType(TraceEventType? eventType)
+        {
+            if (!eventType.HasValue)
+                return "TRACE";
+
             switch (eventType)
             {
                 case TraceEventType.Critical: return "FATAL";
@@ -266,6 +414,9 @@ namespace Harvester.Integration.Diagnostics
             }
         }
 
+        /// <summary>
+        /// Get the current username from the current thread principal.
+        /// </summary>
         private static String GetCurrentUsername()
         {
             var principal = Thread.CurrentPrincipal;
@@ -274,6 +425,9 @@ namespace Harvester.Integration.Diagnostics
             return String.IsNullOrWhiteSpace(username) ? (WindowsIdentity.GetCurrent() ?? WindowsIdentity.GetAnonymous()).Name : username;
         }
 
+        /// <summary>
+        /// Get the current thread name or managed thread id.
+        /// </summary>
         private static String GetCurrentThread()
         {
             return Thread.CurrentThread.Name ?? Thread.CurrentThread.ManagedThreadId.ToString(CultureInfo.InvariantCulture);
