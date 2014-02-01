@@ -213,14 +213,34 @@ namespace Harvester.Integration.Diagnostics
                 xmlWriter.WriteAttributeString("value", machineName);
                 xmlWriter.WriteEndElement();
 
+                var activityId = Trace.CorrelationManager.ActivityId;
+                if (activityId != Guid.Empty)
+                {
+                    xmlWriter.WriteStartElement("log4net:data");
+                    xmlWriter.WriteAttributeString("name", "correlationManager:ActivityId");
+                    xmlWriter.WriteAttributeString("value", activityId.ToString());
+                    xmlWriter.WriteEndElement();
+                }
+
+                var logicalOperationStack = Trace.CorrelationManager.LogicalOperationStack;
+                if (logicalOperationStack.Count > 0)
+                {
+                    var frames = logicalOperationStack.ToArray();
+                    for (var i = 0; i < frames.Length; i++)
+                    {
+                        xmlWriter.WriteStartElement("log4net:data");
+                        xmlWriter.WriteAttributeString("name", "correlationManager:LogicalOperationStack[" + i + "]");
+                        xmlWriter.WriteAttributeString("value", frames[i].ToString());
+                        xmlWriter.WriteEndElement();
+                    }
+                }
+
                 if (data != null)
                 {
                     for (var i = 0; i < data.Count; i++)
                     {
-                        var item = i + 1;
-
                         xmlWriter.WriteStartElement("log4net:data");
-                        xmlWriter.WriteAttributeString("name", "log4net:DataItem #" + item);
+                        xmlWriter.WriteAttributeString("name", "data[" + i + "]");
                         xmlWriter.WriteAttributeString("value", data[i] == null ? String.Empty : data[i].ToString());
                         xmlWriter.WriteEndElement();
                     }
