@@ -31,7 +31,7 @@ namespace Harvester.Integration.Diagnostics
 {
     public sealed class HarvesterListener : TraceListener
     {
-        private static readonly IList<Object> NoData = new Object[0];
+        private static readonly Object[] NoData = new Object[0];
         private const String NoCategory = "";
         private const String NoMessage = "";
         private const String NoLogger = "";
@@ -120,21 +120,21 @@ namespace Harvester.Integration.Diagnostics
 
         public override void TraceEvent(TraceEventCache eventCache, String source, TraceEventType eventType, Int32 id)
         {
-            TraceEvent(eventCache, source, eventType, id, NoMessage, NoData);
+            if (Filter == null || Filter.ShouldTrace(eventCache, source, eventType, id, null, null, null, null))
+                WriteEvent(eventCache.DateTime, eventType, source, NoMessage, NoData);
         }
 
         public override void TraceEvent(TraceEventCache eventCache, String source, TraceEventType eventType, Int32 id, String message)
         {
-            TraceEvent(eventCache, source, eventType, id, message, NoData);
+            if (Filter == null || Filter.ShouldTrace(eventCache, source, eventType, id, message, null, null, null))
+                WriteEvent(eventCache.DateTime, eventType, source, message, NoData);
         }
 
-        // ReSharper disable MethodOverloadWithOptionalParameter
         public override void TraceEvent(TraceEventCache eventCache, String source, TraceEventType eventType, Int32 id, String format, params Object[] args)
         {
             if (Filter == null || Filter.ShouldTrace(eventCache, source, eventType, id, format, args, null, null))
-                WriteEvent(eventCache.DateTime, eventType, source, String.Format(format, args), null);
+                WriteEvent(eventCache.DateTime, eventType, source, String.Format(format, args), NoData);
         }
-        // ReSharper restore MethodOverloadWithOptionalParameter
 
         public override void Write(Object value)
         {
