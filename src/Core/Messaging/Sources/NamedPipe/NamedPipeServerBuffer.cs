@@ -34,7 +34,7 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
         {
             Verify.NotWhitespace(identity, "identity");
             Verify.NotWhitespace(pipeName, "pipeName");
-            Verify.True(pipeName.StartsWith(@"\\.\pipe\"), "pipeName", Localization.InvalidNamedPiperName);
+            Verify.True(pipeName.StartsWith(@"\\.\pipe\"), "pipeName", Localization.InvalidNamedPipeName);
 
             pipeStream = new NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.Asynchronous, 0, 0, GetPipeSecurity(identity));
             memoryStream = new MemoryStream();

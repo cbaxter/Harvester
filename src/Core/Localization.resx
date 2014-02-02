@@ -131,7 +131,7 @@ Property: {0}</value>
     <value>Unknown filter type.
 Friendly Name:{0}</value>
   </data>
-  <data name="InvalidNamedPiperName" xml:space="preserve">
+  <data name="InvalidNamedPipeName" xml:space="preserve">
     <value>Invalid NamedPipe name.
 Example: \\.\pipe\CustomPipeName</value>
   </data>

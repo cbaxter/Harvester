@@ -38,6 +38,7 @@ namespace Harvester.Integration.Diagnostics
         private readonly String machineName = Environment.MachineName;
         private readonly IWriteMessages messageWriter;
         private readonly MessageBuffer messageBuffer;
+        private readonly Boolean captureIdentity;
 
         /// <summary>
         /// Gets a value indicating whether the trace listener is thread safe.
@@ -55,6 +56,7 @@ namespace Harvester.Integration.Diagnostics
             var mutexName = parsedInitializeData.ContainsKey("Mutex Name") ? parsedInitializeData["Mutex Name"] : "HarvesterMutex";
             var bufferType = parsedInitializeData.ContainsKey("Buffer Type") ? parsedInitializeData["Buffer Type"] : "NamedPipeBuffer";
 
+            captureIdentity = !parsedInitializeData.ContainsKey("Capture Identity") || Boolean.Parse(parsedInitializeData["Capture Identity"]);
             switch (bufferType)
             {
                 case "SharedMemoryBuffer":
@@ -330,7 +332,7 @@ namespace Harvester.Integration.Diagnostics
         private void WriteEvent(DateTime timestamp, TraceEventType? level, String logger, String message)
         {
             var xml = new StringBuilder();
-            
+
             using (var stringWriter = new StringWriter(xml))
             using (var xmlWriter = new XmlTextWriter(stringWriter))
             {
@@ -339,10 +341,13 @@ namespace Harvester.Integration.Diagnostics
                 // Write out core trace event attributes.
                 xmlWriter.WriteAttributeString("logger", logger);
                 xmlWriter.WriteAttributeString("timestamp", timestamp.ToLocalTime().ToString("yyyy-MM-ddTHH:mm:ss.ffffffzzzz"));
-                xmlWriter.WriteAttributeString("username", GetCurrentUsername());
                 xmlWriter.WriteAttributeString("level", GetLevelFromType(level));
                 xmlWriter.WriteAttributeString("thread", GetCurrentThread());
                 xmlWriter.WriteAttributeString("domain", domain);
+
+                // Only capture username if required (slow).
+                if (captureIdentity)
+                    xmlWriter.WriteAttributeString("username", GetCurrentUsername());
 
                 // Write out message element if available.
                 if (!String.IsNullOrWhiteSpace(message))
@@ -420,7 +425,7 @@ namespace Harvester.Integration.Diagnostics
         private static String GetCurrentUsername()
         {
             var principal = Thread.CurrentPrincipal;
-            var username = principal != null && !String.IsNullOrWhiteSpace(principal.Identity.Name) ? Thread.CurrentPrincipal.Identity.Name : String.Empty;
+            var username = principal == null ? String.Empty : principal.Identity.Name;
 
             return String.IsNullOrWhiteSpace(username) ? (WindowsIdentity.GetCurrent() ?? WindowsIdentity.GetAnonymous()).Name : username;
         }
