@@ -349,40 +349,71 @@ namespace Harvester.Integration.Diagnostics
                 if (captureIdentity)
                     xmlWriter.WriteAttributeString("username", GetCurrentUsername());
 
-                // Write out message element if available.
-                if (!String.IsNullOrWhiteSpace(message))
-                {
-                    xmlWriter.WriteStartElement("log4net:message");
-                    xmlWriter.WriteString(message);
-                    xmlWriter.WriteEndElement();
-                }
+                // Write child elements.
+                WriteMessage(xmlWriter, message);
+                WriteProperties(xmlWriter, machineName);
 
-                // Write out trace event extended properties.
-                xmlWriter.WriteStartElement("log4net:properties");
-
-                // Write out the machine name.
-                if (!String.IsNullOrWhiteSpace(machineName))
-                    WriteProperty(xmlWriter, "log4net:HostName", machineName);
-
-                // Include the correlation manager's activity ID if available.
-                var activityId = Trace.CorrelationManager.ActivityId;
-                if (activityId != Guid.Empty)
-                    WriteProperty(xmlWriter, "correlationManager:ActivityId", activityId);
-
-                // Include the correlation manager's logical stack trace frames if available
-                var logicalOperationStack = Trace.CorrelationManager.LogicalOperationStack;
-                if (logicalOperationStack.Count > 0)
-                {
-                    var frames = logicalOperationStack.ToArray();
-                    for (var i = 0; i < frames.Length; i++)
-                        WriteProperty(xmlWriter, "correlationManager:LogicalOperationStack[" + i + "]", frames[i]);
-                }
-
-                xmlWriter.WriteEndElement();
+                // Close the trace event element.
                 xmlWriter.WriteEndElement();
             }
 
             messageWriter.Write(xml.ToString());
+        }
+
+        /// <summary>
+        /// Write out the trace event log message.
+        /// </summary>
+        /// <param name="xmlWriter">The underlying XML writer.</param>
+        /// <param name="message">The message to write.</param>
+        private static void WriteMessage(XmlWriter xmlWriter, String message)
+        {
+            if (String.IsNullOrWhiteSpace(message)) return;
+
+            xmlWriter.WriteStartElement("log4net:message");
+            xmlWriter.WriteString(message);
+            xmlWriter.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Write out the trace event extended properties.
+        /// </summary>
+        /// <param name="xmlWriter">The underlying XML writer.</param>
+        /// <param name="machineName">The machine name.</param>
+        private static void WriteProperties(XmlWriter xmlWriter, String machineName)
+        {
+            // Write out trace event extended properties.
+            xmlWriter.WriteStartElement("log4net:properties");
+
+            // Write out the machine name.
+            if (!String.IsNullOrWhiteSpace(machineName))
+                WriteProperty(xmlWriter, "log4net:HostName", machineName);
+
+            // Include the correlation manager's activity ID if available.
+            var activityId = Trace.CorrelationManager.ActivityId;
+            if (activityId != Guid.Empty)
+                WriteProperty(xmlWriter, "trace:activityId", activityId);
+
+            // Include the correlation manager's logical stack trace frames if available
+            var logicalOperationStack = Trace.CorrelationManager.LogicalOperationStack;
+            if (logicalOperationStack.Count == 1)
+            {
+                WriteProperty(xmlWriter, "trace:logicalOperationStack", logicalOperationStack.Peek());
+            }
+            else if (logicalOperationStack.Count > 1)
+            {
+                var frames = logicalOperationStack.ToArray();
+                var flattened = new StringBuilder(frames[0].ToString());
+
+                for (var i = 1; i < frames.Length; i++)
+                {
+                    flattened.Append(", ");
+                    flattened.Append(frames[i]);
+                }
+
+                WriteProperty(xmlWriter, "trace:logicalOperationStack", flattened);
+            }
+
+            xmlWriter.WriteEndElement();
         }
 
         /// <summary>
