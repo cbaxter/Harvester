@@ -66,6 +66,8 @@
             this.userFilterButton = new System.Windows.Forms.ToolStripButton();
             this.messageFilterButton = new System.Windows.Forms.ToolStripButton();
             this.separator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.saveButton = new System.Windows.Forms.ToolStripButton();
+            this.separator4 = new System.Windows.Forms.ToolStripSeparator();
             this.searchText = new System.Windows.Forms.ToolStripComboBox();
             this.searchButton = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStrip.SuspendLayout();
@@ -286,11 +288,13 @@
             this.userFilterButton,
             this.messageFilterButton,
             this.separator3,
+            this.saveButton,
+            this.separator4,
             this.searchText,
             this.searchButton});
             this.mainToolStrip.Location = new System.Drawing.Point(3, 0);
             this.mainToolStrip.Name = "mainToolStrip";
-            this.mainToolStrip.Size = new System.Drawing.Size(507, 25);
+            this.mainToolStrip.Size = new System.Drawing.Size(536, 25);
             this.mainToolStrip.TabIndex = 0;
             // 
             // closeButton
@@ -402,6 +406,20 @@
             this.separator3.Name = "separator3";
             this.separator3.Size = new System.Drawing.Size(6, 25);
             // 
+            // saveButton
+            // 
+            this.saveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.saveButton.Image = global::Harvester.Properties.Resources.save;
+            this.saveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(23, 22);
+            this.saveButton.Text = "Save to File";
+            // 
+            // separator4
+            // 
+            this.separator4.Name = "separator4";
+            this.separator4.Size = new System.Drawing.Size(6, 25);
+            // 
             // searchText
             // 
             this.searchText.Name = "searchText";
@@ -487,5 +505,7 @@
         private System.Windows.Forms.SplitContainer splitContainer;
         private SystemEventControl systemEventControl;
         private System.Windows.Forms.ToolStripComboBox searchText;
+        private System.Windows.Forms.ToolStripButton saveButton;
+        private System.Windows.Forms.ToolStripSeparator separator4;
     }
 }

@@ -66,6 +66,8 @@ namespace Harvester.Forms
             userFilterButton.Click += (sender, e) => HandleEvent(ShowFilterByUsername);
             messageFilterButton.Click += (sender, e) => HandleEvent(ShowFilterByMessage);
 
+            saveButton.Click += (sender, e) => HandleEvent(SaveEventItemsToTextFile);
+
             searchButton.Click += (sender, e) => HandleEvent(StartSearch);
             searchText.KeyDown += (sender, e) => HandleEvent(() =>
                                                                  {
@@ -237,6 +239,42 @@ namespace Harvester.Forms
         }
 
         #endregion
+
+        #region Save Event Items to Text File
+        private void SaveEventItemsToTextFile()
+        {
+            lock (bufferedItems)
+            {
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                saveFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                saveFileDialog1.Title = "Save Events";
+                saveFileDialog1.CheckPathExists = true;
+                saveFileDialog1.DefaultExt = "txt";
+                saveFileDialog1.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+                saveFileDialog1.FilterIndex = 2;
+                saveFileDialog1.RestoreDirectory = true;
+                System.Text.StringBuilder outputBuilder = new System.Text.StringBuilder();
+
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (ListViewItem row in systemEvents.Items)
+                    {
+                        for (int i = 0; i < 9; i++)
+                        {
+                            outputBuilder.Append(row.SubItems[i].Text + " ");
+                        }
+                        outputBuilder.Append("\r\n");
+                    }
+
+                    System.IO.StreamWriter outFile = new System.IO.StreamWriter(saveFileDialog1.FileName);
+                    outFile.Write(outputBuilder.ToString());
+                    outFile.Close();
+                } 
+
+            }
+        }
+
+        #endregion  
 
         #region Show Color Picker
 
