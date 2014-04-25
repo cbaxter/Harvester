@@ -414,6 +414,7 @@
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(23, 22);
             this.saveButton.Text = "Save to File";
+            this.saveButton.ToolTipText = "Save to File (Ctrl + S)";
             // 
             // separator4
             // 

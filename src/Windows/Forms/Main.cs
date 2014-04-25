@@ -115,7 +115,8 @@ namespace Harvester.Forms
                            {Keys.Control | Keys.Shift | Keys.U, userFilterButton.PerformClick}, 
                            {Keys.Control | Keys.Shift | Keys.M, messageFilterButton.PerformClick}, 
                            {Keys.Control | Keys.Shift | Keys.F, searchText.Focus}, 
-                           {Keys.Control | Keys.F, searchButton.PerformClick}
+                           {Keys.Control | Keys.F, searchButton.PerformClick},
+                           {Keys.Control | Keys.S, saveButton.PerformClick}
                        };
         }
 
