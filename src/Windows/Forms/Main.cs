@@ -262,7 +262,7 @@ namespace Harvester.Forms
                     {
                         for (int i = 0; i < 9; i++)
                         {
-                            outputBuilder.Append(row.SubItems[i].Text + " ");
+                            outputBuilder.Append(row.SubItems[i].Text.Replace(Environment.NewLine, " ") + " ");
                         }
                         outputBuilder.Append("\r\n");
                     }
