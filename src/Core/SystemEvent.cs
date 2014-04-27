@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Harvester.Core.Messaging;
 
 /* Copyright (c) 2012-2013 CBaxter
@@ -51,6 +52,21 @@ namespace Harvester.Core
                            Source = message.Source,
                            RawMessage = new Lazy<String>(() => message.Message)
                        };
+        }
+
+        public void WriteTo(StreamWriter writer)
+        {
+            writer.WriteLine(
+                "{0} {1:yyyy-MM-dd HH:mm:ss,ffffff} {2} ({3}) {4} {5} {6} {7}",
+                MessageId,
+                Timestamp,
+                ProcessName,
+                ProcessId,
+                Thread,
+                Username,
+                Source,
+                Message.Replace(Environment.NewLine, "\\r\\n").Replace("\r", "\\r").Replace("\n", "\\n")
+            );
         }
     }
 }

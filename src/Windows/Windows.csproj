@@ -226,6 +226,9 @@
     <Content Include="..\Resources\Images\Search.png">
       <Link>Resources\Images\Search.png</Link>
     </Content>
+    <Content Include="..\Resources\Images\Disk.png">
+      <Link>Resources\Images\Disk.png</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

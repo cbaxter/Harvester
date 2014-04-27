@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Harvester.Core;
@@ -54,7 +55,7 @@ namespace Harvester.Forms
 
         private void WireUpToolStrip()
         {
-            closeButton.Click += (sender, e) => HandleEvent(Application.Exit);
+            saveButton.Click += (sender, e) => HandleEvent(SaveSystemEvents);
             eraseButton.Click += (sender, e) => HandleEvent(ClearSystemEvents);
             scrollButton.Click += (sender, e) => HandleEvent(ToggleAutoScroll);
             colorButton.Click += (sender, e) => HandleEvent(ShowColorPicker);
@@ -113,7 +114,8 @@ namespace Harvester.Forms
                            {Keys.Control | Keys.Shift | Keys.U, userFilterButton.PerformClick}, 
                            {Keys.Control | Keys.Shift | Keys.M, messageFilterButton.PerformClick}, 
                            {Keys.Control | Keys.Shift | Keys.F, searchText.Focus}, 
-                           {Keys.Control | Keys.F, searchButton.PerformClick}
+                           {Keys.Control | Keys.F, searchButton.PerformClick},
+                           {Keys.Control | Keys.S, saveButton.PerformClick}
                        };
         }
 
@@ -193,7 +195,7 @@ namespace Harvester.Forms
         {
             Action accelerator;
             if (!accelerators.TryGetValue(keyData, out accelerator))
-                return base.ProcessCmdKey(ref msg, keyData); ;
+                return base.ProcessCmdKey(ref msg, keyData);
 
             accelerator.Invoke();
             return true;
@@ -233,6 +235,28 @@ namespace Harvester.Forms
             {
                 systemEvents.Items.Clear();
                 systemEventControl.Clear();
+            }
+        }
+
+        #endregion
+
+        #region Save System Events
+
+        private void SaveSystemEvents()
+        {
+            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                return;
+
+            using (var fileWriter = new FileStream(saveFileDialog.FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
+            using (var streamWriter = new StreamWriter(fileWriter))
+            {
+                fileWriter.SetLength(0);
+
+                foreach (var e in systemEvents.Items.Cast<ListViewItem>().Select(item => (SystemEvent)item.Tag))
+                    e.WriteTo(streamWriter);
+
+                streamWriter.Flush();
             }
         }
 

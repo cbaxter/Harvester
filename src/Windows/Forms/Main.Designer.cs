@@ -53,7 +53,7 @@
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.systemEventControl = new Harvester.Forms.SystemEventControl();
             this.mainToolStrip = new System.Windows.Forms.ToolStrip();
-            this.closeButton = new System.Windows.Forms.ToolStripButton();
+            this.saveButton = new System.Windows.Forms.ToolStripButton();
             this.separator1 = new System.Windows.Forms.ToolStripSeparator();
             this.eraseButton = new System.Windows.Forms.ToolStripButton();
             this.colorButton = new System.Windows.Forms.ToolStripButton();
@@ -68,6 +68,7 @@
             this.separator3 = new System.Windows.Forms.ToolStripSeparator();
             this.searchText = new System.Windows.Forms.ToolStripComboBox();
             this.searchButton = new System.Windows.Forms.ToolStripButton();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.contextMenuStrip.SuspendLayout();
             this.toolStripContainer.ContentPanel.SuspendLayout();
             this.toolStripContainer.TopToolStripPanel.SuspendLayout();
@@ -273,7 +274,7 @@
             this.mainToolStrip.Dock = System.Windows.Forms.DockStyle.None;
             this.mainToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.mainToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.closeButton,
+            this.saveButton,
             this.separator1,
             this.eraseButton,
             this.colorButton,
@@ -290,17 +291,18 @@
             this.searchButton});
             this.mainToolStrip.Location = new System.Drawing.Point(3, 0);
             this.mainToolStrip.Name = "mainToolStrip";
-            this.mainToolStrip.Size = new System.Drawing.Size(507, 25);
+            this.mainToolStrip.Size = new System.Drawing.Size(476, 25);
             this.mainToolStrip.TabIndex = 0;
             // 
-            // closeButton
+            // saveButton
             // 
-            this.closeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.closeButton.Image = global::Harvester.Properties.Resources.Close;
-            this.closeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.closeButton.Name = "closeButton";
-            this.closeButton.Size = new System.Drawing.Size(23, 22);
-            this.closeButton.Text = "Close Application (Alt+F4)";
+            this.saveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.saveButton.Image = global::Harvester.Properties.Resources.Save;
+            this.saveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(23, 22);
+            this.saveButton.Text = "Save to File";
+            this.saveButton.ToolTipText = "Save to File (Ctrl + S)";
             // 
             // separator1
             // 
@@ -418,6 +420,13 @@
             this.searchButton.Text = "Search";
             this.searchButton.ToolTipText = "Search (Ctrl+F)";
             // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.DefaultExt = "txt";
+            this.saveFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            this.saveFileDialog.RestoreDirectory = true;
+            this.saveFileDialog.Title = "Save Events";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -461,7 +470,7 @@
         private System.Windows.Forms.Label feedbackLabel;
         private System.Windows.Forms.ToolStripContainer toolStripContainer;
         private System.Windows.Forms.ToolStrip mainToolStrip;
-        private System.Windows.Forms.ToolStripButton closeButton;
+        private System.Windows.Forms.ToolStripButton saveButton;
         private System.Windows.Forms.ToolStripSeparator separator1;
         private System.Windows.Forms.ToolStripButton eraseButton;
         private System.Windows.Forms.ToolStripButton colorButton;
@@ -487,5 +496,6 @@
         private System.Windows.Forms.SplitContainer splitContainer;
         private SystemEventControl systemEventControl;
         private System.Windows.Forms.ToolStripComboBox searchText;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
     }
 }
