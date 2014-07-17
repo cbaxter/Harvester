@@ -146,10 +146,11 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
+       Other similar extension points exist, see Microsoft.Common.targets. -->
   <Target Name="BeforeBuild">
+    <WriteLinesToFile Overwrite="true" File="../.shared/VersionInfo.cs" Condition="!Exists('../.shared/VersionInfo.cs')" Lines="using System.Reflection%3b;;[assembly: AssemblyVersion(&quot;0.0.0.0&quot;)];[assembly: AssemblyFileVersion(&quot;0.0.0.0&quot;)];[assembly: AssemblyConfiguration(&quot;$(Configuration)&quot;)];" />
   </Target>
-  <Target Name="AfterBuild">
+  <!--  <Target Name="AfterBuild">
   </Target>
   -->
 </Project>
