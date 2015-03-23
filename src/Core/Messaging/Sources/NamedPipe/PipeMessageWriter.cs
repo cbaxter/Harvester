@@ -60,11 +60,10 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
         {
             //Boolean createdNew;
             Mutex mutex;
+            Boolean captured = false;
 
             if (Mutex.TryOpenExisting(mutexName, out mutex))
             {
-                var captured = false;
-
                 try
                 {
                     captured = mutex.WaitOne(messageBuffer.Timeout);

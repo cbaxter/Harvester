@@ -28,7 +28,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeServerB
         {
             var pipeName = @"\\.\pipe\" + Guid.NewGuid();
 
-            buffer = new NamedPipeServerBuffer(pipeName, "Everyone");
+            buffer = new NamedPipeServerBuffer(pipeName);
         }
 
         public void Dispose()

@@ -65,11 +65,10 @@ namespace Harvester.Core.Messaging.Sources.DbWin
         public void Write(String message)
         {
             Mutex mutex;
+            Boolean captured = false;
 
             if (Mutex.TryOpenExisting(mutexName, out mutex))
             {
-                var captured = false;
-
                 try
                 {
                     captured = mutex.WaitOne(messageBuffer.Timeout);

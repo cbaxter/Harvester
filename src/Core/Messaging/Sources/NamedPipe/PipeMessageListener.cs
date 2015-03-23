@@ -31,7 +31,7 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
         /// <param name="messageProcessor">The underlying message processor instance.</param>
         /// <param name="configuration">The named pipe message listener configuration.</param>
         public PipeMessageListener(IProcessMessages messageProcessor, IConfigureListeners configuration)
-            : this(GetSource(configuration), messageProcessor, new NamedPipeServerBuffer(GetSource(configuration), GetIdentity(configuration)), GetMutex(configuration))
+            : this(GetSource(configuration), messageProcessor, new NamedPipeServerBuffer(GetSource(configuration)), GetMutex(configuration))
         { }
 
         /// <summary>
@@ -57,18 +57,6 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
             Verify.NotNull(configuration, "configuration");
 
             return configuration.Binding;
-        }
-
-        /// <summary>
-        /// Get the identiy of the underlying named pipe instance.
-        /// </summary>
-        /// <param name="configuration">The underlying listener configuration.</param>
-        private static String GetIdentity(IConfigureListeners configuration)
-        {
-            Verify.NotNull(configuration, "configuration");
-            Verify.True(configuration.HasExtendedProperty("identity"), "configuration", "Listener mising configuration attribute 'identity'.\r\nName: " + configuration.Binding);
-
-            return configuration.GetExtendedProperty("identity");
         }
 
         /// <summary>
