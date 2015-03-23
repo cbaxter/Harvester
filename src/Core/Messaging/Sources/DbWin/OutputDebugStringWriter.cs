@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading;
 
-/* Copyright (c) 2012-2013 CBaxter
+/* Copyright (c) 2012-2015 CBaxter
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
  * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
@@ -19,29 +19,35 @@ using System.Threading;
 
 namespace Harvester.Core.Messaging.Sources.DbWin
 {
+    /// <summary>
+    /// Writes out debug messages to the output debug string shared memory buffer.
+    /// </summary>
     public sealed class OutputDebugStringWriter : IWriteMessages
     {
         private readonly MessageBuffer messageBuffer;
         private readonly String mutexName;
         private readonly Byte[] buffer;
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="OutputDebugStringWriter"/>.
+        /// </summary>
+        /// <param name="mutexName">The global mutex name.</param>
+        /// <param name="messageBuffer">The underlying message buffer implementation.</param>
         public OutputDebugStringWriter(String mutexName, MessageBuffer messageBuffer)
-            : this(mutexName, messageBuffer, new Byte[OutputDebugString.BufferSize])
-        { }
-
-        public OutputDebugStringWriter(String mutexName, MessageBuffer messageBuffer, Byte[] buffer)
         {
-            Verify.NotNull(buffer, "buffer");
             Verify.NotWhitespace(mutexName, "mutexName");
             Verify.NotNull(messageBuffer, "messageBuffer");
 
-            this.buffer = buffer;
             this.mutexName = mutexName;
             this.messageBuffer = messageBuffer;
+            this.buffer = new Byte[OutputDebugString.BufferSize];
 
             PrepareBufferPreamble();
         }
 
+        /// <summary>
+        /// Prepare the underlying message buffer by pre-writing the current process identifier to the start of the buffer.
+        /// </summary>
         private void PrepareBufferPreamble()
         {
             using (var process = Process.GetCurrentProcess())
@@ -52,35 +58,60 @@ namespace Harvester.Core.Messaging.Sources.DbWin
             }
         }
 
+        /// <summary>
+        /// Write out the specified <paramref name="message"/> to the underlying message buffer.
+        /// </summary>
+        /// <param name="message">The message to write.</param>
         public void Write(String message)
         {
-            Boolean createdNew;
+            Mutex mutex;
 
-            using (var mutex = new Mutex(false, mutexName, out createdNew))
+            if (Mutex.TryOpenExisting(mutexName, out mutex))
             {
-                if (createdNew || !mutex.WaitOne(messageBuffer.Timeout))
-                    return;
+                var captured = false;
 
                 try
                 {
-                    if (String.IsNullOrEmpty(message))
-                        WriteEmptyMessage();
-                    else
-                        WriteChunkedMessage(message);
+                    captured = mutex.WaitOne(messageBuffer.Timeout);
+                    if (captured) WriteInternal(message);
+                }
+                catch (AbandonedMutexException)
+                {
+                    captured = true;
                 }
                 finally
                 {
-                    mutex.ReleaseMutex();
+                    if (captured) mutex.ReleaseMutex();
+                    mutex.Dispose();
                 }
             }
         }
 
+        /// <summary>
+        /// Write out the specified <paramref name="message"/> to the underlying message buffer.
+        /// </summary>
+        /// <param name="message">The message to write.</param>
+        private void WriteInternal(String message)
+        {
+            if (String.IsNullOrEmpty(message))
+                WriteEmptyMessage();
+            else
+                WriteChunkedMessage(message);
+        }
+
+        /// <summary>
+        /// Write an empty message to the underlying message buffer.
+        /// </summary>
         private void WriteEmptyMessage()
         {
             buffer[OutputDebugString.PreambleSize] = 0;
             messageBuffer.Write(buffer);
         }
 
+        /// <summary>
+        /// Write a chunked message to the underlying message buffer.
+        /// </summary>
+        /// <param name="message">The message to write.</param>
         private void WriteChunkedMessage(String message)
         {
             const Int32 maxBlockSize = OutputDebugString.BufferSize - OutputDebugString.PreambleSize - 1;

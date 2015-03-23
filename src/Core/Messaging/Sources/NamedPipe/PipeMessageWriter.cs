@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading;
 
-/* Copyright (c) 2012-2013 CBaxter
+/* Copyright (c) 2012-2015 CBaxter
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
  * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
@@ -19,48 +19,82 @@ using System.Threading;
 
 namespace Harvester.Core.Messaging.Sources.NamedPipe
 {
+    /// <summary>
+    /// Writes out debug messages to the underlying named pipe.
+    /// </summary>
     public sealed class PipeMessageWriter : IWriteMessages
     {
-        private readonly MessageBuffer memoryBuffer;
+        private readonly MessageBuffer messageBuffer;
         private readonly String mutexName;
         private readonly Byte[] preamble;
 
-        public PipeMessageWriter(String mutexName, MessageBuffer memoryBuffer)
+        /// <summary>
+        /// Initializes a new instance of <see cref="PipeMessageWriter"/>.
+        /// </summary>
+        /// <param name="mutexName">The global mutex name.</param>
+        /// <param name="messageBuffer">The underlying message buffer implementation.</param>
+        public PipeMessageWriter(String mutexName, MessageBuffer messageBuffer)
         {
             Verify.NotWhitespace(mutexName, "mutexName");
-            Verify.NotNull(memoryBuffer, "memoryBuffer");
+            Verify.NotNull(messageBuffer, "messageBuffer");
 
             this.mutexName = mutexName;
-            this.memoryBuffer = memoryBuffer;
-
-            using (var process = Process.GetCurrentProcess())
-                preamble = BitConverter.GetBytes(process.Id);
+            this.messageBuffer = messageBuffer;
+            this.preamble = GetPremable();
         }
 
+        /// <summary>
+        /// Gets the message preamble (i.e., current process identifier).
+        /// </summary>
+        private static Byte[] GetPremable()
+        {
+            using (var process = Process.GetCurrentProcess())
+                return BitConverter.GetBytes(process.Id);
+        }
+
+        /// <summary>
+        /// Write out the specified <paramref name="message"/> to the underlying message buffer.
+        /// </summary>
+        /// <param name="message">The message to write.</param>
         public void Write(String message)
         {
-            Boolean createdNew;
+            //Boolean createdNew;
+            Mutex mutex;
 
-            using (var mutex = new Mutex(false, mutexName, out createdNew))
+            if (Mutex.TryOpenExisting(mutexName, out mutex))
             {
-                if (createdNew || !mutex.WaitOne(memoryBuffer.Timeout))
-                    return;
+                var captured = false;
 
                 try
                 {
-                    var messageBytes = Encoding.UTF8.GetBytes(message ?? String.Empty);
-                    var data = new Byte[preamble.Length + messageBytes.Length];
-
-                    Buffer.BlockCopy(preamble, 0, data, 0, preamble.Length);
-                    Buffer.BlockCopy(messageBytes, 0, data, preamble.Length, messageBytes.Length);
-
-                    memoryBuffer.Write(data);
+                    captured = mutex.WaitOne(messageBuffer.Timeout);
+                    if (captured) WriteInternal(message);
+                }
+                catch (AbandonedMutexException)
+                {
+                    captured = true;
                 }
                 finally
                 {
-                    mutex.ReleaseMutex();
+                    if (captured) mutex.ReleaseMutex();
+                    mutex.Dispose();
                 }
             }
+        }
+
+        /// <summary>
+        /// Write out the specified <paramref name="message"/> to the underlying message buffer.
+        /// </summary>
+        /// <param name="message">The message to write.</param>
+        private void WriteInternal(String message)
+        {
+            var messageBytes = Encoding.UTF8.GetBytes(message ?? String.Empty);
+            var data = new Byte[preamble.Length + messageBytes.Length];
+
+            Buffer.BlockCopy(preamble, 0, data, 0, preamble.Length);
+            Buffer.BlockCopy(messageBytes, 0, data, preamble.Length, messageBytes.Length);
+
+            messageBuffer.Write(data);
         }
     }
 }
