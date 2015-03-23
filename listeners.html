@@ -45,7 +45,7 @@
     &lt;listener binding=&quot;Local\DBWIN&quot; mutex=&quot;DBWinMutex&quot; type=&quot;Harvester.Core.Messaging.Sources.DbWin.OutputDebugStringListener, Harvester.Core&quot; /&gt;
     &lt;listener binding=&quot;Local\HRVSTWIN&quot; mutex=&quot;HrvstWinMutex&quot; type=&quot;Harvester.Core.Messaging.Sources.DbWin.OutputDebugStringListener, Harvester.Core&quot; /&gt;
     &lt;listener binding=&quot;Global\DBWIN&quot; mutex=&quot;DBWinMutex&quot; elevatedOnly=&quot;true&quot; type=&quot;Harvester.Core.Messaging.Sources.DbWin.OutputDebugStringListener, Harvester.Core&quot; /&gt;
-    &lt;listener binding=&quot;\\.\pipe\Harvester&quot; mutex=&quot;HarvesterMutex&quot; identity=&quot;Everyone&quot; type=&quot;Harvester.Core.Messaging.Sources.NamedPipe.PipeMessageListener, Harvester.Core&quot;/&gt;
+    &lt;listener binding=&quot;\\.\pipe\Harvester&quot; mutex=&quot;HarvesterMutex&quot; type=&quot;Harvester.Core.Messaging.Sources.NamedPipe.PipeMessageListener, Harvester.Core&quot;/&gt;
 &lt;/listeners&gt;</code></pre>
 
         <p><strong>binding</strong></p>
@@ -74,7 +74,7 @@
         <h5>PipeMessageListener</h5> 
         <p>Uses local named pipes to read trace messages from individual applications. Typically used to read messages 
         from Microsoft .NET 4.0 or later applications or if capturing output from applications running in IIS.</p>
-        <pre><code>&lt;listener binding=&quot;\\.\pipe\Harvester&quot; mutex=&quot;HarvesterMutex&quot; identity=&quot;Everyone&quot; type=&quot;Harvester.Core.Messaging.Sources.NamedPipe.PipeMessageListener, Harvester.Core&quot;/&gt;</code></pre>
+        <pre><code>&lt;listener binding=&quot;\\.\pipe\Harvester&quot; mutex=&quot;HarvesterMutex&quot; type=&quot;Harvester.Core.Messaging.Sources.NamedPipe.PipeMessageListener, Harvester.Core&quot;/&gt;</code></pre>
         <p>A valid binding name must begin with a local pipe name (i.e., \\.\pipe\...).</p>
 
       </section>
