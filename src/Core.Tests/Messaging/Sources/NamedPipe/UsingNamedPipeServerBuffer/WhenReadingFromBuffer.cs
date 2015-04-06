@@ -32,7 +32,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeServerB
         public WhenReadingFromBuffer()
         {
             pipeName = @"\\.\pipe\" + Guid.NewGuid();
-            buffer = new NamedPipeServerBuffer(pipeName, "Everyone");
+            buffer = new NamedPipeServerBuffer(pipeName);
             clientPipeStream = new NamedPipeClientStream(".", pipeName, PipeDirection.InOut);
         }
 
@@ -86,7 +86,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeServerB
             for (var i = 0; i < iterations * clients.Length; i++)
             {
                 var bytes = buffer.Read();
-                var message = Encoding.UTF8.GetString(bytes, 0,bytes.Length);
+                var message = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
 
                 Assert.True(message.StartsWith("START->"));
                 Assert.True(message.EndsWith("<-END"));
@@ -102,7 +102,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeServerB
             {
                 var message = Encoding.UTF8.GetBytes("START->" + String.Empty.PadLeft(randomizer.Next(0, 32768)) + "<-END");
 
-                using(var client = new NamedPipeClientStream(".", pipeName, PipeDirection.InOut))
+                using (var client = new NamedPipeClientStream(".", pipeName, PipeDirection.InOut))
                 {
                     client.Connect();
                     client.Write(message, 0, message.Length);

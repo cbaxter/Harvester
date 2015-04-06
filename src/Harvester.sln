@@ -1,9 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{602C14A3-A239-490A-8186-5457418DF564}"
 	ProjectSection(SolutionItems) = preProject
-		.nuget\nuget-bootstrap.exe = .nuget\nuget-bootstrap.exe
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\nuget.exe = .nuget\nuget.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
@@ -83,8 +84,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{65EDA78B-79C5-4A97-B9F9-A39BF3BD4F94} = {F3FCA665-0DC0-402A-883F-52B5F13B762E}
+		{FD5F597A-58C9-4688-8C23-0AE5C2EE9D53} = {680AC2F2-0C11-4F0C-BA28-A23A10D4176A}
 		{0ACD7FBA-77ED-4F12-B88E-CA87AE89C74D} = {680AC2F2-0C11-4F0C-BA28-A23A10D4176A}
 		{74B18130-510E-41AE-AB2D-B1AF44D41E20} = {680AC2F2-0C11-4F0C-BA28-A23A10D4176A}
-		{FD5F597A-58C9-4688-8C23-0AE5C2EE9D53} = {680AC2F2-0C11-4F0C-BA28-A23A10D4176A}
 	EndGlobalSection
 EndGlobal

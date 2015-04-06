@@ -2,6 +2,7 @@
 using System.IO;
 using System.IO.Pipes;
 using System.Security.AccessControl;
+using System.Security.Principal;
 
 /* Copyright (c) 2012-2013 CBaxter
  * 
@@ -26,17 +27,16 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
         private readonly Byte[] buffer;
 
         public NamedPipeServerBuffer()
-            : this(@"\\.\pipe\Harvester", "Everyone")
+            : this(@"\\.\pipe\Harvester")
         { }
 
-        public NamedPipeServerBuffer(String pipeName, String identity)
+        public NamedPipeServerBuffer(String pipeName)
             : base(pipeName)
         {
-            Verify.NotWhitespace(identity, "identity");
             Verify.NotWhitespace(pipeName, "pipeName");
             Verify.True(pipeName.StartsWith(@"\\.\pipe\"), "pipeName", Localization.InvalidNamedPipeName);
 
-            pipeStream = new NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.Asynchronous, 0, 0, GetPipeSecurity(identity));
+            pipeStream = new NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.Asynchronous, 0, 0, GetPipeSecurity());
             memoryStream = new MemoryStream();
             buffer = new Byte[8192];
 
@@ -52,11 +52,11 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
             memoryStream.Dispose();
         }
 
-        private static PipeSecurity GetPipeSecurity(String identity)
+        private static PipeSecurity GetPipeSecurity()
         {
             var pipeSecurity = new PipeSecurity();
 
-            pipeSecurity.AddAccessRule(new PipeAccessRule(identity, PipeAccessRights.ReadWrite, AccessControlType.Allow));
+            pipeSecurity.AddAccessRule(new PipeAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), PipeAccessRights.ReadWrite, AccessControlType.Allow));
 
             return pipeSecurity;
         }

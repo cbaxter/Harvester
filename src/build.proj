@@ -4,13 +4,15 @@
     <UsingTask TaskName="Xunit.Runner.MSBuild.xunit" AssemblyFile="..\lib\MSBuild\xUnit\xunit.runner.msbuild.dll" />
 
     <PropertyGroup>
-        <NuGetExe>".nuget/nuget.exe"</NuGetExe>
+        <SolutionDir>$(MSBuildProjectDirectory)</SolutionDir>
         <Platform Condition="'$(Platform)' == ''">Any CPU</Platform>
         <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
         <MajorVersion Condition="'$(MajorVersion)' == ''">0</MajorVersion>
         <MinorVersion Condition="'$(MinorVersion)' == ''">0</MinorVersion>
         <RevisionNumber Condition="'$(RevisionNumber)' == ''">0</RevisionNumber>
         <Commit Condition="'$(Commit)' == ''">Unknown</Commit>
+        <NuGetDir>$(SolutionDir)\.nuget</NuGetDir>
+        <NuGetExe>".nuget/nuget.exe"</NuGetExe>
         <BuildOutput>.artifacts</BuildOutput>
     </PropertyGroup>
 
@@ -77,7 +79,8 @@
 
     <Target Name="Build" DependsOnTargets="GenerateFiles">
         <MakeDir Directories="$(BuildOutput)" />
-        <MSBuild Projects="Harvester.sln" Targets="Build" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+        <MSBuild Projects=".nuget\NuGet.Targets" Targets="RestorePackages" Properties="SolutionDir=$(SolutionDir);ProjectDir=$(NuGetDir);DownloadNuGetExe=true;RequireRestoreConsent=false;" />
+        <MSBuild Projects="Harvester.sln" Targets="Build" Properties="Configuration=$(Configuration);Platform=$(Platform);DownloadNuGetExe=true;RequireRestoreConsent=false;" />
     </Target>
 
     <Target Name="Test" DependsOnTargets="Build">

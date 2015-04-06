@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO.Pipes;
 using Harvester.Core.Messaging.Sources;
 using Harvester.Core.Messaging.Sources.NamedPipe;
 using Xunit;
@@ -37,9 +36,9 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeClientB
         }
 
         [Fact]
-        public void ThrowTimeoutExceptionIfCannotConnectToServerPipeStream()
+        public void IgnoreTimeoutExceptionIfCannotConnectToServerPipeStream()
         {
-            Assert.Throws<TimeoutException>(() => buffer.Write(null));
+            Assert.DoesNotThrow(() => buffer.Write(null));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.IO.Pipes;
 
 /* Copyright (c) 2012-2013 CBaxter
@@ -54,8 +55,13 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
             message = message ?? Empty;
             using (var pipeStream = new NamedPipeClientStream(serverName, pipeName, PipeDirection.InOut, PipeOptions.None))
             {
-                pipeStream.Connect(timeout);
-                pipeStream.Write(message, 0, message.Length);
+                try
+                {
+                    pipeStream.Connect(timeout);
+                    pipeStream.Write(message, 0, message.Length);
+                }
+                catch (IOException) { }
+                catch (TimeoutException) { }
             }
         }
 

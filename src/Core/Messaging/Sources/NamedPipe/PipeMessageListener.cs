@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-/* Copyright (c) 2012-2013 CBaxter
+/* Copyright (c) 2012-2015 CBaxter
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
  * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
@@ -17,15 +17,30 @@ using System.Threading;
 
 namespace Harvester.Core.Messaging.Sources.NamedPipe
 {
+    /// <summary>
+    /// A named pipe message listener.
+    /// </summary>
     internal class PipeMessageListener : MessageListener
     {
         private readonly MessageBuffer messageBuffer;
         private readonly Mutex mutex;
 
+        /// <summary>
+        /// Creates a new instance of <see cref="PipeMessageListener"/>.
+        /// </summary>
+        /// <param name="messageProcessor">The underlying message processor instance.</param>
+        /// <param name="configuration">The named pipe message listener configuration.</param>
         public PipeMessageListener(IProcessMessages messageProcessor, IConfigureListeners configuration)
-            : this(GetSource(configuration), messageProcessor, new NamedPipeServerBuffer(GetSource(configuration), GetIdentity(configuration)), GetMutex(configuration))
+            : this(GetSource(configuration), messageProcessor, new NamedPipeServerBuffer(GetSource(configuration)), GetMutex(configuration))
         { }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="PipeMessageListener"/>.
+        /// </summary>
+        /// <param name="listenerName">The named pipe listener name.</param>
+        /// <param name="messageProcessor">The underlying message processor instance.</param>
+        /// <param name="messageBuffer">The underlying message buffer instance.</param>
+        /// <param name="mutex">The mutex used to indicate a listener is active.</param>
         private PipeMessageListener(String listenerName, IProcessMessages messageProcessor, MessageBuffer messageBuffer, Mutex mutex)
             : base(listenerName, messageProcessor, new PipeMessageReader(messageBuffer))
         {
@@ -33,6 +48,10 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
             this.messageBuffer = messageBuffer;
         }
 
+        /// <summary>
+        /// Gets the named pipe binding configuration (i.e., source).
+        /// </summary>
+        /// <param name="configuration">The underlying listener configuration.</param>
         private static String GetSource(IConfigureListeners configuration)
         {
             Verify.NotNull(configuration, "configuration");
@@ -40,21 +59,21 @@ namespace Harvester.Core.Messaging.Sources.NamedPipe
             return configuration.Binding;
         }
 
-        private static String GetIdentity(IConfigureListeners configuration)
-        {
-            Verify.NotNull(configuration, "configuration");
-            Verify.True(configuration.HasExtendedProperty("identity"), "configuration", "Listener mising configuration attribute 'identity'.\r\nName: " + configuration.Binding);
-
-            return configuration.GetExtendedProperty("identity");
-        }
-
+        /// <summary>
+        /// Get or create the mutex instance used to singal that one or more listeners are active.
+        /// </summary>
+        /// <param name="configuration">The underlying listener configuration.</param>
         private static Mutex GetMutex(IConfigureListeners configuration)
         {
             Verify.NotNull(configuration, "configuration");
 
-            return new Mutex(false, configuration.Mutex);
+            return CreateMutex(configuration.Mutex);
         }
 
+        /// <summary>
+        /// Releases all resources used by the current instance of <see cref="PipeMessageListener"/>.
+        /// </summary>
+        /// <param name="disposing">Indicates whether the method call comes from a Dispose method (its value is true) or from a finalizer (its value is false).</param>
         protected override void Dispose(Boolean disposing)
         {
             if (disposing)

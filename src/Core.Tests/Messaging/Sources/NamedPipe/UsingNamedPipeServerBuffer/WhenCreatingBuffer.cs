@@ -27,7 +27,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeServerB
         public WhenCreatingBuffer()
         {
             pipeName = @"\\.\pipe\" + Guid.NewGuid();
-            buffer = new NamedPipeServerBuffer(pipeName, "Everyone");
+            buffer = new NamedPipeServerBuffer(pipeName);
         }
 
         public void Dispose()
@@ -38,7 +38,7 @@ namespace Harvester.Core.Tests.Messaging.Sources.NamedPipe.UsingNamedPipeServerB
         [Fact]
         public void OnlySingleNamedInstanceAllowed()
         {
-            Assert.Throws<UnauthorizedAccessException>(() => new NamedPipeServerBuffer(pipeName, "Everyone"));
+            Assert.Throws<UnauthorizedAccessException>(() => new NamedPipeServerBuffer(pipeName));
         }
     }
 }
