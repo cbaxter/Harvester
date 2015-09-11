@@ -39,7 +39,7 @@ namespace Harvester.Integration.NLog
             Layout = new Log4JXmlEventLayout();
             Binding = @"\\.\pipe\Harvester";
             BufferType = @"NamedPipeBuffer";
-            MutexName = @"HarvesterMutex";
+            MutexName = @"Global\HarvesterMutex";
         }
 
         protected override void InitializeTarget()

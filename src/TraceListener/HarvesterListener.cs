@@ -48,12 +48,12 @@ namespace Harvester.Integration.Diagnostics
         /// <summary>
         /// Initializes a new instance of <see cref="HarvesterListener"/>.
         /// </summary>
-        /// <param name="initializeData">The message buffer initialization string (i.e., Binding=\\.\pipe\Harvester; Buffer Type=NamedPipeBuffer; Mutex Name=HarvesterMutex;)</param>
+        /// <param name="initializeData">The message buffer initialization string (i.e., Binding=\\.\pipe\Harvester; Buffer Type=NamedPipeBuffer; Mutex Name=Global\HarvesterMutex;)</param>
         public HarvesterListener(String initializeData)
         {
             var parsedInitializeData = ParseInitializationData(initializeData ?? String.Empty);
             var binding = parsedInitializeData.ContainsKey("Binding") ? parsedInitializeData["Binding"] : @"\\.\pipe\Harvester";
-            var mutexName = parsedInitializeData.ContainsKey("Mutex Name") ? parsedInitializeData["Mutex Name"] : "HarvesterMutex";
+            var mutexName = parsedInitializeData.ContainsKey("Mutex Name") ? parsedInitializeData["Mutex Name"] : "Global\HarvesterMutex";
             var bufferType = parsedInitializeData.ContainsKey("Buffer Type") ? parsedInitializeData["Buffer Type"] : "NamedPipeBuffer";
 
             captureIdentity = !parsedInitializeData.ContainsKey("Capture Identity") || Boolean.Parse(parsedInitializeData["Capture Identity"]);
@@ -75,7 +75,7 @@ namespace Harvester.Integration.Diagnostics
         /// <summary>
         /// Parse the initialization data string to determine the underlying message buffer/write implementations.
         /// </summary>
-        /// <param name="initializeData">The message buffer initialization string (i.e., Binding=\\.\pipe\Harvester; Buffer Type=NamedPipeBuffer; Mutex Name=HarvesterMutex;)</param>
+        /// <param name="initializeData">The message buffer initialization string (i.e., Binding=\\.\pipe\Harvester; Buffer Type=NamedPipeBuffer; Mutex Name=Global\HarvesterMutex;)</param>
         private static IDictionary<String, String> ParseInitializationData(String initializeData)
         {
             if (String.IsNullOrWhiteSpace(initializeData))

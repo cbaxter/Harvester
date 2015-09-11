@@ -6,7 +6,7 @@
         <appender name="HarvesterAppender" type="Harvester.Integration.Log4Net.HarvesterAppender, Harvester.Integration.Log4Net, Version=${Version}, Culture=neutral, PublicKeyToken=2335e074c59acad6">
             <binding value="\\.\pipe\Harvester" />
             <bufferType value="NamedPipeBuffer" />
-            <mutex value="HarvesterMutex" />
+            <mutex value="Global\HarvesterMutex" />
         </appender>
     </log4net>
     <root>
