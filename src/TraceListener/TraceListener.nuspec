@@ -12,7 +12,7 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <tags>log logging error trace debug monitor</tags>
         <dependencies>
-            <dependency id="Harvester.Core" version="2.0.0.0" />
+          <dependency id="Harvester.Core" version="$version$" />
         </dependencies>
     </metadata>
     <files>

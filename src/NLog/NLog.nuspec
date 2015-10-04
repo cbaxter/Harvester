@@ -1,21 +1,21 @@
 ﻿<?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-    <metadata>
-        <id>$id$</id>
-        <owners>$author$</owners>
-        <authors>$author$</authors>
-        <version>$version$</version>
-        <description>$description$</description>
-        <iconUrl>http://cbaxter.github.com/Harvester/images/harvester_logo.png</iconUrl>
-        <licenseUrl>https://raw.github.com/cbaxter/Harvester/master/license.txt</licenseUrl>
-        <projectUrl>http://cbaxter.github.com/Harvester</projectUrl>
-        <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <tags>log logging nlog error trace debug monitor</tags>
-        <dependencies>
-            <dependency id="Harvester.Core" version="2.0.0.0" />
-        </dependencies>
-    </metadata>
-    <files>
-        <file src="Content\**\*.transform" target="content" />
-    </files>
+  <metadata>
+    <id>$id$</id>
+    <owners>$author$</owners>
+    <authors>$author$</authors>
+    <version>$version$</version>
+    <description>$description$</description>
+    <iconUrl>http://cbaxter.github.com/Harvester/images/harvester_logo.png</iconUrl>
+    <licenseUrl>https://raw.github.com/cbaxter/Harvester/master/license.txt</licenseUrl>
+    <projectUrl>http://cbaxter.github.com/Harvester</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>log logging nlog error trace debug monitor</tags>
+    <dependencies>
+      <dependency id="Harvester.Core" version="$version$" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="Content\**\*.transform" target="content" />
+  </files>
 </package>
