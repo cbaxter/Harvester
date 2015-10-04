@@ -98,8 +98,13 @@
         <p>Note: Using a SharedMemoryBuffer for applications hosted in IIS is not supported.</p>
 
         <p><strong>MutexName</strong></p>
-        <p>The mutex name that correspond to the bound Harvester <a href="listeners.html">listener</a>.</p>
-        
+        <p>The mutex name that correspond to the bound Harvester <a href="listeners.html">listener</a>.</p>     
+   
+        <p>IMPORTANT: The Harvester mutex uses `LOCAL\` scope by default; change the MutexName to `GLOBAL\HarvesterMutex` if the mutex must be 
+        shared across multiple user sessions (i.e., capturing log messages from IIS, Windows Services or any other user session).</p>
+    
+        <p>The corresponding &lt;listener /&gt; element in the Harvester configuration file(s) may also need to be updated from `HarvesterMutex` to `GLOBAL\HarvesterMutex`.</p>
+
       </section>
     </div>
     <!-- FOOTER  -->
