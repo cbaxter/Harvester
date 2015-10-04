@@ -6,9 +6,9 @@
     <!-- 
     IMPORTANT: 
     Harvester mutex uses `LOCAL\` scope by default; change to `GLOBAL\HarvesterMutex` if mutex must be shared across 
-    multiple user session (i.e., capturing log messages from IIS, Windows Serves or any other user session).
+    multiple user sessions (i.e., capturing log messages from IIS, Windows Services or any other user session).
     
-    The corresponding <listener /> element in the Harvester configuration file must also need to be updated 
+    The corresponding <listener /> element in the Harvester configuration file(s) may also need to be updated 
     from `HarvesterMutex` to `GLOBAL\HarvesterMutex`.
     -->
     <appender name="HarvesterAppender" type="Harvester.Integration.Log4Net.HarvesterAppender, Harvester.Integration.Log4Net, Version=${Version}, Culture=neutral, PublicKeyToken=2335e074c59acad6">
