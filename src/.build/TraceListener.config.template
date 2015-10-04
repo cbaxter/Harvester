@@ -1,11 +1,19 @@
 <configuration>
-    <system.diagnostics>
-        <trace>
-            <listeners>
-                <add name="HarvesterListener"
-                     type="Harvester.Integration.Diagnostics.HarvesterListener, Harvester.Integration.TraceListener, Version=${Version}, Culture=neutral, PublicKeyToken=2335e074c59acad6"
-                     initializeData="Binding = \\.\pipe\Harvester; Buffer Type = NamedPipeBuffer; Mutex Name = HarvesterMutex;"/>
-            </listeners>
-        </trace>
-    </system.diagnostics>
+  <system.diagnostics>
+    <trace>
+      <listeners>
+        <!-- 
+        IMPORTANT: 
+        Harvester mutex uses `LOCAL\` scope by default; change to `GLOBAL\HarvesterMutex` if mutex must be shared across 
+        multiple user session (i.e., capturing log messages from IIS, Windows Serves or any other user session).
+    
+        The corresponding <listener /> element in the Harvester configuration file must also need to be updated 
+        from `HarvesterMutex` to `GLOBAL\HarvesterMutex`.
+        -->
+        <add name="HarvesterListener"
+             type="Harvester.Integration.Diagnostics.HarvesterListener, Harvester.Integration.TraceListener, Version=${Version}, Culture=neutral, PublicKeyToken=2335e074c59acad6"
+             initializeData="Binding = \\.\pipe\Harvester; Buffer Type = NamedPipeBuffer; Mutex Name = HarvesterMutex;"/>
+      </listeners>
+    </trace>
+  </system.diagnostics>
 </configuration>

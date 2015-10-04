@@ -1,16 +1,24 @@
 <configuration>
-    <configSections>
-        <section name="nlog" type="NLog.Config.ConfigSectionHandler, NLog"/>
-    </configSections>
-    <nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <extensions>
-            <add assembly="Harvester.Integration.NLog, Version=${Version}, Culture=neutral, PublicKeyToken=2335e074c59acad6"/>
-        </extensions>
-        <targets>
-            <target xsi:type="Harvester" name="Harvester" bufferType="NamedPipeBuffer" binding ="\\.\pipe\Harvester" mutexName="HarvesterMutex" />
-        </targets>
-        <rules>
-            <logger name="*" minlevel="Trace" writeTo="Harvester" />
-        </rules>
-    </nlog>
+  <configSections>
+    <section name="nlog" type="NLog.Config.ConfigSectionHandler, NLog"/>
+  </configSections>
+  <nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <extensions>
+      <add assembly="Harvester.Integration.NLog, Version=${Version}, Culture=neutral, PublicKeyToken=2335e074c59acad6"/>
+    </extensions>
+    <targets>
+      <!-- 
+      IMPORTANT: 
+      Harvester mutex uses `LOCAL\` scope by default; change to `GLOBAL\HarvesterMutex` if mutex must be shared across 
+      multiple user session (i.e., capturing log messages from IIS, Windows Serves or any other user session).
+    
+      The corresponding <listener /> element in the Harvester configuration file must also need to be updated 
+      from `HarvesterMutex` to `GLOBAL\HarvesterMutex`.
+      -->
+      <target xsi:type="Harvester" name="Harvester" bufferType="NamedPipeBuffer" binding ="\\.\pipe\Harvester" mutexName="HarvesterMutex" />
+    </targets>
+    <rules>
+      <logger name="*" minlevel="Trace" writeTo="Harvester" />
+    </rules>
+  </nlog>
 </configuration>
