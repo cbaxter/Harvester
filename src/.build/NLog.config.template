@@ -7,7 +7,7 @@
             <add assembly="Harvester.Integration.NLog, Version=${Version}, Culture=neutral, PublicKeyToken=2335e074c59acad6"/>
         </extensions>
         <targets>
-            <target xsi:type="Harvester" name="Harvester" bufferType="NamedPipeBuffer" binding ="\\.\pipe\Harvester" mutexName="HarvesterMutex" />
+            <target xsi:type="Harvester" name="Harvester" bufferType="NamedPipeBuffer" binding ="\\.\pipe\Harvester" mutexName="Global\HarvesterMutex" />
         </targets>
         <rules>
             <logger name="*" minlevel="Trace" writeTo="Harvester" />

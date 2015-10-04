@@ -37,7 +37,7 @@ namespace Harvester.Integration.Log4Net
             Layout = new XmlLayoutSchemaLog4j();
             Binding = @"\\.\pipe\Harvester";
             BufferType = @"NamedPipeBuffer";
-            MutexName = @"HarvesterMutex";
+            MutexName = @"Global\HarvesterMutex";
         }
 
         public override void ActivateOptions()
